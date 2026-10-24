@@ -3357,6 +3357,103 @@
       "network": "Something went wrong. Please try again."
     }
   },
+  "setup": {
+    "title": "Eternal Setup",
+    "retry": "Try again",
+    "nav": {
+      "back": "Back",
+      "next": "Next"
+    },
+    "steps": {
+      "welcome": "Welcome",
+      "account": "Admin account",
+      "address": "Panel address",
+      "review": "Review"
+    },
+    "welcome": {
+      "heading": "Welcome to Eternal",
+      "intro": "Let's set up your panel in a few quick steps. This only happens once.",
+      "version": "Version {version}",
+      "language": "Language",
+      "nextTitle": "What happens next",
+      "next1": "Create the administrator account you will sign in with.",
+      "next2": "Choose the port and the secret path where the panel will live.",
+      "next3": "Review everything, then the panel restarts with your settings."
+    },
+    "account": {
+      "heading": "Create the administrator account",
+      "intro": "You will use these credentials to sign in to the panel.",
+      "username": "Username",
+      "usernameHelp": "3 to 32 characters: letters, digits, dot, underscore or hyphen.",
+      "password": "Password",
+      "passwordHelp": "At least 8 characters. Avoid common passwords and your username.",
+      "confirm": "Confirm password",
+      "mismatch": "The passwords do not match.",
+      "generate": "Generate strong password",
+      "show": "Show password",
+      "hide": "Hide password",
+      "copy": "Copy password",
+      "copied": "Copied to clipboard",
+      "strength": "Strength",
+      "strength0": "Too weak",
+      "strength1": "Weak",
+      "strength2": "Fair",
+      "strength3": "Good",
+      "strength4": "Strong"
+    },
+    "address": {
+      "heading": "Choose where the panel lives",
+      "intro": "Pick a port and a secret path. A random path keeps the login page hidden from scanners.",
+      "port": "Port",
+      "portHelp": "A number from 1024 to 65535.",
+      "random": "Random",
+      "randomPort": "Generate a random port",
+      "randomPath": "Generate a random path",
+      "portChecking": "Checking the port...",
+      "portFree": "The port is free.",
+      "basePath": "Secret path",
+      "basePathHelp": "4 to 64 characters: letters, digits, hyphen, underscore and slashes.",
+      "preview": "Your panel will be available at",
+      "httpsNote": "The panel starts on plain HTTP. After setup, enable HTTPS with the eternal command on the server or in the panel Settings."
+    },
+    "review": {
+      "heading": "Review and create",
+      "intro": "Check the details below, then create your panel.",
+      "username": "Username",
+      "password": "Password",
+      "url": "Panel address",
+      "language": "Language",
+      "saveTitle": "Save these credentials now",
+      "saveWarning": "They are not shown again and are not stored anywhere else. Without them you cannot sign in.",
+      "create": "Create my panel"
+    },
+    "done": {
+      "title": "Your panel is ready",
+      "desc": "The panel is restarting on its new address. You will be redirected automatically.",
+      "address": "Panel address",
+      "copy": "Copy",
+      "copied": "Copied to clipboard",
+      "waiting": "Waiting for the panel to come online...",
+      "timeout": "The panel did not answer yet. Open it manually once it is up.",
+      "open": "Open the panel"
+    },
+    "fatal": {
+      "badTokenTitle": "This setup link is not valid",
+      "alreadyDoneTitle": "Setup is already complete"
+    },
+    "errors": {
+      "bad_token": "The setup link is invalid or has expired. Use the link printed by the installer.",
+      "already_done": "This panel is already configured. Sign in with your administrator account.",
+      "username_invalid": "The username must be 3 to 32 characters: letters, digits, dot, underscore or hyphen.",
+      "password_weak": "The password is too weak. Use at least 8 characters and avoid common passwords or your username.",
+      "port_invalid": "The port must be a number from 1024 to 65535.",
+      "port_in_use": "This port is already in use. Choose another one.",
+      "base_path_invalid": "The path must be 4 to 64 characters: letters, digits, hyphen, underscore and slashes, without double slashes.",
+      "rate_limited": "Too many attempts. Wait a minute and try again.",
+      "internal_error": "Something went wrong on the server. Try again.",
+      "network": "Could not reach the server. Check your connection and try again."
+    }
+  },
   "tgbot": {
     "keyboardClosed": "❌ Custom keyboard closed!",
     "noResult": "❗ No result!",
