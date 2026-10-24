@@ -691,6 +691,17 @@ func main() {
 			fmt.Println("hosted-init failed:", err)
 			os.Exit(1)
 		}
+	case "setup-init", "setup-link":
+		var setupPort int
+		setupInitCmd := flag.NewFlagSet("setup-init", flag.ExitOnError)
+		setupInitCmd.IntVar(&setupPort, "port", 0, "Panel port for the wizard (random free port when omitted)")
+		if err := setupInitCmd.Parse(os.Args[2:]); err != nil {
+			fmt.Println(err)
+			return
+		}
+		if code := runSetupInit(os.Stdout, setupPort); code != setupInitOK {
+			os.Exit(code)
+		}
 	case "encrypt-tokens":
 		encryptNodeTokens()
 	case "migrate-db":
@@ -832,6 +843,7 @@ Commands:
     migrate-db     SQLite <-> .dump (--dump/--restore) or copy into PostgreSQL/MySQL (--dsn)
     encrypt-tokens encrypt node bearer tokens with the configured active key
     setting        set settings
+    setup-init     open the first-run setup wizard and print its token (setup-link prints a new one)
     client         manage clients: list, show, add, del, enable, disable, reset
 `
 }

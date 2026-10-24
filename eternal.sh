@@ -3482,6 +3482,27 @@ migrate_db_prompt() {
     migrate_db "$input" "$output"
 }
 
+# setup_link prints a fresh link to the first-run wizard while it is still open.
+setup_link() {
+    local out code port token ip
+    out=$("${xui_folder}/eternal" setup-link 2> /dev/null)
+    code=$?
+    if [[ $code -eq 3 ]]; then
+        echo -e "${green}This panel is already set up; there is no wizard to open.${plain}"
+        echo -e "Reset the login with: ${blue}eternal setting -username NAME -password PASS${plain}"
+        return 0
+    elif [[ $code -ne 0 ]]; then
+        echo -e "${red}Could not open the setup wizard.${plain}"
+        return 1
+    fi
+    port=$(printf '%s\n' "$out" | sed -n 's/^setup_port=//p' | head -n1)
+    token=$(printf '%s\n' "$out" | sed -n 's/^setup_token=//p' | head -n1)
+    ip=$(curl -s --max-time 3 https://api4.ipify.org 2> /dev/null)
+    systemctl restart eternal > /dev/null 2>&1 || true
+    echo -e "${green}The setup wizard is open. Visit:${plain}"
+    echo -e "  ${blue}http://${ip:-SERVER_IP}:${port}/setup?t=${token}${plain}"
+}
+
 show_usage() {
     echo -e "┌───────────────────────────────────────────────────────────────────┐
 │  ${blue}eternal control menu usages (subcommands):${plain}                       │
@@ -3493,6 +3514,7 @@ show_usage() {
 |  ${blue}eternal restart-xray${plain}          - Restart Xray                     │
 │  ${blue}eternal status${plain}                - Current Status                   │
 │  ${blue}eternal settings${plain}              - Current Settings                 │
+│  ${blue}eternal setup-link${plain}            - New link to the setup wizard     │
 │  ${blue}eternal enable${plain}                - Enable Autostart on OS Startup   │
 │  ${blue}eternal disable${plain}               - Disable Autostart on OS Startup  │
 │  ${blue}eternal log${plain}                   - Check logs                       │
@@ -3665,6 +3687,9 @@ if [[ $# > 0 ]]; then
             ;;
         "settings")
             check_install 0 && check_config 0
+            ;;
+        "setup-link")
+            check_install 0 && setup_link
             ;;
         "enable")
             check_install 0 && enable 0

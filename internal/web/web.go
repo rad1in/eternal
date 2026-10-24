@@ -260,6 +260,8 @@ func (s *Server) initRouter() (*gin.Engine, error) {
 	}
 
 	engine.Use(locale.LocalizerMiddleware())
+	(&panel.SetupService{}).Load()
+	engine.Use(controller.SetupGate(s.settingService.DecoySite().Handler()))
 
 	// `/assets/` serves the Vite-built bundle. In dev we pull from disk
 	// so the Vite watcher's incremental rebuilds show up without
@@ -276,6 +278,13 @@ func (s *Server) initRouter() (*gin.Engine, error) {
 		engine.StaticFS("/shop/assets", http.FS(os.DirFS("internal/web/dist/assets")))
 	} else {
 		engine.StaticFS("/shop/assets", http.FS(&wrapDistFS{FS: distFS}))
+	}
+
+	// The first-run wizard loads its bundle from /setup/assets for the same reason.
+	if config.IsDebug() {
+		engine.StaticFS("/setup/assets", http.FS(os.DirFS("internal/web/dist/assets")))
+	} else {
+		engine.StaticFS("/setup/assets", http.FS(&wrapDistFS{FS: distFS}))
 	}
 
 	// Hand the embedded `dist/` filesystem to the controller package
@@ -298,6 +307,7 @@ func (s *Server) initRouter() (*gin.Engine, error) {
 
 	decoySite := s.settingService.DecoySite().Handler()
 	controller.NewShopController(engine.Group("/shop"), decoySite)
+	controller.NewSetupController(engine.Group("/setup"), decoySite)
 
 	// Initialize WebSocket hub
 	s.wsHub = websocket.NewHub()
