@@ -57,7 +57,11 @@ func SetupGate(notFound gin.HandlerFunc) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		path := c.Request.URL.Path
 		if global.SetupPending() && path != "/setup" && !strings.HasPrefix(path, "/setup/") {
-			notFound(c)
+			if notFound != nil {
+				notFound(c)
+			} else {
+				c.Status(http.StatusNotFound)
+			}
 			c.Abort()
 			return
 		}
@@ -92,6 +96,8 @@ func (a *SetupController) page(c *gin.Context) {
 		return
 	}
 	body = bytes.ReplaceAll(body, []byte(`="/assets/`), []byte(`="/setup/assets/`))
+	inject := `<script data-cfasync="false">window.X_UI_BASE_PATH="/setup/"</script></head>`
+	body = bytes.Replace(body, []byte("</head>"), []byte(inject), 1)
 	c.Header("Cache-Control", "no-store")
 	c.Header("Referrer-Policy", "no-referrer")
 	c.Data(http.StatusOK, "text/html; charset=utf-8", body)

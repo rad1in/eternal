@@ -60,8 +60,8 @@ func (h *setupHarness) do(method, path, token, body string) (*httptest.ResponseR
 func TestSetupPageOpensOnlyForTheLinkWithTheToken(t *testing.T) {
 	h := newSetupHarness(t, true)
 	w, _ := h.do(http.MethodGet, "/setup?t="+h.token, "", "")
-	if w.Code != http.StatusOK || !strings.Contains(w.Body.String(), `src="/setup/assets/setup.js"`) {
-		t.Fatalf("page = %d %q; want the bundle with assets under /setup/assets", w.Code, w.Body.String())
+	if w.Code != http.StatusOK || !strings.Contains(w.Body.String(), `src="/setup/assets/setup.js"`) || !strings.Contains(w.Body.String(), `window.X_UI_BASE_PATH="/setup/"`) {
+		t.Fatalf("page = %d %q; want the bundle with assets and the runtime base path under /setup", w.Code, w.Body.String())
 	}
 	if w.Header().Get("Cache-Control") != "no-store" || w.Header().Get("Referrer-Policy") != "no-referrer" {
 		t.Errorf("the token is in the URL: the page must not be cached or leaked in referrers, headers = %v", w.Header())
@@ -158,5 +158,19 @@ func TestSetupGateHidesTheWholePanelWhileTheWizardIsOpen(t *testing.T) {
 	global.SetSetupPending(false)
 	if code := get("/login"); code != http.StatusOK {
 		t.Errorf("GET /login = %d after setup, want the panel back", code)
+	}
+}
+
+func TestSetupGateAnswers404WhenNoDecoyIsConfigured(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	t.Cleanup(func() { global.SetSetupPending(false) })
+	engine := gin.New()
+	engine.Use(SetupGate(nil))
+	engine.GET("/login", func(c *gin.Context) { c.Status(http.StatusOK) })
+	global.SetSetupPending(true)
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, httptest.NewRequest(http.MethodGet, "/login", nil))
+	if w.Code != http.StatusNotFound {
+		t.Fatalf("GET /login = %d with no decoy configured, want 404", w.Code)
 	}
 }
