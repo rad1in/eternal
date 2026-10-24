@@ -3357,6 +3357,103 @@
       "network": "Algo deu errado. Tente novamente."
     }
   },
+  "setup": {
+    "title": "Configuração do Eternal",
+    "retry": "Tentar novamente",
+    "nav": {
+      "back": "Voltar",
+      "next": "Avançar"
+    },
+    "steps": {
+      "welcome": "Boas-vindas",
+      "account": "Conta de administrador",
+      "address": "Endereço do painel",
+      "review": "Revisão"
+    },
+    "welcome": {
+      "heading": "Bem-vindo ao Eternal",
+      "intro": "Vamos configurar seu painel em poucos passos. Isso acontece apenas uma vez.",
+      "version": "Versão {version}",
+      "language": "Idioma",
+      "nextTitle": "O que acontece a seguir",
+      "next1": "Crie a conta de administrador que você usará para entrar.",
+      "next2": "Escolha a porta e o caminho secreto onde o painel ficará.",
+      "next3": "Revise tudo e o painel será reiniciado com suas configurações."
+    },
+    "account": {
+      "heading": "Crie a conta de administrador",
+      "intro": "Você usará estas credenciais para entrar no painel.",
+      "username": "Usuário",
+      "usernameHelp": "De 3 a 32 caracteres: letras, dígitos, ponto, sublinhado ou hífen.",
+      "password": "Senha",
+      "passwordHelp": "Pelo menos 8 caracteres. Evite senhas comuns e o seu nome de usuário.",
+      "confirm": "Confirmar senha",
+      "mismatch": "As senhas não coincidem.",
+      "generate": "Gerar senha forte",
+      "show": "Mostrar senha",
+      "hide": "Ocultar senha",
+      "copy": "Copiar senha",
+      "copied": "Copiado para a área de transferência",
+      "strength": "Força",
+      "strength0": "Fraca demais",
+      "strength1": "Fraca",
+      "strength2": "Razoável",
+      "strength3": "Boa",
+      "strength4": "Forte"
+    },
+    "address": {
+      "heading": "Escolha onde o painel ficará",
+      "intro": "Escolha uma porta e um caminho secreto. Um caminho aleatório mantém a página de login oculta de scanners.",
+      "port": "Porta",
+      "portHelp": "Um número de 1024 a 65535.",
+      "random": "Aleatória",
+      "randomPort": "Gerar uma porta aleatória",
+      "randomPath": "Gerar um caminho aleatório",
+      "portChecking": "Verificando a porta...",
+      "portFree": "A porta está livre.",
+      "basePath": "Caminho secreto",
+      "basePathHelp": "De 4 a 64 caracteres: letras, dígitos, hífen, sublinhado e barras.",
+      "preview": "Seu painel estará disponível em",
+      "httpsNote": "O painel inicia em HTTP simples. Após a configuração, ative o HTTPS com o comando eternal no servidor ou nas Configurações do painel."
+    },
+    "review": {
+      "heading": "Revisar e criar",
+      "intro": "Confira os dados abaixo e crie seu painel.",
+      "username": "Usuário",
+      "password": "Senha",
+      "url": "Endereço do painel",
+      "language": "Idioma",
+      "saveTitle": "Salve estas credenciais agora",
+      "saveWarning": "Elas não serão exibidas novamente nem ficam guardadas em outro lugar. Sem elas você não consegue entrar.",
+      "create": "Criar meu painel"
+    },
+    "done": {
+      "title": "Seu painel está pronto",
+      "desc": "O painel está reiniciando no novo endereço. Você será redirecionado automaticamente.",
+      "address": "Endereço do painel",
+      "copy": "Copiar",
+      "copied": "Copiado para a área de transferência",
+      "waiting": "Aguardando o painel ficar online...",
+      "timeout": "O painel ainda não respondeu. Abra-o manualmente quando estiver no ar.",
+      "open": "Abrir o painel"
+    },
+    "fatal": {
+      "badTokenTitle": "Este link de configuração não é válido",
+      "alreadyDoneTitle": "A configuração já foi concluída"
+    },
+    "errors": {
+      "bad_token": "O link de configuração é inválido ou expirou. Use o link exibido pelo instalador.",
+      "already_done": "Este painel já está configurado. Entre com sua conta de administrador.",
+      "username_invalid": "O usuário deve ter de 3 a 32 caracteres: letras, dígitos, ponto, sublinhado ou hífen.",
+      "password_weak": "A senha é muito fraca. Use pelo menos 8 caracteres e evite senhas comuns ou o seu nome de usuário.",
+      "port_invalid": "A porta deve ser um número de 1024 a 65535.",
+      "port_in_use": "Esta porta já está em uso. Escolha outra.",
+      "base_path_invalid": "O caminho deve ter de 4 a 64 caracteres: letras, dígitos, hífen, sublinhado e barras, sem barras duplas.",
+      "rate_limited": "Muitas tentativas. Aguarde um minuto e tente novamente.",
+      "internal_error": "Algo deu errado no servidor. Tente novamente.",
+      "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
+    }
+  },
   "tgbot": {
     "keyboardClosed": "❌ Teclado fechado!",
     "noResult": "❗ Nenhum resultado!",

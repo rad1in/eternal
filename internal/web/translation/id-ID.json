@@ -3357,6 +3357,103 @@
       "network": "Terjadi kesalahan. Silakan coba lagi."
     }
   },
+  "setup": {
+    "title": "Penyiapan Eternal",
+    "retry": "Coba lagi",
+    "nav": {
+      "back": "Kembali",
+      "next": "Berikutnya"
+    },
+    "steps": {
+      "welcome": "Selamat datang",
+      "account": "Akun admin",
+      "address": "Alamat panel",
+      "review": "Tinjau"
+    },
+    "welcome": {
+      "heading": "Selamat datang di Eternal",
+      "intro": "Mari siapkan panel Anda dalam beberapa langkah singkat. Ini hanya dilakukan sekali.",
+      "version": "Versi {version}",
+      "language": "Bahasa",
+      "nextTitle": "Apa yang terjadi selanjutnya",
+      "next1": "Buat akun administrator untuk masuk.",
+      "next2": "Pilih port dan jalur rahasia tempat panel berjalan.",
+      "next3": "Tinjau semuanya, lalu panel dimulai ulang dengan pengaturan Anda."
+    },
+    "account": {
+      "heading": "Buat akun administrator",
+      "intro": "Anda akan memakai kredensial ini untuk masuk ke panel.",
+      "username": "Nama pengguna",
+      "usernameHelp": "3 sampai 32 karakter: huruf, angka, titik, garis bawah, atau tanda hubung.",
+      "password": "Kata sandi",
+      "passwordHelp": "Minimal 8 karakter. Hindari kata sandi umum dan nama pengguna Anda.",
+      "confirm": "Konfirmasi kata sandi",
+      "mismatch": "Kata sandi tidak cocok.",
+      "generate": "Buat kata sandi kuat",
+      "show": "Tampilkan kata sandi",
+      "hide": "Sembunyikan kata sandi",
+      "copy": "Salin kata sandi",
+      "copied": "Disalin ke papan klip",
+      "strength": "Kekuatan",
+      "strength0": "Terlalu lemah",
+      "strength1": "Lemah",
+      "strength2": "Cukup",
+      "strength3": "Baik",
+      "strength4": "Kuat"
+    },
+    "address": {
+      "heading": "Pilih lokasi panel",
+      "intro": "Pilih port dan jalur rahasia. Jalur acak menyembunyikan halaman login dari pemindai.",
+      "port": "Port",
+      "portHelp": "Angka dari 1024 sampai 65535.",
+      "random": "Acak",
+      "randomPort": "Buat port acak",
+      "randomPath": "Buat jalur acak",
+      "portChecking": "Memeriksa port...",
+      "portFree": "Port tersedia.",
+      "basePath": "Jalur rahasia",
+      "basePathHelp": "4 sampai 64 karakter: huruf, angka, tanda hubung, garis bawah, dan garis miring.",
+      "preview": "Panel Anda akan tersedia di",
+      "httpsNote": "Panel dimulai dengan HTTP biasa. Setelah penyiapan, aktifkan HTTPS dengan perintah eternal di server atau lewat Pengaturan panel."
+    },
+    "review": {
+      "heading": "Tinjau dan buat",
+      "intro": "Periksa detail di bawah lalu buat panel Anda.",
+      "username": "Nama pengguna",
+      "password": "Kata sandi",
+      "url": "Alamat panel",
+      "language": "Bahasa",
+      "saveTitle": "Simpan kredensial ini sekarang",
+      "saveWarning": "Kredensial tidak ditampilkan lagi dan tidak disimpan di tempat lain. Tanpa ini Anda tidak bisa masuk.",
+      "create": "Buat panel saya"
+    },
+    "done": {
+      "title": "Panel Anda siap",
+      "desc": "Panel sedang dimulai ulang di alamat barunya. Anda akan dialihkan secara otomatis.",
+      "address": "Alamat panel",
+      "copy": "Salin",
+      "copied": "Disalin ke papan klip",
+      "waiting": "Menunggu panel online...",
+      "timeout": "Panel belum merespons. Buka secara manual setelah aktif.",
+      "open": "Buka panel"
+    },
+    "fatal": {
+      "badTokenTitle": "Tautan penyiapan ini tidak valid",
+      "alreadyDoneTitle": "Penyiapan sudah selesai"
+    },
+    "errors": {
+      "bad_token": "Tautan penyiapan tidak valid atau sudah kedaluwarsa. Gunakan tautan yang dicetak oleh installer.",
+      "already_done": "Panel ini sudah dikonfigurasi. Masuk dengan akun administrator Anda.",
+      "username_invalid": "Nama pengguna harus 3 sampai 32 karakter: huruf, angka, titik, garis bawah, atau tanda hubung.",
+      "password_weak": "Kata sandi terlalu lemah. Gunakan minimal 8 karakter dan hindari kata sandi umum atau nama pengguna Anda.",
+      "port_invalid": "Port harus berupa angka dari 1024 sampai 65535.",
+      "port_in_use": "Port ini sudah digunakan. Pilih yang lain.",
+      "base_path_invalid": "Jalur harus 4 sampai 64 karakter: huruf, angka, tanda hubung, garis bawah, dan garis miring, tanpa garis miring ganda.",
+      "rate_limited": "Terlalu banyak percobaan. Tunggu semenit lalu coba lagi.",
+      "internal_error": "Terjadi kesalahan di server. Coba lagi.",
+      "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi."
+    }
+  },
   "tgbot": {
     "keyboardClosed": "❌ Keyboard ditutup!",
     "noResult": "❗ Tidak ada hasil!",

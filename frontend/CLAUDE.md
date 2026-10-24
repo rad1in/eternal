@@ -11,6 +11,8 @@ React 19 + Ant Design 6 + Vite 8 + TypeScript. The Vite config is
   `/panel`, lazy routes).
 - `login.html` — login + 2FA (`src/entries/login.tsx`).
 - `subpage.html` — public subscription viewer (`src/entries/subpage.tsx`).
+- `setup.html` — first-run setup wizard at `/setup?t=<token>` (`src/entries/setup.tsx`,
+  API under `/setup/api`, token sent as `X-Setup-Token`).
 The `@` import alias maps to `src/`.
 
 ## Data flow

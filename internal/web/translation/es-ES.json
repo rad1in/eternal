@@ -3357,6 +3357,103 @@
       "network": "Algo salió mal. Inténtalo de nuevo."
     }
   },
+  "setup": {
+    "title": "Configuración de Eternal",
+    "retry": "Reintentar",
+    "nav": {
+      "back": "Atrás",
+      "next": "Siguiente"
+    },
+    "steps": {
+      "welcome": "Bienvenida",
+      "account": "Cuenta de administrador",
+      "address": "Dirección del panel",
+      "review": "Revisión"
+    },
+    "welcome": {
+      "heading": "Te damos la bienvenida a Eternal",
+      "intro": "Configuremos tu panel en unos pocos pasos. Solo se hace una vez.",
+      "version": "Versión {version}",
+      "language": "Idioma",
+      "nextTitle": "Qué ocurre a continuación",
+      "next1": "Crea la cuenta de administrador con la que iniciarás sesión.",
+      "next2": "Elige el puerto y la ruta secreta donde estará el panel.",
+      "next3": "Revisa todo y el panel se reiniciará con tu configuración."
+    },
+    "account": {
+      "heading": "Crea la cuenta de administrador",
+      "intro": "Usarás estas credenciales para iniciar sesión en el panel.",
+      "username": "Usuario",
+      "usernameHelp": "De 3 a 32 caracteres: letras, dígitos, punto, guion bajo o guion.",
+      "password": "Contraseña",
+      "passwordHelp": "Al menos 8 caracteres. Evita contraseñas comunes y tu nombre de usuario.",
+      "confirm": "Confirmar contraseña",
+      "mismatch": "Las contraseñas no coinciden.",
+      "generate": "Generar contraseña segura",
+      "show": "Mostrar contraseña",
+      "hide": "Ocultar contraseña",
+      "copy": "Copiar contraseña",
+      "copied": "Copiado al portapapeles",
+      "strength": "Seguridad",
+      "strength0": "Demasiado débil",
+      "strength1": "Débil",
+      "strength2": "Aceptable",
+      "strength3": "Buena",
+      "strength4": "Fuerte"
+    },
+    "address": {
+      "heading": "Elige dónde vivirá el panel",
+      "intro": "Elige un puerto y una ruta secreta. Una ruta aleatoria mantiene oculta la página de acceso a los escáneres.",
+      "port": "Puerto",
+      "portHelp": "Un número del 1024 al 65535.",
+      "random": "Aleatorio",
+      "randomPort": "Generar un puerto aleatorio",
+      "randomPath": "Generar una ruta aleatoria",
+      "portChecking": "Comprobando el puerto...",
+      "portFree": "El puerto está libre.",
+      "basePath": "Ruta secreta",
+      "basePathHelp": "De 4 a 64 caracteres: letras, dígitos, guion, guion bajo y barras.",
+      "preview": "Tu panel estará disponible en",
+      "httpsNote": "El panel arranca con HTTP simple. Después de la configuración, activa HTTPS con el comando eternal en el servidor o en los Ajustes del panel."
+    },
+    "review": {
+      "heading": "Revisar y crear",
+      "intro": "Comprueba los datos y crea tu panel.",
+      "username": "Usuario",
+      "password": "Contraseña",
+      "url": "Dirección del panel",
+      "language": "Idioma",
+      "saveTitle": "Guarda estas credenciales ahora",
+      "saveWarning": "No se volverán a mostrar ni se guardan en ningún otro sitio. Sin ellas no podrás iniciar sesión.",
+      "create": "Crear mi panel"
+    },
+    "done": {
+      "title": "Tu panel está listo",
+      "desc": "El panel se está reiniciando en su nueva dirección. Se te redirigirá automáticamente.",
+      "address": "Dirección del panel",
+      "copy": "Copiar",
+      "copied": "Copiado al portapapeles",
+      "waiting": "Esperando a que el panel se ponga en marcha...",
+      "timeout": "El panel aún no responde. Ábrelo manualmente cuando esté activo.",
+      "open": "Abrir el panel"
+    },
+    "fatal": {
+      "badTokenTitle": "Este enlace de configuración no es válido",
+      "alreadyDoneTitle": "La configuración ya está completa"
+    },
+    "errors": {
+      "bad_token": "El enlace de configuración no es válido o ha caducado. Usa el enlace que mostró el instalador.",
+      "already_done": "Este panel ya está configurado. Inicia sesión con tu cuenta de administrador.",
+      "username_invalid": "El usuario debe tener de 3 a 32 caracteres: letras, dígitos, punto, guion bajo o guion.",
+      "password_weak": "La contraseña es demasiado débil. Usa al menos 8 caracteres y evita contraseñas comunes o tu nombre de usuario.",
+      "port_invalid": "El puerto debe ser un número del 1024 al 65535.",
+      "port_in_use": "Este puerto ya está en uso. Elige otro.",
+      "base_path_invalid": "La ruta debe tener de 4 a 64 caracteres: letras, dígitos, guion, guion bajo y barras, sin barras dobles.",
+      "rate_limited": "Demasiados intentos. Espera un minuto e inténtalo de nuevo.",
+      "internal_error": "Algo ha fallado en el servidor. Inténtalo de nuevo.",
+      "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo."
+    }
+  },
   "tgbot": {
     "keyboardClosed": "❌ Teclado cerrado!",
     "noResult": "❗ ¡Sin resultados!",
