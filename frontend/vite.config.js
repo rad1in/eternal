@@ -237,6 +237,7 @@ export default defineConfig({
         login: path.resolve(import.meta.dirname, 'login.html'),
         subpage: path.resolve(import.meta.dirname, 'subpage.html'),
         shop: path.resolve(import.meta.dirname, 'shop.html'),
+        setup: path.resolve(import.meta.dirname, 'setup.html'),
       },
       output: {
         manualChunks(id) {
@@ -288,6 +289,11 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '^/(?:[^/]+/)?(login|logout|getTwoFactorEnable|csrf-token|sponsors|panel|server)(?:/|$)': makeBackendProxy(BACKEND_TARGET),
+      '^/setup(?:/|$)': {
+        target: BACKEND_TARGET,
+        changeOrigin: true,
+        bypass: (req) => (req.method === 'GET' && req.url.split('?')[0] === '/setup' ? '/setup.html' : undefined),
+      },
       '^/$': makeBackendProxy(BACKEND_TARGET),
       '^/[^/]+/$': makeBackendProxy(BACKEND_TARGET),
       '^/(?:[^/]+/)?ws$': {

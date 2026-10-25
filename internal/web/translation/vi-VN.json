@@ -3357,6 +3357,103 @@
       "network": "Đã xảy ra lỗi. Vui lòng thử lại."
     }
   },
+  "setup": {
+    "title": "Thiết lập Eternal",
+    "retry": "Thử lại",
+    "nav": {
+      "back": "Quay lại",
+      "next": "Tiếp theo"
+    },
+    "steps": {
+      "welcome": "Chào mừng",
+      "account": "Tài khoản quản trị",
+      "address": "Địa chỉ bảng điều khiển",
+      "review": "Xem lại"
+    },
+    "welcome": {
+      "heading": "Chào mừng đến với Eternal",
+      "intro": "Hãy thiết lập bảng điều khiển của bạn qua vài bước nhanh. Việc này chỉ làm một lần.",
+      "version": "Phiên bản {version}",
+      "language": "Ngôn ngữ",
+      "nextTitle": "Điều gì sẽ xảy ra tiếp theo",
+      "next1": "Tạo tài khoản quản trị để đăng nhập.",
+      "next2": "Chọn cổng và đường dẫn bí mật nơi bảng điều khiển hoạt động.",
+      "next3": "Xem lại mọi thứ, sau đó bảng điều khiển khởi động lại với cài đặt của bạn."
+    },
+    "account": {
+      "heading": "Tạo tài khoản quản trị",
+      "intro": "Bạn sẽ dùng thông tin này để đăng nhập vào bảng điều khiển.",
+      "username": "Tên người dùng",
+      "usernameHelp": "Từ 3 đến 32 ký tự: chữ cái, chữ số, dấu chấm, gạch dưới hoặc gạch ngang.",
+      "password": "Mật khẩu",
+      "passwordHelp": "Ít nhất 8 ký tự. Tránh mật khẩu phổ biến và tên người dùng của bạn.",
+      "confirm": "Xác nhận mật khẩu",
+      "mismatch": "Mật khẩu không khớp.",
+      "generate": "Tạo mật khẩu mạnh",
+      "show": "Hiện mật khẩu",
+      "hide": "Ẩn mật khẩu",
+      "copy": "Sao chép mật khẩu",
+      "copied": "Đã sao chép vào bộ nhớ tạm",
+      "strength": "Độ mạnh",
+      "strength0": "Quá yếu",
+      "strength1": "Yếu",
+      "strength2": "Trung bình",
+      "strength3": "Tốt",
+      "strength4": "Mạnh"
+    },
+    "address": {
+      "heading": "Chọn nơi đặt bảng điều khiển",
+      "intro": "Chọn một cổng và đường dẫn bí mật. Đường dẫn ngẫu nhiên giúp ẩn trang đăng nhập khỏi các trình quét.",
+      "port": "Cổng",
+      "portHelp": "Một số từ 1024 đến 65535.",
+      "random": "Ngẫu nhiên",
+      "randomPort": "Tạo cổng ngẫu nhiên",
+      "randomPath": "Tạo đường dẫn ngẫu nhiên",
+      "portChecking": "Đang kiểm tra cổng...",
+      "portFree": "Cổng còn trống.",
+      "basePath": "Đường dẫn bí mật",
+      "basePathHelp": "Từ 4 đến 64 ký tự: chữ cái, chữ số, gạch ngang, gạch dưới và dấu gạch chéo.",
+      "preview": "Bảng điều khiển của bạn sẽ có tại",
+      "httpsNote": "Bảng điều khiển khởi động với HTTP thường. Sau khi thiết lập, hãy bật HTTPS bằng lệnh eternal trên máy chủ hoặc trong Cài đặt của bảng điều khiển."
+    },
+    "review": {
+      "heading": "Xem lại và tạo",
+      "intro": "Kiểm tra thông tin bên dưới rồi tạo bảng điều khiển của bạn.",
+      "username": "Tên người dùng",
+      "password": "Mật khẩu",
+      "url": "Địa chỉ bảng điều khiển",
+      "language": "Ngôn ngữ",
+      "saveTitle": "Hãy lưu thông tin này ngay bây giờ",
+      "saveWarning": "Thông tin sẽ không hiển thị lại và không được lưu ở nơi nào khác. Không có nó bạn không thể đăng nhập.",
+      "create": "Tạo bảng điều khiển của tôi"
+    },
+    "done": {
+      "title": "Bảng điều khiển của bạn đã sẵn sàng",
+      "desc": "Bảng điều khiển đang khởi động lại ở địa chỉ mới. Bạn sẽ được chuyển hướng tự động.",
+      "address": "Địa chỉ bảng điều khiển",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép vào bộ nhớ tạm",
+      "waiting": "Đang chờ bảng điều khiển hoạt động...",
+      "timeout": "Bảng điều khiển chưa phản hồi. Hãy mở thủ công khi nó đã chạy.",
+      "open": "Mở bảng điều khiển"
+    },
+    "fatal": {
+      "badTokenTitle": "Liên kết thiết lập này không hợp lệ",
+      "alreadyDoneTitle": "Thiết lập đã hoàn tất"
+    },
+    "errors": {
+      "bad_token": "Liên kết thiết lập không hợp lệ hoặc đã hết hạn. Hãy dùng liên kết do trình cài đặt in ra.",
+      "already_done": "Bảng điều khiển này đã được cấu hình. Hãy đăng nhập bằng tài khoản quản trị.",
+      "username_invalid": "Tên người dùng phải từ 3 đến 32 ký tự: chữ cái, chữ số, dấu chấm, gạch dưới hoặc gạch ngang.",
+      "password_weak": "Mật khẩu quá yếu. Dùng ít nhất 8 ký tự và tránh mật khẩu phổ biến hoặc tên người dùng của bạn.",
+      "port_invalid": "Cổng phải là số từ 1024 đến 65535.",
+      "port_in_use": "Cổng này đang được sử dụng. Hãy chọn cổng khác.",
+      "base_path_invalid": "Đường dẫn phải từ 4 đến 64 ký tự: chữ cái, chữ số, gạch ngang, gạch dưới và dấu gạch chéo, không có gạch chéo kép.",
+      "rate_limited": "Quá nhiều lần thử. Hãy đợi một phút rồi thử lại.",
+      "internal_error": "Máy chủ gặp sự cố. Hãy thử lại.",
+      "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối và thử lại."
+    }
+  },
   "tgbot": {
     "keyboardClosed": "❌ Bàn phím đã đóng!",
     "noResult": "❗ Không có kết quả!",

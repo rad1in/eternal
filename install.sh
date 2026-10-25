@@ -1113,6 +1113,113 @@ prompt_and_setup_ssl() {
     esac
 }
 
+# ---- first-run setup wizard -------------------------------------------------
+# A fresh install no longer asks for credentials in the terminal: the panel
+# starts in setup mode and the installer prints a one-time link to its wizard.
+
+SETUP_WIZARD_PORT=""
+SETUP_WIZARD_TOKEN=""
+SETUP_WIZARD_IP=""
+
+# kv_value KEY OUTPUT: the value of a key=value line in a command's output.
+kv_value() {
+    printf '%s\n' "$2" | sed -n "s/^$1=//p" | head -n1
+}
+
+# prepare_setup_wizard <public-ip>: open the wizard on the freshly installed panel
+# (before the service's first start) and remember its port and token. Returns
+# non-zero when this build has no wizard, so the caller falls back to the old flow.
+prepare_setup_wizard() {
+    local ip="$1" out port_arg=() code
+    [[ -n "${XUI_PANEL_PORT:-}" ]] && port_arg=(-port "${XUI_PANEL_PORT}")
+    out=$("${xui_folder}/eternal" setup-init "${port_arg[@]}" 2> /dev/null)
+    code=$?
+    [[ $code -eq 0 ]] || return 1
+    SETUP_WIZARD_PORT=$(kv_value setup_port "$out")
+    SETUP_WIZARD_TOKEN=$(kv_value setup_token "$out")
+    SETUP_WIZARD_IP="$ip"
+    [[ "$SETUP_WIZARD_PORT" =~ ^[0-9]+$ && -n "$SETUP_WIZARD_TOKEN" ]]
+}
+
+# setup_wizard_hosts: public address first, then every private address, one per line.
+setup_wizard_hosts() {
+    local seen=" " h
+    for h in "$SETUP_WIZARD_IP" $(hostname -I 2> /dev/null); do
+        [[ -n "$h" && "$h" != *:* && "$seen" != *" $h "* ]] || continue
+        seen+="$h "
+        echo "$h"
+    done
+}
+
+# wait_for_setup_wizard: the service was just started; give it a few seconds to answer.
+wait_for_setup_wizard() {
+    local i
+    for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+        if curl -fsS -o /dev/null --max-time 2 "http://127.0.0.1:${SETUP_WIZARD_PORT}/setup?t=${SETUP_WIZARD_TOKEN}" 2> /dev/null; then
+            return 0
+        fi
+        sleep 1
+    done
+    return 1
+}
+
+# open_setup_wizard_locally: on a machine with a desktop session, open the link in a browser.
+# A headless server has no browser, so this does nothing there. Never fatal.
+open_setup_wizard_locally() {
+    local url="$1" opener="" candidate
+    [[ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" && "$NONINTERACTIVE" != "1" ]] || return 0
+    for candidate in google-chrome google-chrome-stable chromium chromium-browser xdg-open; do
+        if command -v "$candidate" > /dev/null 2>&1; then
+            opener="$candidate"
+            break
+        fi
+    done
+    [[ -n "$opener" ]] || return 0
+    if [[ -n "${SUDO_USER:-}" && "$SUDO_USER" != "root" ]]; then
+        sudo -u "$SUDO_USER" env DISPLAY="${DISPLAY:-}" WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-}" "$opener" "$url" > /dev/null 2>&1 &
+    else
+        "$opener" "$url" > /dev/null 2>&1 &
+    fi
+    disown 2> /dev/null || true
+}
+
+# print_setup_wizard_links <version>: the closing screen of a fresh install.
+print_setup_wizard_links() {
+    local version="$1" bold='\033[1m' dim='\033[2m' cyan='\033[0;36m' h first=""
+    local rule="──────────────────────────────────────────────────────────────"
+    echo ""
+    echo -e "${green}╭${rule}╮${plain}"
+    local title="Eternal ${version} is installed"
+    printf "${green}│${plain}  ${green}✔${plain} ${bold}%s${plain}%*s${green}│${plain}\n" "${title}" $((62 - 4 - ${#title})) ""
+    echo -e "${green}╰${rule}╯${plain}"
+    echo ""
+    echo -e "  ${bold}Finish the setup in your browser${plain} — open the link that reaches"
+    echo -e "  this server from where you are:"
+    echo ""
+    local label
+    while read -r h; do
+        [[ -n "$h" ]] || continue
+        if [[ -z "$first" && "$h" == "$SETUP_WIZARD_IP" ]]; then
+            label="as the internet sees this host"
+        else
+            label="private address"
+        fi
+        [[ -z "$first" ]] && first="$h"
+        echo -e "    ${cyan}➜${plain}  ${blue}http://${h}:${SETUP_WIZARD_PORT}/setup?t=${SETUP_WIZARD_TOKEN}${plain}"
+        echo -e "       ${dim}${label}${plain}"
+    done < <(setup_wizard_hosts)
+    echo ""
+    echo -e "  ${yellow}!${plain} Port ${bold}${SETUP_WIZARD_PORT}${plain} was picked at random and is free on this host."
+    echo -e "    Open it in the firewall if one is running. The wizard can move it"
+    echo -e "    before you finish."
+    echo -e "  ${yellow}!${plain} The link works once: it stops working when the wizard is done."
+    echo -e "    Lost it? Run ${bold}eternal setup-link${plain} for a new one."
+    echo ""
+    echo -e "  ${dim}Service:${plain}  systemctl status eternal"
+    echo -e "  ${dim}Logs:${plain}     journalctl -u eternal -f"
+    echo ""
+}
+
 config_after_install() {
     local existing_hasDefaultCredential=$(${xui_folder}/eternal setting -show true | grep -Eo 'hasDefaultCredential: .+' | awk '{print $2}')
     local existing_webBasePath=$(${xui_folder}/eternal setting -show true | grep -Eo 'webBasePath: .+' | awk '{print $2}' | sed 's#^/##')
@@ -1154,6 +1261,15 @@ config_after_install() {
                 fi
             done
         fi
+    fi
+
+    if [[ "$existing_hasDefaultCredential" == "true" && -z "${XUI_USERNAME:-}" && -z "${XUI_PASSWORD:-}" \
+        && "${XUI_DB_TYPE:-sqlite}" == "sqlite" ]]; then
+        if prepare_setup_wizard "${server_ip}"; then
+            ${xui_folder}/eternal migrate
+            return 0
+        fi
+        echo -e "${yellow}This build has no setup wizard; falling back to the terminal setup.${plain}"
     fi
 
     if [[ ${#existing_webBasePath} -lt 4 ]]; then
@@ -2200,7 +2316,15 @@ install_eternal() {
     # works out of the box (no-op when XUI_ENABLE_FAIL2BAN=false). Never fatal.
     setup_fail2ban
 
-    echo -e "${green}eternal ${tag_version}${plain} installation finished, it is running now..."
+    if [[ -n "$SETUP_WIZARD_TOKEN" ]]; then
+        if ! wait_for_setup_wizard; then
+            echo -e "${yellow}The panel did not answer yet; check 'systemctl status eternal' if the link below does not open.${plain}"
+        fi
+        print_setup_wizard_links "${tag_version}"
+        open_setup_wizard_locally "http://127.0.0.1:${SETUP_WIZARD_PORT}/setup?t=${SETUP_WIZARD_TOKEN}"
+    else
+        echo -e "${green}eternal ${tag_version}${plain} installation finished, it is running now..."
+    fi
     echo -e ""
     echo -e "┌──────────────────────────────────────────────────────────┐
 │  ${blue}eternal control menu usages (subcommands):${plain}              │

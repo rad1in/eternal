@@ -46,4 +46,18 @@ export async function readyI18n(scope: LanguageScope = 'panel') {
   return i18next;
 }
 
+export async function switchLanguage(code: string) {
+  const next = Object.prototype.hasOwnProperty.call(lazyModules, moduleKeyFor(code))
+    ? code
+    : FALLBACK;
+  if (next !== FALLBACK && !i18next.hasResourceBundle(next, 'translation')) {
+    const loader = lazyModules[moduleKeyFor(next)] as () => Promise<{
+      default: Record<string, unknown>;
+    }>;
+    const mod = await loader();
+    i18next.addResourceBundle(next, 'translation', mod.default ?? mod, true, true);
+  }
+  await i18next.changeLanguage(next);
+}
+
 export { i18next as i18n };

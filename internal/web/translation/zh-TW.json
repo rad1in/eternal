@@ -3357,6 +3357,103 @@
       "network": "發生錯誤，請重試。"
     }
   },
+  "setup": {
+    "title": "Eternal 初始設定",
+    "retry": "重試",
+    "nav": {
+      "back": "上一步",
+      "next": "下一步"
+    },
+    "steps": {
+      "welcome": "歡迎",
+      "account": "管理員帳號",
+      "address": "面板位址",
+      "review": "確認"
+    },
+    "welcome": {
+      "heading": "歡迎使用 Eternal",
+      "intro": "只需幾個步驟即可完成面板設定，此流程只會進行一次。",
+      "version": "版本 {version}",
+      "language": "語言",
+      "nextTitle": "接下來會發生什麼",
+      "next1": "建立用於登入的管理員帳號。",
+      "next2": "選擇面板使用的連接埠與秘密路徑。",
+      "next3": "確認所有資訊後，面板將依您的設定重新啟動。"
+    },
+    "account": {
+      "heading": "建立管理員帳號",
+      "intro": "您將使用這些憑證登入面板。",
+      "username": "使用者名稱",
+      "usernameHelp": "3 到 32 個字元：字母、數字、句點、底線或連字號。",
+      "password": "密碼",
+      "passwordHelp": "至少 8 個字元。請避免常見密碼與您的使用者名稱。",
+      "confirm": "確認密碼",
+      "mismatch": "兩次輸入的密碼不一致。",
+      "generate": "產生強密碼",
+      "show": "顯示密碼",
+      "hide": "隱藏密碼",
+      "copy": "複製密碼",
+      "copied": "已複製到剪貼簿",
+      "strength": "強度",
+      "strength0": "太弱",
+      "strength1": "弱",
+      "strength2": "普通",
+      "strength3": "良好",
+      "strength4": "強"
+    },
+    "address": {
+      "heading": "選擇面板的存取位置",
+      "intro": "選擇連接埠與秘密路徑。隨機路徑可讓登入頁面不被掃描器發現。",
+      "port": "連接埠",
+      "portHelp": "1024 到 65535 之間的數字。",
+      "random": "隨機",
+      "randomPort": "產生隨機連接埠",
+      "randomPath": "產生隨機路徑",
+      "portChecking": "正在檢查連接埠...",
+      "portFree": "連接埠可用。",
+      "basePath": "秘密路徑",
+      "basePathHelp": "4 到 64 個字元：字母、數字、連字號、底線與斜線。",
+      "preview": "您的面板將位於",
+      "httpsNote": "面板以一般 HTTP 啟動。設定完成後，請在伺服器上使用 eternal 指令，或在面板設定中啟用 HTTPS。"
+    },
+    "review": {
+      "heading": "確認並建立",
+      "intro": "請檢查以下資訊，然後建立面板。",
+      "username": "使用者名稱",
+      "password": "密碼",
+      "url": "面板位址",
+      "language": "語言",
+      "saveTitle": "請立即儲存這些憑證",
+      "saveWarning": "它們不會再次顯示，也不會儲存在其他任何地方。沒有它們將無法登入。",
+      "create": "建立我的面板"
+    },
+    "done": {
+      "title": "面板已就緒",
+      "desc": "面板正在新位址上重新啟動，您將被自動導向。",
+      "address": "面板位址",
+      "copy": "複製",
+      "copied": "已複製到剪貼簿",
+      "waiting": "正在等待面板上線...",
+      "timeout": "面板尚未回應。請在其啟動後手動開啟。",
+      "open": "開啟面板"
+    },
+    "fatal": {
+      "badTokenTitle": "此設定連結無效",
+      "alreadyDoneTitle": "設定已完成"
+    },
+    "errors": {
+      "bad_token": "設定連結無效或已過期。請使用安裝程式印出的連結。",
+      "already_done": "此面板已設定完成。請使用管理員帳號登入。",
+      "username_invalid": "使用者名稱必須為 3 到 32 個字元：字母、數字、句點、底線或連字號。",
+      "password_weak": "密碼太弱。請至少使用 8 個字元，並避免常見密碼或您的使用者名稱。",
+      "port_invalid": "連接埠必須是 1024 到 65535 之間的數字。",
+      "port_in_use": "此連接埠已被占用，請選擇其他連接埠。",
+      "base_path_invalid": "路徑必須為 4 到 64 個字元：字母、數字、連字號、底線與斜線，且不可包含連續斜線。",
+      "rate_limited": "嘗試次數過多，請等待一分鐘後重試。",
+      "internal_error": "伺服器發生問題，請重試。",
+      "network": "無法連線到伺服器。請檢查網路後重試。"
+    }
+  },
   "tgbot": {
     "keyboardClosed": "❌ 自定義鍵盤已關閉！",
     "noResult": "❗ 沒有結果！",

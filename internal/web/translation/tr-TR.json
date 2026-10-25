@@ -3357,6 +3357,103 @@
       "network": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
     }
   },
+  "setup": {
+    "title": "Eternal Kurulumu",
+    "retry": "Tekrar dene",
+    "nav": {
+      "back": "Geri",
+      "next": "İleri"
+    },
+    "steps": {
+      "welcome": "Hoş geldiniz",
+      "account": "Yönetici hesabı",
+      "address": "Panel adresi",
+      "review": "Gözden geçir"
+    },
+    "welcome": {
+      "heading": "Eternal'a hoş geldiniz",
+      "intro": "Panelinizi birkaç adımda kuralım. Bu işlem yalnızca bir kez yapılır.",
+      "version": "Sürüm {version}",
+      "language": "Dil",
+      "nextTitle": "Sırada ne var",
+      "next1": "Giriş yapacağınız yönetici hesabını oluşturun.",
+      "next2": "Panelin çalışacağı portu ve gizli yolu seçin.",
+      "next3": "Her şeyi gözden geçirin; panel ayarlarınızla yeniden başlatılır."
+    },
+    "account": {
+      "heading": "Yönetici hesabını oluşturun",
+      "intro": "Panele giriş yapmak için bu bilgileri kullanacaksınız.",
+      "username": "Kullanıcı adı",
+      "usernameHelp": "3 ile 32 karakter: harf, rakam, nokta, alt çizgi veya tire.",
+      "password": "Parola",
+      "passwordHelp": "En az 8 karakter. Yaygın parolalardan ve kullanıcı adınızdan kaçının.",
+      "confirm": "Parolayı doğrulayın",
+      "mismatch": "Parolalar eşleşmiyor.",
+      "generate": "Güçlü parola oluştur",
+      "show": "Parolayı göster",
+      "hide": "Parolayı gizle",
+      "copy": "Parolayı kopyala",
+      "copied": "Panoya kopyalandı",
+      "strength": "Güç",
+      "strength0": "Çok zayıf",
+      "strength1": "Zayıf",
+      "strength2": "Orta",
+      "strength3": "İyi",
+      "strength4": "Güçlü"
+    },
+    "address": {
+      "heading": "Panelin nerede çalışacağını seçin",
+      "intro": "Bir port ve gizli bir yol seçin. Rastgele bir yol, giriş sayfasını tarayıcılardan gizler.",
+      "port": "Port",
+      "portHelp": "1024 ile 65535 arasında bir sayı.",
+      "random": "Rastgele",
+      "randomPort": "Rastgele port oluştur",
+      "randomPath": "Rastgele yol oluştur",
+      "portChecking": "Port denetleniyor...",
+      "portFree": "Port boş.",
+      "basePath": "Gizli yol",
+      "basePathHelp": "4 ile 64 karakter: harf, rakam, tire, alt çizgi ve eğik çizgi.",
+      "preview": "Panelinize şu adresten ulaşılacak",
+      "httpsNote": "Panel düz HTTP ile başlar. Kurulumdan sonra sunucuda eternal komutuyla veya panel Ayarları'ndan HTTPS'i etkinleştirin."
+    },
+    "review": {
+      "heading": "Gözden geçir ve oluştur",
+      "intro": "Aşağıdaki bilgileri kontrol edin ve panelinizi oluşturun.",
+      "username": "Kullanıcı adı",
+      "password": "Parola",
+      "url": "Panel adresi",
+      "language": "Dil",
+      "saveTitle": "Bu bilgileri şimdi kaydedin",
+      "saveWarning": "Bir daha gösterilmez ve başka bir yerde saklanmaz. Bunlar olmadan giriş yapamazsınız.",
+      "create": "Panelimi oluştur"
+    },
+    "done": {
+      "title": "Paneliniz hazır",
+      "desc": "Panel yeni adresinde yeniden başlatılıyor. Otomatik olarak yönlendirileceksiniz.",
+      "address": "Panel adresi",
+      "copy": "Kopyala",
+      "copied": "Panoya kopyalandı",
+      "waiting": "Panelin çevrimiçi olması bekleniyor...",
+      "timeout": "Panel henüz yanıt vermedi. Çalışır duruma geldiğinde elle açın.",
+      "open": "Paneli aç"
+    },
+    "fatal": {
+      "badTokenTitle": "Bu kurulum bağlantısı geçerli değil",
+      "alreadyDoneTitle": "Kurulum zaten tamamlandı"
+    },
+    "errors": {
+      "bad_token": "Kurulum bağlantısı geçersiz veya süresi dolmuş. Yükleyicinin yazdırdığı bağlantıyı kullanın.",
+      "already_done": "Bu panel zaten yapılandırılmış. Yönetici hesabınızla giriş yapın.",
+      "username_invalid": "Kullanıcı adı 3 ile 32 karakter olmalı: harf, rakam, nokta, alt çizgi veya tire.",
+      "password_weak": "Parola çok zayıf. En az 8 karakter kullanın; yaygın parolalardan ve kullanıcı adınızdan kaçının.",
+      "port_invalid": "Port 1024 ile 65535 arasında bir sayı olmalı.",
+      "port_in_use": "Bu port zaten kullanımda. Başka bir tane seçin.",
+      "base_path_invalid": "Yol 4 ile 64 karakter olmalı: harf, rakam, tire, alt çizgi ve eğik çizgi; çift eğik çizgi olmamalı.",
+      "rate_limited": "Çok fazla deneme. Bir dakika bekleyip tekrar deneyin.",
+      "internal_error": "Sunucuda bir sorun oluştu. Tekrar deneyin.",
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin."
+    }
+  },
   "tgbot": {
     "keyboardClosed": "❌ Klavye kapatıldı!",
     "noResult": "❗ Sonuç yok!",
