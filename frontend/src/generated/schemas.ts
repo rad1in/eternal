@@ -5488,7 +5488,7 @@ export const SCHEMAS: Record<string, unknown> = {
     "description": "NodeJoinCommand is the join command with the token it carries and when it expires.",
     "properties": {
       "command": {
-        "example": "XUI_NONINTERACTIVE=1 XUI_JOIN_URL='https://panel.example.com:2053/abc/join/node' XUI_JOIN_TOKEN='...' bash \u003c(curl -Ls ...)",
+        "example": "curl -fsSL https://panel.example.com:2053/abc/install-node.sh | bash -s -- --panel https://panel.example.com:2053/abc --token ...",
         "type": "string"
       },
       "expiresAt": {

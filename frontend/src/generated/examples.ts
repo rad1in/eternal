@@ -1376,7 +1376,7 @@ export const EXAMPLES: Record<string, unknown> = {
     "xrayVersion": "25.10.31"
   },
   "NodeJoinCommand": {
-    "command": "XUI_NONINTERACTIVE=1 XUI_JOIN_URL='https://panel.example.com:2053/abc/join/node' XUI_JOIN_TOKEN='...' bash \u003c(curl -Ls ...)",
+    "command": "curl -fsSL https://panel.example.com:2053/abc/install-node.sh | bash -s -- --panel https://panel.example.com:2053/abc --token ...",
     "expiresAt": 1760003600000,
     "joinUrl": "https://panel.example.com:2053/abc/join/node"
   },

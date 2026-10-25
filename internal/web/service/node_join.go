@@ -18,8 +18,6 @@ const (
 	nodeJoinSetting   = "nodeJoinTokens"
 	nodeJoinMaxTokens = 20
 	nodeJoinProbe     = 6 * time.Second
-	// JoinScriptURL is the one-command node installer the join command downloads.
-	JoinScriptURL = "https://raw.githubusercontent.com/rad1in/eternal/main/join-node.sh"
 )
 
 // nodeJoinMu serializes token claims so one token can only ever add one node.
@@ -188,19 +186,20 @@ func (s *NodeJoinService) Join(token string, in NodeJoinRequest) (*NodeView, err
 
 // NodeJoinCommand is the join command with the token it carries and when it expires.
 type NodeJoinCommand struct {
-	Command   string `json:"command" example:"XUI_NONINTERACTIVE=1 XUI_JOIN_URL='https://panel.example.com:2053/abc/join/node' XUI_JOIN_TOKEN='...' bash <(curl -Ls ...)"`
+	Command   string `json:"command" example:"curl -fsSL https://panel.example.com:2053/abc/install-node.sh | bash -s -- --panel https://panel.example.com:2053/abc --token ..."`
 	JoinURL   string `json:"joinUrl" example:"https://panel.example.com:2053/abc/join/node"`
 	ExpiresAt int64  `json:"expiresAt" example:"1760003600000"`
 }
 
-// IssueCommand creates a one-hour token and the command that uses it against masterURL.
-func (s *NodeJoinService) IssueCommand(masterURL, name string) (*NodeJoinCommand, error) {
+// IssueCommand creates a one-hour token and the command that uses it against
+// masterURL; pin is the master's TLS key when its certificate is self-signed.
+func (s *NodeJoinService) IssueCommand(masterURL, name, pin string) (*NodeJoinCommand, error) {
 	token, expires, err := s.Issue(time.Hour)
 	if err != nil {
 		return nil, err
 	}
 	return &NodeJoinCommand{
-		Command:   JoinCommand(masterURL, token, name),
+		Command:   JoinCommand(masterURL, token, name, pin),
 		JoinURL:   strings.TrimRight(masterURL, "/") + "/join/node",
 		ExpiresAt: expires,
 	}, nil
@@ -210,17 +209,21 @@ func shellQuote(s string) string {
 	return "'" + strings.ReplaceAll(s, "'", `'\''`) + "'"
 }
 
-// JoinCommand is the shell command an admin runs on a new server: it installs
-// the panel and registers the server on the master at masterURL (with base path).
-func JoinCommand(masterURL, token, name string) string {
-	joinURL := strings.TrimRight(masterURL, "/") + "/join/node"
-	parts := []string{
-		"XUI_NONINTERACTIVE=1",
-		"XUI_JOIN_URL=" + shellQuote(joinURL),
-		"XUI_JOIN_TOKEN=" + shellQuote(token),
+// JoinCommand is the shell command an admin runs on a new server: it fetches the
+// installer from the master at masterURL (with base path), which installs the
+// panel there and registers the server back on the master.
+func JoinCommand(masterURL, token, name, pin string) string {
+	master := strings.TrimRight(masterURL, "/")
+	curl := "curl -fsSL"
+	if pin != "" {
+		curl = "curl -fsSLk --pinnedpubkey " + shellQuote(pin)
 	}
+	cmd := curl + " " + master + "/install-node.sh | bash -s -- --panel " + master + " --token " + token
 	if name != "" {
-		parts = append(parts, "XUI_NODE_NAME="+shellQuote(name))
+		cmd += " --name " + shellQuote(name)
 	}
-	return strings.Join(parts, " ") + " bash <(curl -Ls " + JoinScriptURL + ")"
+	if pin != "" {
+		cmd += " --pin " + shellQuote(pin)
+	}
+	return cmd
 }

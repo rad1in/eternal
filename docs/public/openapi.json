@@ -5514,7 +5514,7 @@
         "description": "NodeJoinCommand is the join command with the token it carries and when it expires.",
         "properties": {
           "command": {
-            "example": "XUI_NONINTERACTIVE=1 XUI_JOIN_URL='https://panel.example.com:2053/abc/join/node' XUI_JOIN_TOKEN='...' bash <(curl -Ls ...)",
+            "example": "curl -fsSL https://panel.example.com:2053/abc/install-node.sh | bash -s -- --panel https://panel.example.com:2053/abc --token ...",
             "type": "string"
           },
           "expiresAt": {
@@ -16577,7 +16577,7 @@
         "tags": [
           "Nodes"
         ],
-        "summary": "Issue a single-use join token (valid one hour, stored hashed) and the shell command that installs the panel on a new server and registers it here. The server calls POST {basePath}/join/node with the token, so the master must be reachable from it.",
+        "summary": "Issue a single-use join token (valid one hour, stored hashed) and the shell command that installs the panel on a new server and registers it here. The command fetches {basePath}/install-node.sh from this panel and the server then calls POST {basePath}/join/node with the token, so the master must be reachable from it.",
         "operationId": "post_panel_api_nodes_joinCommand",
         "requestBody": {
           "required": true,
@@ -16615,7 +16615,7 @@
                 "example": {
                   "success": true,
                   "obj": {
-                    "command": "XUI_NONINTERACTIVE=1 XUI_JOIN_URL='https://panel.example.com:2053/abc/join/node' XUI_JOIN_TOKEN='...' bash <(curl -Ls ...)",
+                    "command": "curl -fsSL https://panel.example.com:2053/abc/install-node.sh | bash -s -- --panel https://panel.example.com:2053/abc --token ...",
                     "expiresAt": 1760003600000,
                     "joinUrl": "https://panel.example.com:2053/abc/join/node"
                   }

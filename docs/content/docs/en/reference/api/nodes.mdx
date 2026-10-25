@@ -55,9 +55,10 @@ _openapi:
     - depth: 2
       title: Issue a single-use join token (valid one hour, stored hashed) and the
         shell command that installs the panel on a new server and registers it
-        here. The server calls POST {basePath}/join/node with the token, so the
+        here. The command fetches {basePath}/install-node.sh from this panel and
+        the server then calls POST {basePath}/join/node with the token, so the
         master must be reachable from it.
-      url: '#issue-a-single-use-join-token-valid-one-hour-stored-hashed-and-the-shell-command-that-installs-the-panel-on-a-new-server-and-registers-it-here-the-server-calls-post-basepathjoinnode-with-the-token-so-the-master-must-be-reachable-from-it'
+      url: '#issue-a-single-use-join-token-valid-one-hour-stored-hashed-and-the-shell-command-that-installs-the-panel-on-a-new-server-and-registers-it-here-the-command-fetches-basepathinstall-nodesh-from-this-panel-and-the-server-then-calls-post-basepathjoinnode-with-the-token-so-the-master-must-be-reachable-from-it'
     - depth: 2
       title: Probe a node without saving it. Uses the body as connection details and
         returns the same heartbeat snapshot a registered node would have.
@@ -131,9 +132,10 @@ _openapi:
         id: pause-or-resume-traffic-sync-with-this-node
       - content: Issue a single-use join token (valid one hour, stored hashed) and the
           shell command that installs the panel on a new server and registers it
-          here. The server calls POST {basePath}/join/node with the token, so
+          here. The command fetches {basePath}/install-node.sh from this panel
+          and the server then calls POST {basePath}/join/node with the token, so
           the master must be reachable from it.
-        id: issue-a-single-use-join-token-valid-one-hour-stored-hashed-and-the-shell-command-that-installs-the-panel-on-a-new-server-and-registers-it-here-the-server-calls-post-basepathjoinnode-with-the-token-so-the-master-must-be-reachable-from-it
+        id: issue-a-single-use-join-token-valid-one-hour-stored-hashed-and-the-shell-command-that-installs-the-panel-on-a-new-server-and-registers-it-here-the-command-fetches-basepathinstall-nodesh-from-this-panel-and-the-server-then-calls-post-basepathjoinnode-with-the-token-so-the-master-must-be-reachable-from-it
       - content: Probe a node without saving it. Uses the body as connection details and
           returns the same heartbeat snapshot a registered node would have.
         id: probe-a-node-without-saving-it-uses-the-body-as-connection-details-and-returns-the-same-heartbeat-snapshot-a-registered-node-would-have

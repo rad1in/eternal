@@ -16,9 +16,10 @@ import (
 )
 
 type NodeController struct {
-	nodeService service.NodeService
-	xrayService service.XrayService
-	joinService service.NodeJoinService
+	nodeService    service.NodeService
+	xrayService    service.XrayService
+	joinService    service.NodeJoinService
+	settingService service.SettingService
 }
 
 func NewNodeController(g *gin.RouterGroup) *NodeController {
