@@ -592,6 +592,12 @@ export const BackupResultSchema = z.object({
 });
 export type BackupResult = z.infer<typeof BackupResultSchema>;
 
+export const BotLinkSchema = z.object({
+  label: z.string(),
+  url: z.string(),
+});
+export type BotLink = z.infer<typeof BotLinkSchema>;
+
 export const CardPayConfigSchema = z.object({
   bankName: z.string(),
   cardNumber: z.string(),
@@ -868,6 +874,20 @@ export const CryptoConfigSchema = z.object({
 });
 export type CryptoConfig = z.infer<typeof CryptoConfigSchema>;
 
+export const CustomOfferConfigSchema = z.object({
+  currency: z.string(),
+  enabled: z.boolean(),
+  limitIp: z.number().int(),
+  maxDays: z.number().int(),
+  maxGb: z.number().int(),
+  minDays: z.number().int(),
+  minGb: z.number().int(),
+  pricePerDay: z.number().int(),
+  pricePerGb: z.number().int(),
+  templateId: z.number().int(),
+});
+export type CustomOfferConfig = z.infer<typeof CustomOfferConfigSchema>;
+
 export const DashboardLayoutSchema = z.object({
   widgets: z.array(z.lazy(() => DashboardWidgetSchema)),
 });
@@ -902,6 +922,12 @@ export const FallbackParentInfoSchema = z.object({
   path: z.string().optional(),
 });
 export type FallbackParentInfo = z.infer<typeof FallbackParentInfoSchema>;
+
+export const ForceJoinChatSchema = z.object({
+  chat: z.string(),
+  link: z.string(),
+});
+export type ForceJoinChat = z.infer<typeof ForceJoinChatSchema>;
 
 export const GeoCategorySchema = z.object({
   attributes: z.array(z.string()),
@@ -1546,6 +1572,7 @@ export const PendingActionSchema = z.object({
 export type PendingAction = z.infer<typeof PendingActionSchema>;
 
 export const PlanSchema = z.object({
+  category: z.string(),
   createdAt: z.number().int(),
   currency: z.string(),
   description: z.string(),
@@ -1636,9 +1663,11 @@ export const RotationResultSchema = z.object({
 export type RotationResult = z.infer<typeof RotationResultSchema>;
 
 export const SalesConfigSchema = z.object({
+  bot: z.lazy(() => ShopBotConfigSchema),
   card: z.lazy(() => CardPayConfigSchema),
   clearSecrets: z.array(z.string()).optional(),
   crypto: z.lazy(() => CryptoConfigSchema),
+  custom: z.lazy(() => CustomOfferConfigSchema),
   idpay: z.lazy(() => IDPayConfigSchema),
   paypal: z.lazy(() => PayPalConfigSchema),
   publicBaseUrl: z.string(),
@@ -1652,9 +1681,11 @@ export const SalesConfigSchema = z.object({
 export type SalesConfig = z.infer<typeof SalesConfigSchema>;
 
 export const SalesConfigViewSchema = z.object({
+  bot: z.lazy(() => ShopBotConfigSchema),
   card: z.lazy(() => CardPayConfigSchema),
   clearSecrets: z.array(z.string()).optional(),
   crypto: z.lazy(() => CryptoConfigSchema),
+  custom: z.lazy(() => CustomOfferConfigSchema),
   hasCryptoApiKey: z.boolean(),
   hasCryptoIpnSecret: z.boolean(),
   hasIdpayApiKey: z.boolean(),
@@ -1775,11 +1806,31 @@ export const SharedAccountFlagSchema = z.object({
 });
 export type SharedAccountFlag = z.infer<typeof SharedAccountFlagSchema>;
 
+export const ShopBotConfigSchema = z.object({
+  forceJoin: z.array(z.lazy(() => ForceJoinChatSchema)),
+  links: z.array(z.lazy(() => BotLinkSchema)),
+  miniApp: z.boolean(),
+  receiptChatId: z.number().int(),
+});
+export type ShopBotConfig = z.infer<typeof ShopBotConfigSchema>;
+
 export const ShopCatalogSchema = z.object({
+  custom: z.lazy(() => ShopCustomSchema).nullable().optional(),
   methods: z.array(z.string()),
   plans: z.array(z.lazy(() => ShopPlanSchema)),
 });
 export type ShopCatalog = z.infer<typeof ShopCatalogSchema>;
+
+export const ShopCustomSchema = z.object({
+  currency: z.string(),
+  maxDays: z.number().int(),
+  maxGb: z.number().int(),
+  minDays: z.number().int(),
+  minGb: z.number().int(),
+  pricePerDay: z.number().int(),
+  pricePerGb: z.number().int(),
+});
+export type ShopCustom = z.infer<typeof ShopCustomSchema>;
 
 export const ShopOrderViewSchema = z.object({
   amount: z.number().int(),
@@ -1802,6 +1853,7 @@ export const ShopOrderViewSchema = z.object({
 export type ShopOrderView = z.infer<typeof ShopOrderViewSchema>;
 
 export const ShopPlanSchema = z.object({
+  category: z.string(),
   currency: z.string(),
   description: z.string(),
   durationDays: z.number().int(),
@@ -1812,6 +1864,27 @@ export const ShopPlanSchema = z.object({
   totalGB: z.number().int(),
 });
 export type ShopPlan = z.infer<typeof ShopPlanSchema>;
+
+export const ShopServiceSchema = z.object({
+  down: z.number().int(),
+  email: z.string(),
+  enable: z.boolean(),
+  expiryTime: z.number().int(),
+  id: z.number().int(),
+  subscriptionUrl: z.string(),
+  total: z.number().int(),
+  up: z.number().int(),
+});
+export type ShopService = z.infer<typeof ShopServiceSchema>;
+
+export const ShopSessionSchema = z.object({
+  lang: z.string(),
+  name: z.string(),
+  services: z.array(z.lazy(() => ShopServiceSchema)),
+  tgId: z.number().int(),
+  token: z.string(),
+});
+export type ShopSession = z.infer<typeof ShopSessionSchema>;
 
 export const ShopWalletSchema = z.object({
   balances: z.array(z.lazy(() => WalletBalanceSchema)),

@@ -566,6 +566,11 @@ export interface BackupResult {
   pruned: number;
 }
 
+export interface BotLink {
+  label: string;
+  url: string;
+}
+
 export interface CardPayConfig {
   bankName: string;
   cardNumber: string;
@@ -821,6 +826,19 @@ export interface CryptoConfig {
   sandbox: boolean;
 }
 
+export interface CustomOfferConfig {
+  currency: string;
+  enabled: boolean;
+  limitIp: number;
+  maxDays: number;
+  maxGb: number;
+  minDays: number;
+  minGb: number;
+  pricePerDay: number;
+  pricePerGb: number;
+  templateId: number;
+}
+
 export interface DashboardLayout {
   widgets: DashboardWidget[];
 }
@@ -850,6 +868,11 @@ export interface DiscountCode {
 export interface FallbackParentInfo {
   masterId: number;
   path?: string;
+}
+
+export interface ForceJoinChat {
+  chat: string;
+  link: string;
 }
 
 export interface GeoCategory {
@@ -1451,6 +1474,7 @@ export interface PendingAction {
 }
 
 export interface Plan {
+  category: string;
   createdAt: number;
   currency: string;
   description: string;
@@ -1534,9 +1558,11 @@ export interface RotationResult {
 }
 
 export interface SalesConfig {
+  bot: ShopBotConfig;
   card: CardPayConfig;
   clearSecrets?: string[];
   crypto: CryptoConfig;
+  custom: CustomOfferConfig;
   idpay: IDPayConfig;
   paypal: PayPalConfig;
   publicBaseUrl: string;
@@ -1549,9 +1575,11 @@ export interface SalesConfig {
 }
 
 export interface SalesConfigView {
+  bot: ShopBotConfig;
   card: CardPayConfig;
   clearSecrets?: string[];
   crypto: CryptoConfig;
+  custom: CustomOfferConfig;
   hasCryptoApiKey: boolean;
   hasCryptoIpnSecret: boolean;
   hasIdpayApiKey: boolean;
@@ -1665,9 +1693,27 @@ export interface SharedAccountFlag {
   lastSeen: number;
 }
 
+export interface ShopBotConfig {
+  forceJoin: ForceJoinChat[];
+  links: BotLink[];
+  miniApp: boolean;
+  receiptChatId: number;
+}
+
 export interface ShopCatalog {
+  custom?: ShopCustom | null;
   methods: string[];
   plans: ShopPlan[];
+}
+
+export interface ShopCustom {
+  currency: string;
+  maxDays: number;
+  maxGb: number;
+  minDays: number;
+  minGb: number;
+  pricePerDay: number;
+  pricePerGb: number;
 }
 
 export interface ShopOrderView {
@@ -1690,6 +1736,7 @@ export interface ShopOrderView {
 }
 
 export interface ShopPlan {
+  category: string;
   currency: string;
   description: string;
   durationDays: number;
@@ -1698,6 +1745,25 @@ export interface ShopPlan {
   name: string;
   price: number;
   totalGB: number;
+}
+
+export interface ShopService {
+  down: number;
+  email: string;
+  enable: boolean;
+  expiryTime: number;
+  id: number;
+  subscriptionUrl: string;
+  total: number;
+  up: number;
+}
+
+export interface ShopSession {
+  lang: string;
+  name: string;
+  services: ShopService[];
+  tgId: number;
+  token: string;
 }
 
 export interface ShopWallet {

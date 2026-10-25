@@ -2379,6 +2379,24 @@ export const SCHEMAS: Record<string, unknown> = {
     ],
     "type": "object"
   },
+  "BotLink": {
+    "description": "BotLink is an extra button on the bot menu, such as a support channel.",
+    "properties": {
+      "label": {
+        "example": "Tutorials",
+        "type": "string"
+      },
+      "url": {
+        "example": "https://t.me/mychannel",
+        "type": "string"
+      }
+    },
+    "required": [
+      "label",
+      "url"
+    ],
+    "type": "object"
+  },
   "CardPayConfig": {
     "description": "CardPayConfig is the destination card for manual card-to-card payments.",
     "properties": {
@@ -3527,6 +3545,65 @@ export const SCHEMAS: Record<string, unknown> = {
     ],
     "type": "object"
   },
+  "CustomOfferConfig": {
+    "description": "CustomOfferConfig sells a quota and a duration the buyer picks, priced per\nGB and per day in Currency's minor unit. TemplateId supplies the inbounds.",
+    "properties": {
+      "currency": {
+        "example": "IRT",
+        "type": "string"
+      },
+      "enabled": {
+        "type": "boolean"
+      },
+      "limitIp": {
+        "example": 2,
+        "type": "integer"
+      },
+      "maxDays": {
+        "example": 365,
+        "type": "integer"
+      },
+      "maxGb": {
+        "example": 500,
+        "type": "integer"
+      },
+      "minDays": {
+        "example": 7,
+        "type": "integer"
+      },
+      "minGb": {
+        "example": 5,
+        "type": "integer"
+      },
+      "pricePerDay": {
+        "example": 1000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "pricePerGb": {
+        "example": 2000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "templateId": {
+        "example": 1,
+        "type": "integer"
+      }
+    },
+    "required": [
+      "currency",
+      "enabled",
+      "limitIp",
+      "maxDays",
+      "maxGb",
+      "minDays",
+      "minGb",
+      "pricePerDay",
+      "pricePerGb",
+      "templateId"
+    ],
+    "type": "object"
+  },
   "DashboardLayout": {
     "description": "DashboardLayout is an admin's overview arrangement. Widgets absent from the\nlist keep their default place, so a new widget never disappears.",
     "properties": {
@@ -3659,6 +3736,24 @@ export const SCHEMAS: Record<string, unknown> = {
     },
     "required": [
       "masterId"
+    ],
+    "type": "object"
+  },
+  "ForceJoinChat": {
+    "description": "ForceJoinChat is a channel or group a buyer must belong to before the bot\nserves them. Chat is an @username or a numeric chat id; Link is where the\nbuyer joins (derived from an @username when blank).",
+    "properties": {
+      "chat": {
+        "example": "@mychannel",
+        "type": "string"
+      },
+      "link": {
+        "example": "https://t.me/mychannel",
+        "type": "string"
+      }
+    },
+    "required": [
+      "chat",
+      "link"
     ],
     "type": "object"
   },
@@ -6424,6 +6519,11 @@ export const SCHEMAS: Record<string, unknown> = {
   "Plan": {
     "description": "Plan is a sellable package. Price is in the currency's minor unit (see\nservice.CurrencyDecimals); TotalGB is in bytes; DurationDays 0 means no\nexpiry. TemplateId supplies the inbounds and the rest of the client preset.",
     "properties": {
+      "category": {
+        "description": "Category groups plans in the bot and the shop; empty means ungrouped.",
+        "example": "Monthly",
+        "type": "string"
+      },
       "createdAt": {
         "format": "int64",
         "type": "integer"
@@ -6480,6 +6580,7 @@ export const SCHEMAS: Record<string, unknown> = {
       }
     },
     "required": [
+      "category",
       "createdAt",
       "currency",
       "description",
@@ -6795,6 +6896,9 @@ export const SCHEMAS: Record<string, unknown> = {
   "SalesConfig": {
     "description": "SalesConfig is everything the operator configures about selling. It is one\nJSON setting. Secrets are served blank and kept when a save leaves them\nblank; ClearSecrets names the ones to empty on purpose.",
     "properties": {
+      "bot": {
+        "$ref": "#/components/schemas/ShopBotConfig"
+      },
       "card": {
         "$ref": "#/components/schemas/CardPayConfig"
       },
@@ -6806,6 +6910,9 @@ export const SCHEMAS: Record<string, unknown> = {
       },
       "crypto": {
         "$ref": "#/components/schemas/CryptoConfig"
+      },
+      "custom": {
+        "$ref": "#/components/schemas/CustomOfferConfig"
       },
       "idpay": {
         "$ref": "#/components/schemas/IDPayConfig"
@@ -6838,8 +6945,10 @@ export const SCHEMAS: Record<string, unknown> = {
       }
     },
     "required": [
+      "bot",
       "card",
       "crypto",
+      "custom",
       "idpay",
       "paypal",
       "publicBaseUrl",
@@ -6855,6 +6964,9 @@ export const SCHEMAS: Record<string, unknown> = {
   "SalesConfigView": {
     "description": "SalesConfigView is the configuration as the admin API serves it: secrets are\nblank and the Has flags say which are set.",
     "properties": {
+      "bot": {
+        "$ref": "#/components/schemas/ShopBotConfig"
+      },
       "card": {
         "$ref": "#/components/schemas/CardPayConfig"
       },
@@ -6866,6 +6978,9 @@ export const SCHEMAS: Record<string, unknown> = {
       },
       "crypto": {
         "$ref": "#/components/schemas/CryptoConfig"
+      },
+      "custom": {
+        "$ref": "#/components/schemas/CustomOfferConfig"
       },
       "hasCryptoApiKey": {
         "type": "boolean"
@@ -6919,8 +7034,10 @@ export const SCHEMAS: Record<string, unknown> = {
       }
     },
     "required": [
+      "bot",
       "card",
       "crypto",
+      "custom",
       "hasCryptoApiKey",
       "hasCryptoIpnSecret",
       "hasIdpayApiKey",
@@ -7308,9 +7425,49 @@ export const SCHEMAS: Record<string, unknown> = {
     ],
     "type": "object"
   },
-  "ShopCatalog": {
-    "description": "ShopCatalog is what the public shop lists: sellable plans and the payment\nmethods that are switched on.",
+  "ShopBotConfig": {
+    "description": "ShopBotConfig tunes the Telegram bot's shop. ReceiptChatId is a group or\nchannel that gets card receipts besides the admins' own chats; MiniApp adds\nthe \"open shop\" button.",
     "properties": {
+      "forceJoin": {
+        "items": {
+          "$ref": "#/components/schemas/ForceJoinChat"
+        },
+        "type": "array"
+      },
+      "links": {
+        "items": {
+          "$ref": "#/components/schemas/BotLink"
+        },
+        "type": "array"
+      },
+      "miniApp": {
+        "type": "boolean"
+      },
+      "receiptChatId": {
+        "example": -1001234567890,
+        "format": "int64",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "forceJoin",
+      "links",
+      "miniApp",
+      "receiptChatId"
+    ],
+    "type": "object"
+  },
+  "ShopCatalog": {
+    "description": "ShopCatalog is what the public shop lists: sellable plans, the calculator\noffer when it is on, and the payment methods that are switched on.",
+    "properties": {
+      "custom": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ShopCustom"
+          }
+        ],
+        "nullable": true
+      },
       "methods": {
         "items": {
           "type": "string"
@@ -7327,6 +7484,51 @@ export const SCHEMAS: Record<string, unknown> = {
     "required": [
       "methods",
       "plans"
+    ],
+    "type": "object"
+  },
+  "ShopCustom": {
+    "description": "ShopCustom is the calculator offer: prices per GB and per day within bounds.",
+    "properties": {
+      "currency": {
+        "example": "IRT",
+        "type": "string"
+      },
+      "maxDays": {
+        "example": 365,
+        "type": "integer"
+      },
+      "maxGb": {
+        "example": 500,
+        "type": "integer"
+      },
+      "minDays": {
+        "example": 7,
+        "type": "integer"
+      },
+      "minGb": {
+        "example": 5,
+        "type": "integer"
+      },
+      "pricePerDay": {
+        "example": 1000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "pricePerGb": {
+        "example": 2000,
+        "format": "int64",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "currency",
+      "maxDays",
+      "maxGb",
+      "minDays",
+      "minGb",
+      "pricePerDay",
+      "pricePerGb"
     ],
     "type": "object"
   },
@@ -7420,6 +7622,10 @@ export const SCHEMAS: Record<string, unknown> = {
   "ShopPlan": {
     "description": "ShopPlan is a plan as the public shop shows it.",
     "properties": {
+      "category": {
+        "example": "Monthly",
+        "type": "string"
+      },
       "currency": {
         "example": "IRT",
         "type": "string"
@@ -7455,6 +7661,7 @@ export const SCHEMAS: Record<string, unknown> = {
       }
     },
     "required": [
+      "category",
       "currency",
       "description",
       "durationDays",
@@ -7463,6 +7670,92 @@ export const SCHEMAS: Record<string, unknown> = {
       "name",
       "price",
       "totalGB"
+    ],
+    "type": "object"
+  },
+  "ShopService": {
+    "description": "ShopService is one account a Telegram buyer owns, with its usage. It is\nwhat \"my services\" shows in the bot and in the Mini App.",
+    "properties": {
+      "down": {
+        "example": 2097152,
+        "format": "int64",
+        "type": "integer"
+      },
+      "email": {
+        "example": "alice",
+        "type": "string"
+      },
+      "enable": {
+        "example": true,
+        "type": "boolean"
+      },
+      "expiryTime": {
+        "example": 1735689600000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "id": {
+        "example": 12,
+        "type": "integer"
+      },
+      "subscriptionUrl": {
+        "type": "string"
+      },
+      "total": {
+        "example": 53687091200,
+        "format": "int64",
+        "type": "integer"
+      },
+      "up": {
+        "example": 1048576,
+        "format": "int64",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "down",
+      "email",
+      "enable",
+      "expiryTime",
+      "id",
+      "subscriptionUrl",
+      "total",
+      "up"
+    ],
+    "type": "object"
+  },
+  "ShopSession": {
+    "description": "ShopSession is a buyer signed in through the Telegram Mini App.",
+    "properties": {
+      "lang": {
+        "example": "fa",
+        "type": "string"
+      },
+      "name": {
+        "example": "Ali",
+        "type": "string"
+      },
+      "services": {
+        "items": {
+          "$ref": "#/components/schemas/ShopService"
+        },
+        "type": "array"
+      },
+      "tgId": {
+        "example": 123456789,
+        "format": "int64",
+        "type": "integer"
+      },
+      "token": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "lang",
+      "name",
+      "services",
+      "tgId",
+      "token"
     ],
     "type": "object"
   },
