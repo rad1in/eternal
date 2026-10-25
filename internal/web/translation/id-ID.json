@@ -3273,6 +3273,192 @@
       "errPath": "Gunakan hanya huruf, angka, dan . _ ~ -"
     }
   },
+  "shopbot": {
+    "disabled": "Toko sedang tidak tersedia.",
+    "banned": "Akun Anda tidak dapat menggunakan toko. Jika ini keliru, hubungi operator.",
+    "slowDown": "Terlalu banyak ketukan. Tunggu sebentar.",
+    "expired": "Pilihan Anda sudah kedaluwarsa. Buka menu untuk memulai lagi.",
+    "unlimited": "Tanpa batas",
+    "noExpiry": "Tanpa masa berlaku",
+    "menu": {
+      "welcome": "👋 Halo {{ .Name }}!\nApa yang ingin Anda lakukan?"
+    },
+    "join": {
+      "required": "Untuk memakai toko, gabung dulu ke kanal kami, lalu ketuk “Saya sudah gabung”.",
+      "open": "Gabung {{ .Channel }}",
+      "channel": "kanal",
+      "done": "✅ Saya sudah gabung"
+    },
+    "btn": {
+      "buy": "🛒 Beli",
+      "services": "📦 Layanan saya",
+      "wallet": "👛 Dompet",
+      "invite": "🎁 Undang teman",
+      "trial": "🧪 Coba gratis",
+      "support": "🆘 Bantuan",
+      "orders": "🧾 Pesanan saya",
+      "language": "🌐 Bahasa",
+      "miniapp": "🚀 Buka aplikasi toko",
+      "admin": "🛠 Admin",
+      "menu": "🏠 Menu",
+      "back": "⬅️ Kembali",
+      "cancel": "✖️ Batal",
+      "skip": "Lewati",
+      "refresh": "🔄 Segarkan",
+      "custom": "✨ Buat paket sendiri",
+      "newAccount": "🆕 Akun baru",
+      "renew": "🔄 Perpanjang {{ .Email }}",
+      "code": "🏷 Kode diskon",
+      "receipt": "📤 Kirim bukti bayar",
+      "pay": "💳 Bayar sekarang",
+      "link": "🔗 Tautan",
+      "qr": "📷 Kode QR",
+      "renewThis": "🔄 Perpanjang",
+      "addon": "➕ Tambah data / waktu",
+      "newTicket": "✍️ Tiket baru",
+      "reply": "↩️ Balas",
+      "openTicket": "💬 Buka tiket",
+      "openOrder": "🧾 Buka pesanan",
+      "approve": "✅ Setujui",
+      "reject": "❌ Tolak",
+      "today": "📊 Hari ini",
+      "waiting": "🧾 Bukti bayar menunggu",
+      "ban": "🚫 Blokir pengguna",
+      "unban": "✅ Buka blokir pengguna"
+    },
+    "plans": {
+      "title": "🛒 Pilih paket:",
+      "none": "Belum ada paket yang dijual.",
+      "misc": "Lainnya",
+      "detail": "<b>{{ .Name }}</b>\n{{ .Description }}📊 Data: {{ .Quota }}\n⏳ Durasi: {{ .Duration }}\n📱 Perangkat: {{ .Devices }}\n💰 Harga: {{ .Price }}\n\nUntuk akun yang mana?"
+    },
+    "kind": {
+      "new": "Akun baru",
+      "renew": "Perpanjangan",
+      "addon": "Tambahan"
+    },
+    "confirm": "🧾 <b>{{ .Item }}</b>\n{{ .Kind }} · <code>{{ .Email }}</code>\n💰 <b>{{ .Amount }}</b>{{ .Discount }}\n\nPilih cara membayar:",
+    "discountLine": "\n🏷 Harga normal {{ .List }} · kode {{ .Code }}",
+    "gw": {
+      "card": "💳 Transfer ke kartu",
+      "wallet": "👛 Dompet",
+      "zarinpal": "Zarinpal",
+      "idpay": "IDPay",
+      "crypto": "🪙 Kripto",
+      "stripe": "Stripe",
+      "paypal": "PayPal"
+    },
+    "askCode": "Kirim kode diskon Anda sebagai pesan.",
+    "custom": {
+      "item": "Paket kustom: {{ .Parts }}",
+      "addonItem": "Tambahan: {{ .Parts }}",
+      "askGB": "Berapa banyak data yang Anda butuhkan? Pilih ukuran atau kirim jumlah GB ({{ .Min }}-{{ .Max }}).\nHarga: {{ .Price }} per GB.",
+      "askDays": "Untuk berapa hari? Pilih durasi atau kirim jumlah hari ({{ .Min }}-{{ .Max }}).\nHarga: {{ .Price }} per hari.",
+      "badGB": "Kirim jumlah GB antara {{ .Min }} dan {{ .Max }}.",
+      "badDays": "Kirim jumlah hari antara {{ .Min }} dan {{ .Max }}.",
+      "notNumber": "Kirim bilangan bulat."
+    },
+    "addon": {
+      "off": "Menambah data atau waktu sedang tidak tersedia."
+    },
+    "order": {
+      "head": "🧾 Pesanan #{{ .Id }} - {{ .Item }}\n{{ .Kind }} · {{ .Amount }}\nStatus: {{ .Status }}",
+      "card": "\n\n💳 Transfer tepat {{ .Amount }} ke kartu ini:\n<code>{{ .Card }}</code>\n{{ .Holder }} {{ .Bank }}\n{{ .Instructions }}\n\nLalu ketuk “Kirim bukti bayar” dan kirim foto bukti atau nomor referensi transfer.",
+      "reason": "\n❗ {{ .Reason }}"
+    },
+    "orders": {
+      "title": "🧾 Pesanan terbaru Anda:",
+      "none": "Anda belum punya pesanan."
+    },
+    "askReceipt": "Kirim foto bukti pembayaran, atau nomor referensi transfer.",
+    "receiptSent": "✅ Bukti bayar terkirim. Kami akan segera memeriksanya.",
+    "delivered": {
+      "new": "✅ Lunas dan diaktifkan. Layanan Anda siap:",
+      "renew": "✅ Lunas dan diperpanjang. Layanan Anda:",
+      "addon": "✅ Lunas. Data dan waktu sudah ditambahkan:"
+    },
+    "svc": {
+      "none": "Anda belum punya layanan.",
+      "list": "📦 Layanan Anda:",
+      "card": "📦 <b>{{ .Email }}</b>\n{{ .State }}\n📊 {{ .Usage }}\n⏳ {{ .Expiry }}",
+      "state": {
+        "active": "🟢 Aktif",
+        "disabled": "⛔ Dinonaktifkan",
+        "depleted": "📉 Data habis",
+        "expired": "⌛ Kedaluwarsa"
+      },
+      "daysLeft": "sisa {{ .Days }} hari",
+      "startsOnUse": "{{ .Days }} hari sejak koneksi pertama",
+      "link": "🔗 Tautan langganan:\n<code>{{ .URL }}</code>",
+      "jsonLink": "\n\nTautan JSON:\n<code>{{ .URL }}</code>",
+      "noLink": "Tautan langganan tidak tersedia. Hubungi bantuan.",
+      "qrCaption": "📷 Kode QR untuk {{ .Email }}"
+    },
+    "wallet": {
+      "title": "👛 Saldo dompet per layanan:",
+      "empty": "tidak ada saldo",
+      "hint": "\n\nSaldo dapat dipakai untuk membayar perpanjangan dan tambahan.",
+      "none": "Dompet tersedia setelah Anda punya layanan."
+    },
+    "ref": {
+      "off": "Program referral sedang nonaktif.",
+      "needService": "Beli layanan dulu, lalu Anda mendapat tautan undangan sendiri.",
+      "info": "🎁 <b>Undang teman</b>\nSaat teman membeli layanan pertamanya lewat tautan Anda, {{ .Percent }}% dari harga masuk ke dompet Anda.\n\nKode Anda: <code>{{ .Code }}</code>\nTautan Anda:\n{{ .Link }}"
+    },
+    "support": {
+      "noService": "Tiket untuk pelanggan yang punya layanan. Hubungi kami lewat tautan di menu.",
+      "pick": "Tentang layanan yang mana?",
+      "title": "🆘 Bantuan untuk <code>{{ .Email }}</code>",
+      "ticket": "💬 <b>Tiket #{{ .Id }}</b> - {{ .Subject }}\nStatus: {{ .Status }}",
+      "you": "Anda",
+      "staff": "Bantuan",
+      "askNew": "Jelaskan masalah Anda dalam satu pesan. Baris pertama menjadi subjek.",
+      "askReply": "Kirim balasan Anda sebagai pesan.",
+      "sent": "✅ Tiket #{{ .Id }} dibuat. Kami akan menjawab di sini.",
+      "replied": "✅ Balasan terkirim."
+    },
+    "lang": {
+      "choose": "🌐 Pilih bahasa Anda:"
+    },
+    "notify": {
+      "fulfilled": "✅ Pembayaran pesanan #{{ .Id }} ({{ .Item }}) dikonfirmasi.",
+      "rejected": "❌ Pesanan #{{ .Id }} tidak diterima.",
+      "expired": "⌛ Pesanan #{{ .Id }} kedaluwarsa karena pembayaran tidak masuk.",
+      "reminder": "⏰ Pesanan #{{ .Id }} ({{ .Item }}, {{ .Amount }}) masih menunggu pembayaran.",
+      "ticket": "💬 Bantuan menjawab tiket #{{ .Id }} ({{ .Subject }}):\n\n{{ .Excerpt }}"
+    },
+    "reject": {
+      "none": "Tolak tanpa alasan",
+      "notFound": "Pembayaran tidak ditemukan",
+      "amount": "Jumlahnya tidak sesuai",
+      "duplicate": "Bukti ini sudah pernah dipakai"
+    },
+    "admin": {
+      "title": "🛠 Admin toko",
+      "web": "toko web",
+      "receipt": "🧾 <b>Bukti bayar pesanan #{{ .Id }}</b>\nPembeli: {{ .Buyer }}\nAkun: <code>{{ .Account }}</code>\n{{ .Item }} · {{ .Kind }}\nJumlah: <b>{{ .Amount }}</b>\nReferensi: {{ .Ref }}\nCatatan: {{ .Note }}",
+      "approvedBy": "✅ Disetujui oleh {{ .Name }}",
+      "rejectedBy": "❌ Ditolak oleh {{ .Name }}",
+      "alreadyHandled": "Pesanan #{{ .Id }} sudah diproses.",
+      "failed": "Pesanan #{{ .Id }} tidak dapat diproses. Lihat log panel.",
+      "stats": "📊 <b>Hari ini</b>\n{{ .Paid }}\n\nPesanan belum dibayar: {{ .Pending }}\nBukti bayar menunggu: {{ .Review }}",
+      "salesLine": "{{ .Orders }} pesanan lunas: {{ .Amount }}",
+      "noSales": "Belum ada pesanan lunas hari ini.",
+      "noneWaiting": "Tidak ada bukti bayar yang menunggu.",
+      "waitingTitle": "🧾 Bukti bayar menunggu persetujuan:",
+      "askBan": "Kirim id Telegram (angka) yang akan diblokir.",
+      "askUnban": "Kirim id Telegram (angka) yang akan dibuka blokirnya.",
+      "badID": "Itu bukan id Telegram.",
+      "cannotBanAdmin": "Admin tidak dapat diblokir.",
+      "banned": "🚫 {{ .ID }} diblokir dari toko.",
+      "unbanned": "✅ {{ .ID }} dapat memakai toko lagi."
+    },
+    "currency": {
+      "IRT": "Toman",
+      "IRR": "Rial"
+    },
+    "commandDesc": "Buka toko"
+  },
   "shop": {
     "title": "Toko",
     "noPlans": "Belum ada paket yang dijual",
@@ -3354,7 +3540,10 @@
       "ticket_limit": "Tiket terbuka Anda terlalu banyak. Tunggu balasan atau tutup salah satu.",
       "ticket_closed": "Tiket ini sudah ditutup.",
       "rate_limited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
-      "network": "Terjadi kesalahan. Silakan coba lagi."
+      "network": "Terjadi kesalahan. Silakan coba lagi.",
+      "custom_invalid": "Jumlah data atau waktu itu di luar rentang yang diizinkan.",
+      "addon_unsupported": "Akun ini tidak dapat menerima tambahan tersebut: kuota atau durasi tanpa batas tidak bisa diperpanjang.",
+      "banned": "Akun Anda tidak dapat menggunakan toko."
     }
   },
   "setup": {
@@ -3670,40 +3859,6 @@
       "chooseClient": "Pilih Klien untuk Inbound {{ .Inbound }}",
       "chooseInbound": "Pilih Inbound",
       "qrCodeForClient": "Kode QR untuk klien {{ .Email }}:"
-    },
-    "shop": {
-      "disabled": "Toko sedang tidak tersedia.",
-      "menu": "🛒 Toko\r\nApa yang ingin Anda lakukan?",
-      "plansTitle": "🛒 Pilih paket:",
-      "noPlans": "Belum ada paket yang dijual.",
-      "planDetail": "<b>{{ .Name }}</b>\r\n{{ .Description }}\r\nData: {{ .Quota }}\r\nDurasi: {{ .Duration }}\r\nPerangkat: {{ .Devices }}\r\nHarga: {{ .Price }}\r\n\r\nUntuk siapa?",
-      "noExpiry": "Tanpa kedaluwarsa",
-      "confirm": "<b>{{ .Plan }}</b> untuk <code>{{ .Email }}</code>\r\nTotal: {{ .Amount }}\r\nPilih cara pembayaran:",
-      "discountLine": "\r\nHarga normal {{ .List }}, kode {{ .Code }}",
-      "askCode": "Kirim kode diskon Anda dalam satu pesan.",
-      "askReceipt": "Kirim nomor pelacakan transfer Anda dalam satu pesan.",
-      "receiptSent": "✅ Bukti terkirim. Akan segera ditinjau.",
-      "expired": "Pilihan Anda kedaluwarsa. Kirim /shop untuk memulai lagi.",
-      "ordersTitle": "📦 Pesanan terbaru Anda:",
-      "noOrders": "Anda belum punya pesanan.",
-      "order": "📦 Pesanan #{{ .Id }} - {{ .Plan }}\r\nJumlah: {{ .Amount }}\r\nStatus: {{ .Status }}",
-      "cardInfo": "\r\n\r\nTransfer tepat {{ .Amount }} ke kartu ini:\r\n<code>{{ .Card }}</code>\r\n{{ .Holder }} {{ .Bank }}\r\n{{ .Instructions }}",
-      "payLink": "\r\n\r\nSelesaikan pembayaran: {{ .URL }}",
-      "delivered": "✅ Dibayar dan diaktifkan. Langganan Anda:",
-      "buttons": {
-        "plans": "🛒 Paket",
-        "orders": "📦 Pesanan saya",
-        "newAccount": "🆕 Akun baru",
-        "renew": "🔄 Perpanjang {{ .Email }}",
-        "code": "🏷 Kode diskon",
-        "card": "💳 Kartu ke kartu",
-        "wallet": "👛 Dompet",
-        "zarinpal": "Zarinpal",
-        "idpay": "IDPay",
-        "crypto": "Kripto",
-        "receipt": "🧾 Kirim bukti",
-        "refresh": "🔄 Segarkan"
-      }
     }
   },
   "discord": {

@@ -3273,6 +3273,192 @@
       "errPath": "Use only letters, digits and . _ ~ -"
     }
   },
+  "shopbot": {
+    "disabled": "The shop is not available right now.",
+    "banned": "Your account cannot use the shop. Contact the operator if you think this is a mistake.",
+    "slowDown": "Too many taps. Please wait a moment.",
+    "expired": "Your selection has expired. Open the menu to start again.",
+    "unlimited": "Unlimited",
+    "noExpiry": "No expiry",
+    "menu": {
+      "welcome": "👋 Hello {{ .Name }}!\nWhat would you like to do?"
+    },
+    "join": {
+      "required": "To use the shop, please join our channel first, then tap “I have joined”.",
+      "open": "Join {{ .Channel }}",
+      "channel": "the channel",
+      "done": "✅ I have joined"
+    },
+    "btn": {
+      "buy": "🛒 Buy",
+      "services": "📦 My services",
+      "wallet": "👛 Wallet",
+      "invite": "🎁 Invite friends",
+      "trial": "🧪 Free trial",
+      "support": "🆘 Support",
+      "orders": "🧾 My orders",
+      "language": "🌐 Language",
+      "miniapp": "🚀 Open the shop app",
+      "admin": "🛠 Admin",
+      "menu": "🏠 Menu",
+      "back": "⬅️ Back",
+      "cancel": "✖️ Cancel",
+      "skip": "Skip",
+      "refresh": "🔄 Refresh",
+      "custom": "✨ Build your own plan",
+      "newAccount": "🆕 New account",
+      "renew": "🔄 Renew {{ .Email }}",
+      "code": "🏷 Discount code",
+      "receipt": "📤 Send receipt",
+      "pay": "💳 Pay now",
+      "link": "🔗 Link",
+      "qr": "📷 QR code",
+      "renewThis": "🔄 Renew",
+      "addon": "➕ Add data / time",
+      "newTicket": "✍️ New ticket",
+      "reply": "↩️ Reply",
+      "openTicket": "💬 Open ticket",
+      "openOrder": "🧾 Open order",
+      "approve": "✅ Approve",
+      "reject": "❌ Reject",
+      "today": "📊 Today",
+      "waiting": "🧾 Waiting receipts",
+      "ban": "🚫 Ban a user",
+      "unban": "✅ Unban a user"
+    },
+    "plans": {
+      "title": "🛒 Choose a plan:",
+      "none": "No plans are on sale right now.",
+      "misc": "Other",
+      "detail": "<b>{{ .Name }}</b>\n{{ .Description }}📊 Data: {{ .Quota }}\n⏳ Duration: {{ .Duration }}\n📱 Devices: {{ .Devices }}\n💰 Price: {{ .Price }}\n\nWho is it for?"
+    },
+    "kind": {
+      "new": "New account",
+      "renew": "Renewal",
+      "addon": "Add-on"
+    },
+    "confirm": "🧾 <b>{{ .Item }}</b>\n{{ .Kind }} · <code>{{ .Email }}</code>\n💰 <b>{{ .Amount }}</b>{{ .Discount }}\n\nChoose how to pay:",
+    "discountLine": "\n🏷 List price {{ .List }} · code {{ .Code }}",
+    "gw": {
+      "card": "💳 Card to card",
+      "wallet": "👛 Wallet",
+      "zarinpal": "Zarinpal",
+      "idpay": "IDPay",
+      "crypto": "🪙 Crypto",
+      "stripe": "Stripe",
+      "paypal": "PayPal"
+    },
+    "askCode": "Send your discount code as a message.",
+    "custom": {
+      "item": "Custom plan: {{ .Parts }}",
+      "addonItem": "Add-on: {{ .Parts }}",
+      "askGB": "How much data do you need? Pick a size or send a number of GB ({{ .Min }}-{{ .Max }}).\nPrice: {{ .Price }} per GB.",
+      "askDays": "For how many days? Pick a duration or send a number ({{ .Min }}-{{ .Max }}).\nPrice: {{ .Price }} per day.",
+      "badGB": "Please send a number of GB between {{ .Min }} and {{ .Max }}.",
+      "badDays": "Please send a number of days between {{ .Min }} and {{ .Max }}.",
+      "notNumber": "Please send a whole number."
+    },
+    "addon": {
+      "off": "Adding data or time is not available right now."
+    },
+    "order": {
+      "head": "🧾 Order #{{ .Id }} - {{ .Item }}\n{{ .Kind }} · {{ .Amount }}\nStatus: {{ .Status }}",
+      "card": "\n\n💳 Transfer exactly {{ .Amount }} to this card:\n<code>{{ .Card }}</code>\n{{ .Holder }} {{ .Bank }}\n{{ .Instructions }}\n\nThen tap “Send receipt” and send a photo of the receipt or the tracking number.",
+      "reason": "\n❗ {{ .Reason }}"
+    },
+    "orders": {
+      "title": "🧾 Your latest orders:",
+      "none": "You have no orders yet."
+    },
+    "askReceipt": "Send a photo of the payment receipt, or the tracking number of the transfer.",
+    "receiptSent": "✅ Receipt sent. We will confirm it shortly.",
+    "delivered": {
+      "new": "✅ Paid and activated. Your service is ready:",
+      "renew": "✅ Paid and renewed. Your service:",
+      "addon": "✅ Paid. Your data and time were added:"
+    },
+    "svc": {
+      "none": "You have no services yet.",
+      "list": "📦 Your services:",
+      "card": "📦 <b>{{ .Email }}</b>\n{{ .State }}\n📊 {{ .Usage }}\n⏳ {{ .Expiry }}",
+      "state": {
+        "active": "🟢 Active",
+        "disabled": "⛔ Disabled",
+        "depleted": "📉 Data used up",
+        "expired": "⌛ Expired"
+      },
+      "daysLeft": "{{ .Days }} days left",
+      "startsOnUse": "{{ .Days }} days from the first connection",
+      "link": "🔗 Subscription link:\n<code>{{ .URL }}</code>",
+      "jsonLink": "\n\nJSON link:\n<code>{{ .URL }}</code>",
+      "noLink": "The subscription link is not available. Please contact support.",
+      "qrCaption": "📷 QR code for {{ .Email }}"
+    },
+    "wallet": {
+      "title": "👛 Your wallet balance per service:",
+      "empty": "no balance",
+      "hint": "\n\nThe balance can be used to pay renewals and add-ons.",
+      "none": "The wallet is available once you own a service."
+    },
+    "ref": {
+      "off": "The referral program is off right now.",
+      "needService": "Buy a service first, then you get your own invite link.",
+      "info": "🎁 <b>Invite friends</b>\nWhen a friend buys their first service with your link, {{ .Percent }}% of the price goes to your wallet.\n\nYour code: <code>{{ .Code }}</code>\nYour link:\n{{ .Link }}"
+    },
+    "support": {
+      "noService": "Support tickets are for customers with a service. Use the links in the menu to reach us.",
+      "pick": "Which service is it about?",
+      "title": "🆘 Support for <code>{{ .Email }}</code>",
+      "ticket": "💬 <b>Ticket #{{ .Id }}</b> - {{ .Subject }}\nStatus: {{ .Status }}",
+      "you": "You",
+      "staff": "Support",
+      "askNew": "Describe your problem in one message. The first line becomes the subject.",
+      "askReply": "Send your reply as a message.",
+      "sent": "✅ Ticket #{{ .Id }} opened. We will answer here.",
+      "replied": "✅ Reply sent."
+    },
+    "lang": {
+      "choose": "🌐 Choose your language:"
+    },
+    "notify": {
+      "fulfilled": "✅ Payment confirmed for order #{{ .Id }} ({{ .Item }}).",
+      "rejected": "❌ Order #{{ .Id }} was not accepted.",
+      "expired": "⌛ Order #{{ .Id }} expired because no payment arrived.",
+      "reminder": "⏰ Order #{{ .Id }} ({{ .Item }}, {{ .Amount }}) is still waiting for payment.",
+      "ticket": "💬 Support answered ticket #{{ .Id }} ({{ .Subject }}):\n\n{{ .Excerpt }}"
+    },
+    "reject": {
+      "none": "Reject without a reason",
+      "notFound": "No payment was found",
+      "amount": "The amount does not match",
+      "duplicate": "This receipt was already used"
+    },
+    "admin": {
+      "title": "🛠 Shop admin",
+      "web": "web shop",
+      "receipt": "🧾 <b>Receipt for order #{{ .Id }}</b>\nBuyer: {{ .Buyer }}\nAccount: <code>{{ .Account }}</code>\n{{ .Item }} · {{ .Kind }}\nAmount: <b>{{ .Amount }}</b>\nReference: {{ .Ref }}\nNote: {{ .Note }}",
+      "approvedBy": "✅ Approved by {{ .Name }}",
+      "rejectedBy": "❌ Rejected by {{ .Name }}",
+      "alreadyHandled": "Order #{{ .Id }} was already handled.",
+      "failed": "Order #{{ .Id }} could not be processed. See the panel log.",
+      "stats": "📊 <b>Today</b>\n{{ .Paid }}\n\nUnpaid orders: {{ .Pending }}\nReceipts waiting: {{ .Review }}",
+      "salesLine": "{{ .Orders }} paid order(s): {{ .Amount }}",
+      "noSales": "No paid orders yet today.",
+      "noneWaiting": "No receipts are waiting.",
+      "waitingTitle": "🧾 Receipts waiting for approval:",
+      "askBan": "Send the numeric Telegram id to ban.",
+      "askUnban": "Send the numeric Telegram id to unban.",
+      "badID": "That is not a Telegram id.",
+      "cannotBanAdmin": "An admin cannot be banned.",
+      "banned": "🚫 {{ .ID }} is banned from the shop.",
+      "unbanned": "✅ {{ .ID }} can use the shop again."
+    },
+    "currency": {
+      "IRT": "Toman",
+      "IRR": "Rial"
+    },
+    "commandDesc": "Open the shop"
+  },
   "shop": {
     "title": "Shop",
     "noPlans": "No plans are on sale right now",
@@ -3354,7 +3540,10 @@
       "ticket_limit": "You have too many open tickets. Wait for a reply or close one.",
       "ticket_closed": "This ticket is closed.",
       "rate_limited": "Too many requests. Please wait a little and try again.",
-      "network": "Something went wrong. Please try again."
+      "network": "Something went wrong. Please try again.",
+      "custom_invalid": "That amount of data or time is outside the allowed range.",
+      "addon_unsupported": "This account cannot take that add-on: an unlimited quota or an unlimited duration cannot be extended.",
+      "banned": "Your account cannot use the shop."
     }
   },
   "setup": {
@@ -3670,40 +3859,6 @@
       "chooseClient": "Choose a Client for Inbound {{ .Inbound }}",
       "chooseInbound": "Choose an Inbound",
       "qrCodeForClient": "QRCode for client {{ .Email }}:"
-    },
-    "shop": {
-      "disabled": "The shop is not available right now.",
-      "menu": "🛒 Shop\r\nWhat would you like to do?",
-      "plansTitle": "🛒 Choose a plan:",
-      "noPlans": "No plans are on sale right now.",
-      "planDetail": "<b>{{ .Name }}</b>\r\n{{ .Description }}\r\nData: {{ .Quota }}\r\nDuration: {{ .Duration }}\r\nDevices: {{ .Devices }}\r\nPrice: {{ .Price }}\r\n\r\nWho is it for?",
-      "noExpiry": "No expiry",
-      "confirm": "<b>{{ .Plan }}</b> for <code>{{ .Email }}</code>\r\nTotal: {{ .Amount }}\r\nChoose how to pay:",
-      "discountLine": "\r\nList price {{ .List }}, code {{ .Code }}",
-      "askCode": "Send your discount code as a message.",
-      "askReceipt": "Send the tracking number of your transfer as a message.",
-      "receiptSent": "✅ Receipt sent. It will be reviewed shortly.",
-      "expired": "Your selection has expired. Send /shop to start again.",
-      "ordersTitle": "📦 Your latest orders:",
-      "noOrders": "You have no orders yet.",
-      "order": "📦 Order #{{ .Id }} - {{ .Plan }}\r\nAmount: {{ .Amount }}\r\nStatus: {{ .Status }}",
-      "cardInfo": "\r\n\r\nTransfer exactly {{ .Amount }} to this card:\r\n<code>{{ .Card }}</code>\r\n{{ .Holder }} {{ .Bank }}\r\n{{ .Instructions }}",
-      "payLink": "\r\n\r\nComplete the payment: {{ .URL }}",
-      "delivered": "✅ Paid and activated. Your subscription:",
-      "buttons": {
-        "plans": "🛒 Plans",
-        "orders": "📦 My orders",
-        "newAccount": "🆕 New account",
-        "renew": "🔄 Renew {{ .Email }}",
-        "code": "🏷 Discount code",
-        "card": "💳 Card to card",
-        "wallet": "👛 Wallet",
-        "zarinpal": "Zarinpal",
-        "idpay": "IDPay",
-        "crypto": "Crypto",
-        "receipt": "🧾 Send receipt",
-        "refresh": "🔄 Refresh"
-      }
     }
   },
   "discord": {

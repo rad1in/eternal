@@ -231,6 +231,10 @@ type Tgbot struct {
 	xrayService    service.XrayService
 	orderService   service.OrderService
 	salesConfig    service.SalesConfigService
+	botUsers       service.BotUserService
+	tickets        service.TicketService
+	referrals      service.ReferralService
+	wallets        service.WalletService
 	lastStatus     *service.Status
 }
 
@@ -382,10 +386,15 @@ func (t *Tgbot) trySetBotCommands(bot *telego.Bot) {
 		}
 	}()
 
+	commands := []telego.BotCommand{
+		{Command: "start", Description: t.I18nBot("tgbot.commands.startDesc")},
+		{Command: "help", Description: t.I18nBot("tgbot.commands.helpDesc")},
+	}
+	if t.shopEnabled() {
+		commands = append(commands, telego.BotCommand{Command: "shop", Description: t.I18nBot("shopbot.commandDesc")})
+	}
 	err := bot.SetMyCommands(context.Background(), &telego.SetMyCommandsParams{
-		Commands: []telego.BotCommand{
-			{Command: "start", Description: t.I18nBot("tgbot.commands.startDesc")},
-			{Command: "help", Description: t.I18nBot("tgbot.commands.helpDesc")},
+		Commands: append(commands, []telego.BotCommand{
 			{Command: "status", Description: t.I18nBot("tgbot.commands.statusDesc")},
 			{Command: "id", Description: t.I18nBot("tgbot.commands.idDesc")},
 			{Command: "usage", Description: t.I18nBot("tgbot.commands.usageDesc")},
@@ -393,7 +402,7 @@ func (t *Tgbot) trySetBotCommands(bot *telego.Bot) {
 			{Command: "restart", Description: t.I18nBot("tgbot.commands.restartDesc")},
 			{Command: "clearall", Description: t.I18nBot("tgbot.commands.clearallDesc")},
 			{Command: "broadcast", Description: t.I18nBot("tgbot.commands.broadcastDesc")},
-		},
+		}...),
 	})
 	if err != nil {
 		logger.Warning("Failed to set bot commands:", err)

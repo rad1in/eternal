@@ -25,6 +25,16 @@ var BotMessageKeys = []string{
 	"tgbot.messages.ownQuotaWarning",
 	"tgbot.messages.ownExpiryWarning",
 	"tgbot.answers.askToAddUserId",
+	"shopbot.menu.welcome",
+	"shopbot.plans.title",
+	"shopbot.join.required",
+	"shopbot.ref.info",
+	"shopbot.support.noService",
+	"shopbot.askReceipt",
+	"shopbot.receiptSent",
+	"shopbot.delivered.new",
+	"shopbot.notify.reminder",
+	"shopbot.notify.expired",
 }
 
 const maxOverrideLen = 4000

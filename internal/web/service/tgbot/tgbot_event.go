@@ -32,6 +32,9 @@ var tgEventLimiter = eventbus.NewRateLimiter(1 * time.Minute)
 // HandleEvent is the eventbus subscriber callback. It formats incoming events
 // as Telegram messages and sends them to all admin chats.
 func (t *Tgbot) HandleEvent(e eventbus.Event) {
+	if t.handleShopEvent(e) {
+		return
+	}
 	if !t.isEventEnabled(e.Type) {
 		return
 	}

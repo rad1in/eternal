@@ -3273,6 +3273,192 @@
       "errPath": "Chỉ dùng chữ cái, chữ số và . _ ~ -"
     }
   },
+  "shopbot": {
+    "disabled": "Cửa hàng hiện không khả dụng.",
+    "banned": "Tài khoản của bạn không thể dùng cửa hàng. Nếu nghĩ đây là nhầm lẫn, hãy liên hệ người vận hành.",
+    "slowDown": "Bạn bấm quá nhanh. Vui lòng đợi một chút.",
+    "expired": "Lựa chọn của bạn đã hết hạn. Hãy mở menu để bắt đầu lại.",
+    "unlimited": "Không giới hạn",
+    "noExpiry": "Không hết hạn",
+    "menu": {
+      "welcome": "👋 Xin chào {{ .Name }}!\nBạn muốn làm gì?"
+    },
+    "join": {
+      "required": "Để dùng cửa hàng, hãy tham gia kênh của chúng tôi trước rồi bấm “Tôi đã tham gia”.",
+      "open": "Tham gia {{ .Channel }}",
+      "channel": "kênh",
+      "done": "✅ Tôi đã tham gia"
+    },
+    "btn": {
+      "buy": "🛒 Mua",
+      "services": "📦 Dịch vụ của tôi",
+      "wallet": "👛 Ví",
+      "invite": "🎁 Mời bạn bè",
+      "trial": "🧪 Dùng thử miễn phí",
+      "support": "🆘 Hỗ trợ",
+      "orders": "🧾 Đơn hàng của tôi",
+      "language": "🌐 Ngôn ngữ",
+      "miniapp": "🚀 Mở ứng dụng cửa hàng",
+      "admin": "🛠 Quản trị",
+      "menu": "🏠 Menu",
+      "back": "⬅️ Quay lại",
+      "cancel": "✖️ Hủy",
+      "skip": "Bỏ qua",
+      "refresh": "🔄 Làm mới",
+      "custom": "✨ Tự tạo gói",
+      "newAccount": "🆕 Tài khoản mới",
+      "renew": "🔄 Gia hạn {{ .Email }}",
+      "code": "🏷 Mã giảm giá",
+      "receipt": "📤 Gửi biên lai",
+      "pay": "💳 Thanh toán",
+      "link": "🔗 Liên kết",
+      "qr": "📷 Mã QR",
+      "renewThis": "🔄 Gia hạn",
+      "addon": "➕ Thêm dung lượng / thời gian",
+      "newTicket": "✍️ Phiếu hỗ trợ mới",
+      "reply": "↩️ Trả lời",
+      "openTicket": "💬 Mở phiếu",
+      "openOrder": "🧾 Mở đơn hàng",
+      "approve": "✅ Duyệt",
+      "reject": "❌ Từ chối",
+      "today": "📊 Hôm nay",
+      "waiting": "🧾 Biên lai chờ duyệt",
+      "ban": "🚫 Chặn người dùng",
+      "unban": "✅ Bỏ chặn người dùng"
+    },
+    "plans": {
+      "title": "🛒 Chọn một gói:",
+      "none": "Hiện chưa có gói nào được bán.",
+      "misc": "Khác",
+      "detail": "<b>{{ .Name }}</b>\n{{ .Description }}📊 Dữ liệu: {{ .Quota }}\n⏳ Thời hạn: {{ .Duration }}\n📱 Thiết bị: {{ .Devices }}\n💰 Giá: {{ .Price }}\n\nDành cho tài khoản nào?"
+    },
+    "kind": {
+      "new": "Tài khoản mới",
+      "renew": "Gia hạn",
+      "addon": "Gói thêm"
+    },
+    "confirm": "🧾 <b>{{ .Item }}</b>\n{{ .Kind }} · <code>{{ .Email }}</code>\n💰 <b>{{ .Amount }}</b>{{ .Discount }}\n\nChọn cách thanh toán:",
+    "discountLine": "\n🏷 Giá niêm yết {{ .List }} · mã {{ .Code }}",
+    "gw": {
+      "card": "💳 Chuyển khoản vào thẻ",
+      "wallet": "👛 Ví",
+      "zarinpal": "Zarinpal",
+      "idpay": "IDPay",
+      "crypto": "🪙 Tiền mã hóa",
+      "stripe": "Stripe",
+      "paypal": "PayPal"
+    },
+    "askCode": "Hãy gửi mã giảm giá của bạn trong một tin nhắn.",
+    "custom": {
+      "item": "Gói tùy chọn: {{ .Parts }}",
+      "addonItem": "Gói thêm: {{ .Parts }}",
+      "askGB": "Bạn cần bao nhiêu dữ liệu? Chọn một mức hoặc gửi số GB ({{ .Min }}-{{ .Max }}).\nGiá: {{ .Price }} mỗi GB.",
+      "askDays": "Trong bao nhiêu ngày? Chọn một mức hoặc gửi số ngày ({{ .Min }}-{{ .Max }}).\nGiá: {{ .Price }} mỗi ngày.",
+      "badGB": "Hãy gửi số GB từ {{ .Min }} đến {{ .Max }}.",
+      "badDays": "Hãy gửi số ngày từ {{ .Min }} đến {{ .Max }}.",
+      "notNumber": "Hãy gửi một số nguyên."
+    },
+    "addon": {
+      "off": "Hiện chưa thể thêm dung lượng hoặc thời gian."
+    },
+    "order": {
+      "head": "🧾 Đơn hàng #{{ .Id }} - {{ .Item }}\n{{ .Kind }} · {{ .Amount }}\nTrạng thái: {{ .Status }}",
+      "card": "\n\n💳 Hãy chuyển đúng {{ .Amount }} vào thẻ này:\n<code>{{ .Card }}</code>\n{{ .Holder }} {{ .Bank }}\n{{ .Instructions }}\n\nSau đó bấm “Gửi biên lai” và gửi ảnh biên lai hoặc mã giao dịch.",
+      "reason": "\n❗ {{ .Reason }}"
+    },
+    "orders": {
+      "title": "🧾 Các đơn hàng gần đây của bạn:",
+      "none": "Bạn chưa có đơn hàng nào."
+    },
+    "askReceipt": "Hãy gửi ảnh biên lai thanh toán hoặc mã giao dịch chuyển khoản.",
+    "receiptSent": "✅ Đã gửi biên lai. Chúng tôi sẽ xác nhận sớm.",
+    "delivered": {
+      "new": "✅ Đã thanh toán và kích hoạt. Dịch vụ của bạn đã sẵn sàng:",
+      "renew": "✅ Đã thanh toán và gia hạn. Dịch vụ của bạn:",
+      "addon": "✅ Đã thanh toán. Dung lượng và thời gian đã được thêm:"
+    },
+    "svc": {
+      "none": "Bạn chưa có dịch vụ nào.",
+      "list": "📦 Dịch vụ của bạn:",
+      "card": "📦 <b>{{ .Email }}</b>\n{{ .State }}\n📊 {{ .Usage }}\n⏳ {{ .Expiry }}",
+      "state": {
+        "active": "🟢 Đang hoạt động",
+        "disabled": "⛔ Đã tắt",
+        "depleted": "📉 Hết dung lượng",
+        "expired": "⌛ Đã hết hạn"
+      },
+      "daysLeft": "còn {{ .Days }} ngày",
+      "startsOnUse": "{{ .Days }} ngày kể từ lần kết nối đầu tiên",
+      "link": "🔗 Liên kết đăng ký:\n<code>{{ .URL }}</code>",
+      "jsonLink": "\n\nLiên kết JSON:\n<code>{{ .URL }}</code>",
+      "noLink": "Không có liên kết đăng ký. Vui lòng liên hệ hỗ trợ.",
+      "qrCaption": "📷 Mã QR của {{ .Email }}"
+    },
+    "wallet": {
+      "title": "👛 Số dư ví theo từng dịch vụ:",
+      "empty": "không có số dư",
+      "hint": "\n\nSố dư có thể dùng để trả tiền gia hạn và gói thêm.",
+      "none": "Ví sẽ khả dụng khi bạn có một dịch vụ."
+    },
+    "ref": {
+      "off": "Chương trình giới thiệu hiện đang tắt.",
+      "needService": "Hãy mua một dịch vụ trước, bạn sẽ nhận được liên kết mời riêng.",
+      "info": "🎁 <b>Mời bạn bè</b>\nKhi bạn bè mua dịch vụ đầu tiên qua liên kết của bạn, {{ .Percent }}% giá sẽ được cộng vào ví của bạn.\n\nMã của bạn: <code>{{ .Code }}</code>\nLiên kết của bạn:\n{{ .Link }}"
+    },
+    "support": {
+      "noService": "Phiếu hỗ trợ dành cho khách hàng đã có dịch vụ. Hãy liên hệ qua các liên kết trong menu.",
+      "pick": "Về dịch vụ nào?",
+      "title": "🆘 Hỗ trợ cho <code>{{ .Email }}</code>",
+      "ticket": "💬 <b>Phiếu #{{ .Id }}</b> - {{ .Subject }}\nTrạng thái: {{ .Status }}",
+      "you": "Bạn",
+      "staff": "Hỗ trợ",
+      "askNew": "Hãy mô tả vấn đề trong một tin nhắn. Dòng đầu tiên sẽ là tiêu đề.",
+      "askReply": "Hãy gửi câu trả lời của bạn trong một tin nhắn.",
+      "sent": "✅ Đã mở phiếu #{{ .Id }}. Chúng tôi sẽ trả lời tại đây.",
+      "replied": "✅ Đã gửi câu trả lời."
+    },
+    "lang": {
+      "choose": "🌐 Chọn ngôn ngữ của bạn:"
+    },
+    "notify": {
+      "fulfilled": "✅ Đã xác nhận thanh toán đơn #{{ .Id }} ({{ .Item }}).",
+      "rejected": "❌ Đơn #{{ .Id }} không được chấp nhận.",
+      "expired": "⌛ Đơn #{{ .Id }} đã hết hạn vì chưa nhận được thanh toán.",
+      "reminder": "⏰ Đơn #{{ .Id }} ({{ .Item }}, {{ .Amount }}) vẫn đang chờ thanh toán.",
+      "ticket": "💬 Bộ phận hỗ trợ đã trả lời phiếu #{{ .Id }} ({{ .Subject }}):\n\n{{ .Excerpt }}"
+    },
+    "reject": {
+      "none": "Từ chối, không nêu lý do",
+      "notFound": "Không tìm thấy khoản thanh toán",
+      "amount": "Số tiền không khớp",
+      "duplicate": "Biên lai này đã được dùng"
+    },
+    "admin": {
+      "title": "🛠 Quản trị cửa hàng",
+      "web": "cửa hàng web",
+      "receipt": "🧾 <b>Biên lai đơn #{{ .Id }}</b>\nNgười mua: {{ .Buyer }}\nTài khoản: <code>{{ .Account }}</code>\n{{ .Item }} · {{ .Kind }}\nSố tiền: <b>{{ .Amount }}</b>\nMã giao dịch: {{ .Ref }}\nGhi chú: {{ .Note }}",
+      "approvedBy": "✅ {{ .Name }} đã duyệt",
+      "rejectedBy": "❌ {{ .Name }} đã từ chối",
+      "alreadyHandled": "Đơn #{{ .Id }} đã được xử lý.",
+      "failed": "Không thể xử lý đơn #{{ .Id }}. Xem nhật ký của bảng điều khiển.",
+      "stats": "📊 <b>Hôm nay</b>\n{{ .Paid }}\n\nĐơn chưa thanh toán: {{ .Pending }}\nBiên lai chờ duyệt: {{ .Review }}",
+      "salesLine": "{{ .Orders }} đơn đã thanh toán: {{ .Amount }}",
+      "noSales": "Hôm nay chưa có đơn nào được thanh toán.",
+      "noneWaiting": "Không có biên lai nào đang chờ.",
+      "waitingTitle": "🧾 Biên lai chờ duyệt:",
+      "askBan": "Hãy gửi ID Telegram (dạng số) cần chặn.",
+      "askUnban": "Hãy gửi ID Telegram (dạng số) cần bỏ chặn.",
+      "badID": "Đó không phải là ID Telegram.",
+      "cannotBanAdmin": "Không thể chặn quản trị viên.",
+      "banned": "🚫 {{ .ID }} đã bị chặn khỏi cửa hàng.",
+      "unbanned": "✅ {{ .ID }} có thể dùng cửa hàng trở lại."
+    },
+    "currency": {
+      "IRT": "Toman",
+      "IRR": "Rial"
+    },
+    "commandDesc": "Mở cửa hàng"
+  },
   "shop": {
     "title": "Cửa hàng",
     "noPlans": "Hiện chưa có gói nào được bán",
@@ -3354,7 +3540,10 @@
       "ticket_limit": "Bạn có quá nhiều phiếu đang mở. Hãy chờ phản hồi hoặc đóng một phiếu.",
       "ticket_closed": "Phiếu này đã đóng.",
       "rate_limited": "Quá nhiều yêu cầu. Vui lòng đợi một chút rồi thử lại.",
-      "network": "Đã xảy ra lỗi. Vui lòng thử lại."
+      "network": "Đã xảy ra lỗi. Vui lòng thử lại.",
+      "custom_invalid": "Lượng dữ liệu hoặc thời gian nằm ngoài phạm vi cho phép.",
+      "addon_unsupported": "Tài khoản này không thể nhận gói thêm đó: dung lượng hoặc thời hạn không giới hạn thì không thể kéo dài thêm.",
+      "banned": "Tài khoản của bạn không thể dùng cửa hàng."
     }
   },
   "setup": {
@@ -3670,40 +3859,6 @@
       "chooseClient": "Chọn một Khách hàng cho Inbound {{ .Inbound }}",
       "chooseInbound": "Chọn một Inbound",
       "qrCodeForClient": "Mã QR cho khách hàng {{ .Email }}:"
-    },
-    "shop": {
-      "disabled": "Cửa hàng hiện không khả dụng.",
-      "menu": "🛒 Cửa hàng\r\nBạn muốn làm gì?",
-      "plansTitle": "🛒 Chọn một gói:",
-      "noPlans": "Hiện chưa có gói nào được bán.",
-      "planDetail": "<b>{{ .Name }}</b>\r\n{{ .Description }}\r\nDữ liệu: {{ .Quota }}\r\nThời hạn: {{ .Duration }}\r\nThiết bị: {{ .Devices }}\r\nGiá: {{ .Price }}\r\n\r\nCho tài khoản nào?",
-      "noExpiry": "Không hết hạn",
-      "confirm": "<b>{{ .Plan }}</b> cho <code>{{ .Email }}</code>\r\nTổng: {{ .Amount }}\r\nChọn cách thanh toán:",
-      "discountLine": "\r\nGiá niêm yết {{ .List }}, mã {{ .Code }}",
-      "askCode": "Hãy gửi mã giảm giá của bạn trong một tin nhắn.",
-      "askReceipt": "Hãy gửi mã theo dõi giao dịch chuyển khoản trong một tin nhắn.",
-      "receiptSent": "✅ Đã gửi biên lai. Sẽ sớm được xem xét.",
-      "expired": "Lựa chọn của bạn đã hết hạn. Gửi /shop để bắt đầu lại.",
-      "ordersTitle": "📦 Các đơn hàng gần đây:",
-      "noOrders": "Bạn chưa có đơn hàng nào.",
-      "order": "📦 Đơn hàng #{{ .Id }} - {{ .Plan }}\r\nSố tiền: {{ .Amount }}\r\nTrạng thái: {{ .Status }}",
-      "cardInfo": "\r\n\r\nHãy chuyển đúng {{ .Amount }} vào thẻ này:\r\n<code>{{ .Card }}</code>\r\n{{ .Holder }} {{ .Bank }}\r\n{{ .Instructions }}",
-      "payLink": "\r\n\r\nHoàn tất thanh toán: {{ .URL }}",
-      "delivered": "✅ Đã thanh toán và kích hoạt. Gói đăng ký của bạn:",
-      "buttons": {
-        "plans": "🛒 Các gói",
-        "orders": "📦 Đơn hàng của tôi",
-        "newAccount": "🆕 Tài khoản mới",
-        "renew": "🔄 Gia hạn {{ .Email }}",
-        "code": "🏷 Mã giảm giá",
-        "card": "💳 Thẻ sang thẻ",
-        "wallet": "👛 Ví",
-        "zarinpal": "Zarinpal",
-        "idpay": "IDPay",
-        "crypto": "Tiền mã hóa",
-        "receipt": "🧾 Gửi biên lai",
-        "refresh": "🔄 Làm mới"
-      }
     }
   },
   "discord": {
