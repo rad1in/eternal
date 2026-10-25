@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"net/url"
+	"regexp"
 	"slices"
 	"strings"
 
@@ -65,6 +66,45 @@ type ReferralConfig struct {
 	BonusPercent int  `json:"bonusPercent" example:"10"`
 }
 
+// ForceJoinChat is a channel or group a buyer must belong to before the bot
+// serves them. Chat is an @username or a numeric chat id; Link is where the
+// buyer joins (derived from an @username when blank).
+type ForceJoinChat struct {
+	Chat string `json:"chat" example:"@mychannel"`
+	Link string `json:"link" example:"https://t.me/mychannel"`
+}
+
+// BotLink is an extra button on the bot menu, such as a support channel.
+type BotLink struct {
+	Label string `json:"label" example:"Tutorials"`
+	URL   string `json:"url" example:"https://t.me/mychannel"`
+}
+
+// ShopBotConfig tunes the Telegram bot's shop. ReceiptChatId is a group or
+// channel that gets card receipts besides the admins' own chats; MiniApp adds
+// the "open shop" button.
+type ShopBotConfig struct {
+	ForceJoin     []ForceJoinChat `json:"forceJoin"`
+	Links         []BotLink       `json:"links"`
+	ReceiptChatId int64           `json:"receiptChatId" example:"-1001234567890"`
+	MiniApp       bool            `json:"miniApp"`
+}
+
+// CustomOfferConfig sells a quota and a duration the buyer picks, priced per
+// GB and per day in Currency's minor unit. TemplateId supplies the inbounds.
+type CustomOfferConfig struct {
+	Enabled     bool   `json:"enabled"`
+	TemplateId  int    `json:"templateId" example:"1"`
+	Currency    string `json:"currency" example:"IRT"`
+	PricePerGB  int64  `json:"pricePerGb" example:"2000"`
+	PricePerDay int64  `json:"pricePerDay" example:"1000"`
+	MinGB       int    `json:"minGb" example:"5"`
+	MaxGB       int    `json:"maxGb" example:"500"`
+	MinDays     int    `json:"minDays" example:"7"`
+	MaxDays     int    `json:"maxDays" example:"365"`
+	LimitIP     int    `json:"limitIp" example:"2"`
+}
+
 // Names of the secret fields, as ClearSecrets takes them.
 const (
 	secretZarinpalMerchant = "zarinpal.merchantId"
@@ -90,9 +130,11 @@ type SalesConfig struct {
 	PayPal        PayPalConfig   `json:"paypal"`
 	WalletEnabled bool           `json:"walletEnabled"`
 	// TelegramShop opens the shop to customers inside the Telegram bot.
-	TelegramShop bool           `json:"telegramShop"`
-	Referral     ReferralConfig `json:"referral"`
-	ClearSecrets []string       `json:"clearSecrets,omitempty"`
+	TelegramShop bool              `json:"telegramShop"`
+	Referral     ReferralConfig    `json:"referral"`
+	Bot          ShopBotConfig     `json:"bot"`
+	Custom       CustomOfferConfig `json:"custom"`
+	ClearSecrets []string          `json:"clearSecrets,omitempty"`
 }
 
 // SalesConfigView is the configuration as the admin API serves it: secrets are
@@ -231,6 +273,12 @@ func (c *SalesConfig) normalize() error {
 	if c.Referral.Enabled && (c.Referral.BonusPercent < 1 || c.Referral.BonusPercent > 100) {
 		return common.NewError("the referral bonus must be between 1 and 100 percent")
 	}
+	if err := c.normalizeBot(); err != nil {
+		return err
+	}
+	if err := c.Custom.normalize(); err != nil {
+		return err
+	}
 	online := c.Zarinpal.Enabled || c.IDPay.Enabled || c.Crypto.Enabled || c.Stripe.Enabled || c.PayPal.Enabled
 	if online && !validBaseURL(c.PublicBaseURL) {
 		return common.NewError("an online payment method needs the public base URL (http or https)")
@@ -274,4 +322,81 @@ func digitsOnly(s string) string {
 		}
 	}
 	return b.String()
+}
+
+const (
+	maxForceJoin  = 3
+	maxBotLinks   = 6
+	maxLabelRunes = 40
+	maxURLLen     = 300
+	maxUnitPrice  = int64(1_000_000_000_000)
+	maxCustomGB   = 100_000
+	maxCustomDays = 3650
+)
+
+var forceJoinChat = regexp.MustCompile(`^(@[A-Za-z][A-Za-z0-9_]{4,31}|-?[0-9]{5,20})$`)
+
+func (c *SalesConfig) normalizeBot() error {
+	b := &c.Bot
+	if len(b.ForceJoin) > maxForceJoin {
+		return common.NewError("at most", maxForceJoin, "channels can be required")
+	}
+	for i := range b.ForceJoin {
+		j := &b.ForceJoin[i]
+		j.Chat, j.Link = strings.TrimSpace(j.Chat), strings.TrimSpace(j.Link)
+		if !forceJoinChat.MatchString(j.Chat) {
+			return common.NewError("a required channel must be an @username or a numeric chat id")
+		}
+		if j.Link == "" && strings.HasPrefix(j.Chat, "@") {
+			j.Link = "https://t.me/" + strings.TrimPrefix(j.Chat, "@")
+		}
+		if !validButtonURL(j.Link) {
+			return common.NewError("a required channel needs a join link (https or tg)")
+		}
+	}
+	if len(b.Links) > maxBotLinks {
+		return common.NewError("at most", maxBotLinks, "menu links are allowed")
+	}
+	for i := range b.Links {
+		l := &b.Links[i]
+		l.Label, l.URL = strings.TrimSpace(l.Label), strings.TrimSpace(l.URL)
+		if l.Label == "" || len([]rune(l.Label)) > maxLabelRunes || !validButtonURL(l.URL) {
+			return common.NewError("a menu link needs a label (up to 40 characters) and an https or tg URL")
+		}
+	}
+	if b.MiniApp && !strings.HasPrefix(c.PublicBaseURL, "https://") {
+		return common.NewError("the Mini App needs the public base URL to be https")
+	}
+	return nil
+}
+
+// validButtonURL accepts what Telegram accepts for a URL button.
+func validButtonURL(raw string) bool {
+	u, err := url.Parse(raw)
+	if err != nil || len(raw) > maxURLLen {
+		return false
+	}
+	return (u.Scheme == "https" && u.Host != "") || (u.Scheme == "tg" && u.Host != "")
+}
+
+func (o *CustomOfferConfig) normalize() error {
+	o.Currency = strings.ToUpper(strings.TrimSpace(o.Currency))
+	if !o.Enabled {
+		return nil
+	}
+	if _, ok := CurrencyDecimals(o.Currency); !ok {
+		return common.NewError("unsupported currency:", o.Currency)
+	}
+	if _, err := (&ClientService{}).GetClientTemplate(o.TemplateId); err != nil {
+		return err
+	}
+	if o.PricePerGB < 0 || o.PricePerDay < 0 || o.PricePerGB > maxUnitPrice || o.PricePerDay > maxUnitPrice ||
+		(o.PricePerGB == 0 && o.PricePerDay == 0) {
+		return common.NewError("the per-GB and per-day prices cannot be negative and cannot both be zero")
+	}
+	if o.MinGB < 1 || o.MaxGB < o.MinGB || o.MaxGB > maxCustomGB ||
+		o.MinDays < 1 || o.MaxDays < o.MinDays || o.MaxDays > maxCustomDays || o.LimitIP < 0 {
+		return common.NewError("the custom quota and duration bounds are invalid")
+	}
+	return nil
 }

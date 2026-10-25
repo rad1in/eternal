@@ -35,6 +35,9 @@ type TicketAuth struct {
 	Email      string
 	Proof      string
 	OrderToken string
+	// TgId is a Telegram account the caller has already verified (bot sender or
+	// Mini App session); it stands in for the subscription id on its own clients.
+	TgId int64
 }
 
 // TicketDetail is a ticket with its whole conversation, oldest message first.
@@ -66,6 +69,9 @@ func (s *TicketService) account(auth TicketAuth) (string, error) {
 		return order.ClientEmail, nil
 	}
 	rec, err := s.clients.GetRecordByEmail(nil, strings.TrimSpace(auth.Email))
+	if err == nil && auth.TgId != 0 && rec.TgID == auth.TgId {
+		return rec.Email, nil
+	}
 	if err != nil || auth.Proof == "" || subtle.ConstantTimeCompare([]byte(rec.SubID), []byte(auth.Proof)) != 1 {
 		return "", salesErr(ErrProofInvalid)
 	}
@@ -286,7 +292,11 @@ func (s *TicketService) AdminReply(id int, body string) (*TicketDetail, error) {
 	if err := s.addMessage(db, id, model.TicketByAdmin, body, model.TicketAnswered); err != nil {
 		return nil, err
 	}
-	return s.detail(db, id)
+	d, err := s.detail(db, id)
+	if err == nil {
+		publishTicket(eventbus.EventTicketAnswered, &d.Ticket, body)
+	}
+	return d, err
 }
 
 func (s *TicketService) setStatus(id int, from []string, to string) (*model.Ticket, error) {

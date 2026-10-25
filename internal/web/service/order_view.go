@@ -17,13 +17,26 @@ type ShopPlan struct {
 	TotalGB      int64  `json:"totalGB" example:"53687091200"`
 	DurationDays int    `json:"durationDays" example:"30"`
 	LimitIP      int    `json:"limitIp" example:"2"`
+	Category     string `json:"category" example:"Monthly"`
 }
 
-// ShopCatalog is what the public shop lists: sellable plans and the payment
-// methods that are switched on.
+// ShopCustom is the calculator offer: prices per GB and per day within bounds.
+type ShopCustom struct {
+	Currency    string `json:"currency" example:"IRT"`
+	PricePerGB  int64  `json:"pricePerGb" example:"2000"`
+	PricePerDay int64  `json:"pricePerDay" example:"1000"`
+	MinGB       int    `json:"minGb" example:"5"`
+	MaxGB       int    `json:"maxGb" example:"500"`
+	MinDays     int    `json:"minDays" example:"7"`
+	MaxDays     int    `json:"maxDays" example:"365"`
+}
+
+// ShopCatalog is what the public shop lists: sellable plans, the calculator
+// offer when it is on, and the payment methods that are switched on.
 type ShopCatalog struct {
-	Plans   []ShopPlan `json:"plans"`
-	Methods []string   `json:"methods"`
+	Plans   []ShopPlan  `json:"plans"`
+	Custom  *ShopCustom `json:"custom,omitempty"`
+	Methods []string    `json:"methods"`
 }
 
 // ShopOrderView is an order as its customer sees it: no internal ids, and the
@@ -71,8 +84,14 @@ func (s *OrderService) Catalog() (*ShopCatalog, error) {
 	for _, p := range plans {
 		catalog.Plans = append(catalog.Plans, ShopPlan{
 			Id: p.Id, Name: p.Name, Description: p.Description, Price: p.Price, Currency: p.Currency,
-			TotalGB: p.TotalGB, DurationDays: p.DurationDays, LimitIP: p.LimitIP,
+			TotalGB: p.TotalGB, DurationDays: p.DurationDays, LimitIP: p.LimitIP, Category: p.Category,
 		})
+	}
+	if c := cfg.Custom; c.Enabled {
+		catalog.Custom = &ShopCustom{
+			Currency: c.Currency, PricePerGB: c.PricePerGB, PricePerDay: c.PricePerDay,
+			MinGB: c.MinGB, MaxGB: c.MaxGB, MinDays: c.MinDays, MaxDays: c.MaxDays,
+		}
 	}
 	return catalog, nil
 }
@@ -141,11 +160,25 @@ func (s *OrderService) CustomerWallet(email, proof string) (*ShopWallet, error) 
 	if proof == "" || subtle.ConstantTimeCompare([]byte(rec.SubID), []byte(proof)) != 1 {
 		return nil, salesErr(ErrProofInvalid)
 	}
-	view, err := (&WalletService{}).View(rec.Email)
+	return s.walletOf(rec.Email)
+}
+
+// TelegramWallet shows the wallet of a client bound to the verified Telegram
+// account; another account's client is reported as unknown.
+func (s *OrderService) TelegramWallet(tgId int64, email string) (*ShopWallet, error) {
+	rec, err := s.clients.GetRecordByEmail(nil, strings.TrimSpace(email))
+	if err != nil || tgId == 0 || rec.TgID != tgId {
+		return nil, salesErr(ErrEmailUnknown)
+	}
+	return s.walletOf(rec.Email)
+}
+
+func (s *OrderService) walletOf(email string) (*ShopWallet, error) {
+	view, err := (&WalletService{}).View(email)
 	if err != nil {
 		return nil, err
 	}
-	code, err := s.referrals.CodeFor(rec.Email)
+	code, err := s.referrals.CodeFor(email)
 	if err != nil {
 		return nil, err
 	}

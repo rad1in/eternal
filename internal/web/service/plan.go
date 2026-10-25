@@ -21,6 +21,8 @@ func CurrencyDecimals(currency string) (int, bool) {
 	return d, ok
 }
 
+const maxCategoryRunes = 40
+
 // PlanService manages the sellable packages.
 type PlanService struct{}
 
@@ -56,6 +58,10 @@ func (s *PlanService) SavePlan(plan *model.Plan) (*model.Plan, error) {
 	plan.Name = strings.TrimSpace(plan.Name)
 	if plan.Name == "" {
 		return nil, common.NewError("plan name is required")
+	}
+	plan.Category = strings.TrimSpace(plan.Category)
+	if len([]rune(plan.Category)) > maxCategoryRunes {
+		return nil, common.NewError("plan category is too long")
 	}
 	plan.Currency = strings.ToUpper(strings.TrimSpace(plan.Currency))
 	if _, ok := CurrencyDecimals(plan.Currency); !ok {
