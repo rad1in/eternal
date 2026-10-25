@@ -84,6 +84,7 @@ func migrationModels() []any {
 		&model.TicketMessage{},
 		&model.Passkey{},
 		&model.PendingAction{},
+		&model.BotUser{},
 	}
 }
 
