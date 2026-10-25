@@ -4,13 +4,14 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
-	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
 	"net/url"
 	"sort"
 	"strconv"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
 )
 
 // telegramInitData signs launch data the documented way for the given bot token.
