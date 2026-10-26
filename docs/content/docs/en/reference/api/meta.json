@@ -24,6 +24,7 @@
     "subscription-balancers",
     "hosts",
     "nodes",
+    "tunnels",
     "backup",
     "websocket"
   ]

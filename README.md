@@ -205,5 +205,6 @@ Eternal is free software under the **GNU GPL v3**. It is based on:
 - [3x-ui](https://github.com/MHSanaei/3x-ui) by MHSanaei and contributors (GPL-3.0)
 - [X-UI](https://github.com/vaxilu/x-ui) by vaxilu, the project 3x-ui was forked from (GPL-3.0)
 - [Xray-core](https://github.com/XTLS/Xray-core) by the XTLS team (MPL-2.0)
+- [WatTunnel](https://github.com/JohnWatsoon/WatTunnel) by Amirreza (MIT), vendored in `internal/wattunnel` and `cmd/wattun`; its license is in `third_party/wattunnel/LICENSE`
 
 Routing rule sets used by the Iran and Russia templates come from [Iran v2ray rules](https://github.com/chocolate4u/Iran-v2ray-rules) and [Russia v2ray rules](https://github.com/runetfreedom/russia-v2ray-rules-dat) (GPL-3.0).
