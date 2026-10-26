@@ -1,0 +1,150 @@
+---
+title: Tunnels
+description: Encrypted Iran-Kharej port forwarding (WatTunnel) between this
+  panel, its nodes and servers without a panel. One tunnel is two ends sharing a
+  pairUuid; an end runs a managed wattun process. The pairing token carries the
+  tunnel key, so token and join-command responses are owner-only. The
+  /panel/api/tunnels/agent calls are what a master panel sends to the nodes that
+  run its tunnel ends. All endpoints under /panel/api/tunnels.
+full: true
+_openapi:
+  preload:
+    - ./public/openapi.json
+  toc:
+    - depth: 2
+      title: List every tunnel with the last observed state of its ends.
+      url: '#list-every-tunnel-with-the-last-observed-state-of-its-ends'
+    - depth: 2
+      title: 'What this panel can do for tunnels: whether the wattun binary is
+        installed, the platform, the carriers that apply here and this server
+        public IPv4.'
+      url: '#what-this-panel-can-do-for-tunnels-whether-the-wattun-binary-is-installed-the-platform-the-carriers-that-apply-here-and-this-server-public-ipv4'
+    - depth: 2
+      title: One tunnel, with live counters polled from the hosts running its ends.
+      url: '#one-tunnel-with-live-counters-polled-from-the-hosts-running-its-ends'
+    - depth: 2
+      title: Tail of the daemon log of one end.
+      url: '#tail-of-the-daemon-log-of-one-end'
+    - depth: 2
+      title: 'The pairing token and the one-line install command of a tunnel whose
+        Kharej end this panel runs. Owner only: the token contains the tunnel
+        key.'
+      url: '#the-pairing-token-and-the-one-line-install-command-of-a-tunnel-whose-kharej-end-this-panel-runs-owner-only-the-token-contains-the-tunnel-key'
+    - depth: 2
+      title: 'Create a tunnel: starts the Kharej end, hands its token to the Iran end
+        (probing every carrier first when carrier is auto) and waits briefly for
+        the link. An end with kind external runs on a server without a panel;
+        the response then carries the install command (owner only).'
+      url: '#create-a-tunnel-starts-the-kharej-end-hands-its-token-to-the-iran-end-probing-every-carrier-first-when-carrier-is-auto-and-waits-briefly-for-the-link-an-end-with-kind-external-runs-on-a-server-without-a-panel-the-response-then-carries-the-install-command-owner-only'
+    - depth: 2
+      title: Change the name, enabled state, ports (with optional rate and quota) or
+        tuning options. A ports-only change is hot-reloaded and keeps the tunnel
+        connected. Omitted fields stay.
+      url: '#change-the-name-enabled-state-ports-with-optional-rate-and-quota-or-tuning-options-a-ports-only-change-is-hot-reloaded-and-keeps-the-tunnel-connected-omitted-fields-stay'
+    - depth: 2
+      title: Stop and delete a tunnel. With force, an end on a node that cannot be
+        reached is skipped instead of failing the call.
+      url: '#stop-and-delete-a-tunnel-with-force-an-end-on-a-node-that-cannot-be-reached-is-skipped-instead-of-failing-the-call'
+    - depth: 2
+      title: Restart the daemon of every managed end.
+      url: '#restart-the-daemon-of-every-managed-end'
+    - depth: 2
+      title: Test every carrier again from the Iran end of an auto tunnel and switch
+        to the fastest that connects.
+      url: '#test-every-carrier-again-from-the-iran-end-of-an-auto-tunnel-and-switch-to-the-fastest-that-connects'
+    - depth: 2
+      title: Move mb megabytes each way through the Iran end and report the speed.
+      url: '#move-mb-megabytes-each-way-through-the-iran-end-and-report-the-speed'
+    - depth: 2
+      title: 'Node side of a master call: start or update one tunnel end on this host,
+        choosing free ports and refusing clashes. The body is the end including
+        its key.'
+      url: '#node-side-of-a-master-call-start-or-update-one-tunnel-end-on-this-host-choosing-free-ports-and-refusing-clashes-the-body-is-the-end-including-its-key'
+    - depth: 2
+      title: 'Node side: stop and forget one tunnel end.'
+      url: '#node-side-stop-and-forget-one-tunnel-end'
+    - depth: 2
+      title: 'Node side: observed status of every tunnel end running on this host.'
+      url: '#node-side-observed-status-of-every-tunnel-end-running-on-this-host'
+    - depth: 2
+      title: 'Node side: tail of one end daemon log.'
+      url: '#node-side-tail-of-one-end-daemon-log'
+    - depth: 2
+      title: 'Node side: restart one end daemon.'
+      url: '#node-side-restart-one-end-daemon'
+    - depth: 2
+      title: 'Node side: try every carrier of an auto token from this host and return
+        the results, best first.'
+      url: '#node-side-try-every-carrier-of-an-auto-token-from-this-host-and-return-the-results-best-first'
+    - depth: 2
+      title: 'Node side: run a speed test through one Iran end on this host.'
+      url: '#node-side-run-a-speed-test-through-one-iran-end-on-this-host'
+  structuredData:
+    headings:
+      - content: List every tunnel with the last observed state of its ends.
+        id: list-every-tunnel-with-the-last-observed-state-of-its-ends
+      - content: 'What this panel can do for tunnels: whether the wattun binary is
+          installed, the platform, the carriers that apply here and this server
+          public IPv4.'
+        id: what-this-panel-can-do-for-tunnels-whether-the-wattun-binary-is-installed-the-platform-the-carriers-that-apply-here-and-this-server-public-ipv4
+      - content: One tunnel, with live counters polled from the hosts running its ends.
+        id: one-tunnel-with-live-counters-polled-from-the-hosts-running-its-ends
+      - content: Tail of the daemon log of one end.
+        id: tail-of-the-daemon-log-of-one-end
+      - content: 'The pairing token and the one-line install command of a tunnel whose
+          Kharej end this panel runs. Owner only: the token contains the tunnel
+          key.'
+        id: the-pairing-token-and-the-one-line-install-command-of-a-tunnel-whose-kharej-end-this-panel-runs-owner-only-the-token-contains-the-tunnel-key
+      - content: 'Create a tunnel: starts the Kharej end, hands its token to the Iran
+          end (probing every carrier first when carrier is auto) and waits
+          briefly for the link. An end with kind external runs on a server
+          without a panel; the response then carries the install command (owner
+          only).'
+        id: create-a-tunnel-starts-the-kharej-end-hands-its-token-to-the-iran-end-probing-every-carrier-first-when-carrier-is-auto-and-waits-briefly-for-the-link-an-end-with-kind-external-runs-on-a-server-without-a-panel-the-response-then-carries-the-install-command-owner-only
+      - content: Change the name, enabled state, ports (with optional rate and quota) or
+          tuning options. A ports-only change is hot-reloaded and keeps the
+          tunnel connected. Omitted fields stay.
+        id: change-the-name-enabled-state-ports-with-optional-rate-and-quota-or-tuning-options-a-ports-only-change-is-hot-reloaded-and-keeps-the-tunnel-connected-omitted-fields-stay
+      - content: Stop and delete a tunnel. With force, an end on a node that cannot be
+          reached is skipped instead of failing the call.
+        id: stop-and-delete-a-tunnel-with-force-an-end-on-a-node-that-cannot-be-reached-is-skipped-instead-of-failing-the-call
+      - content: Restart the daemon of every managed end.
+        id: restart-the-daemon-of-every-managed-end
+      - content: Test every carrier again from the Iran end of an auto tunnel and switch
+          to the fastest that connects.
+        id: test-every-carrier-again-from-the-iran-end-of-an-auto-tunnel-and-switch-to-the-fastest-that-connects
+      - content: Move mb megabytes each way through the Iran end and report the speed.
+        id: move-mb-megabytes-each-way-through-the-iran-end-and-report-the-speed
+      - content: 'Node side of a master call: start or update one tunnel end on this
+          host, choosing free ports and refusing clashes. The body is the end
+          including its key.'
+        id: node-side-of-a-master-call-start-or-update-one-tunnel-end-on-this-host-choosing-free-ports-and-refusing-clashes-the-body-is-the-end-including-its-key
+      - content: 'Node side: stop and forget one tunnel end.'
+        id: node-side-stop-and-forget-one-tunnel-end
+      - content: 'Node side: observed status of every tunnel end running on this host.'
+        id: node-side-observed-status-of-every-tunnel-end-running-on-this-host
+      - content: 'Node side: tail of one end daemon log.'
+        id: node-side-tail-of-one-end-daemon-log
+      - content: 'Node side: restart one end daemon.'
+        id: node-side-restart-one-end-daemon
+      - content: 'Node side: try every carrier of an auto token from this host and
+          return the results, best first.'
+        id: node-side-try-every-carrier-of-an-auto-token-from-this-host-and-return-the-results-best-first
+      - content: 'Node side: run a speed test through one Iran end on this host.'
+        id: node-side-run-a-speed-test-through-one-iran-end-on-this-host
+    contents: []
+---
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+export default function Layout(props) {
+  const { APIPage, OpenAPIPage } = props.components ?? {};
+  // "APIPage" is the old name from v10, this allows both for backward compatibility
+  const Comp = OpenAPIPage ?? APIPage;
+  return (
+    <>
+      {props.children}
+      <Comp document="./public/openapi.json" webhooks={[]} operations={[{"path":"/panel/api/tunnels/list","method":"get"},{"path":"/panel/api/tunnels/options","method":"get"},{"path":"/panel/api/tunnels/get/{pair}","method":"get"},{"path":"/panel/api/tunnels/logs/{pair}/{role}","method":"get"},{"path":"/panel/api/tunnels/token/{pair}","method":"get"},{"path":"/panel/api/tunnels/create","method":"post"},{"path":"/panel/api/tunnels/update/{pair}","method":"post"},{"path":"/panel/api/tunnels/del/{pair}","method":"post"},{"path":"/panel/api/tunnels/restart/{pair}","method":"post"},{"path":"/panel/api/tunnels/reprobe/{pair}","method":"post"},{"path":"/panel/api/tunnels/speedtest/{pair}","method":"post"},{"path":"/panel/api/tunnels/agent/apply","method":"post"},{"path":"/panel/api/tunnels/agent/remove/{uuid}","method":"post"},{"path":"/panel/api/tunnels/agent/status","method":"get"},{"path":"/panel/api/tunnels/agent/logs/{uuid}","method":"get"},{"path":"/panel/api/tunnels/agent/restart/{uuid}","method":"post"},{"path":"/panel/api/tunnels/agent/probe","method":"post"},{"path":"/panel/api/tunnels/agent/speedtest/{uuid}","method":"post"}]} showTitle />
+    </>
+  );
+}

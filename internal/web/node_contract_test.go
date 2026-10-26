@@ -2,9 +2,11 @@ package web
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"path/filepath"
 	"reflect"
 	"strconv"
@@ -18,7 +20,9 @@ import (
 	"github.com/mhsanaei/3x-ui/v3/internal/database"
 	"github.com/mhsanaei/3x-ui/v3/internal/database/dbtest"
 	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
+	"github.com/mhsanaei/3x-ui/v3/internal/tunnel"
 	"github.com/mhsanaei/3x-ui/v3/internal/util/crypto"
+	"github.com/mhsanaei/3x-ui/v3/internal/wattunnel/spec"
 	"github.com/mhsanaei/3x-ui/v3/internal/web/global"
 	"github.com/mhsanaei/3x-ui/v3/internal/web/runtime"
 	"github.com/mhsanaei/3x-ui/v3/internal/web/service"
@@ -329,6 +333,41 @@ func TestMasterNodeContract(t *testing.T) {
 						t.Fatalf("node clients = %v, want c2 gone", got)
 					}
 				}},
+				{"Tunnel ends run on the node: apply, list, log, restart, speed test, probe, remove", []string{
+					"ApplyTunnel", "TunnelStatuses", "TunnelLogs", "RestartTunnel", "TunnelSpeedTest", "ProbeTunnel", "RemoveTunnel",
+				}, func() error {
+					installFakeWattun(t)
+					end := tunnel.EndConfig{
+						Uuid: "contract-tunnel", PairUuid: "contract-pair", Name: "contract", Role: spec.RoleIran, Enable: true,
+						Carrier: "tcp", Peer: "203.0.113.7:4443", Key: "contractkey12345", Ports: []spec.PortMap{{Listen: 24788, Target: 443}},
+					}
+					if _, err := master.ApplyTunnel(ctx, end); err != nil {
+						return err
+					}
+					if sts, err := master.TunnelStatuses(ctx); err != nil || len(sts) != 1 || sts[0].Uuid != end.Uuid {
+						return fmt.Errorf("statuses = %v, %v", sts, err)
+					}
+					if _, err := master.TunnelLogs(ctx, end.Uuid, 20); err != nil {
+						return err
+					}
+					if err := master.RestartTunnel(ctx, end.Uuid); err != nil {
+						return err
+					}
+					if _, err := master.TunnelSpeedTest(ctx, end.Uuid, 1); err != nil {
+						return err
+					}
+					tok := spec.Token{Carrier: spec.CarrierAuto, Peer: "203.0.113.7", Key: "contractkey12345", Plan: "d=tcp:4443;r="}
+					if _, err := master.ProbeTunnel(ctx, tok.Encode()); err != nil {
+						return err
+					}
+					return master.RemoveTunnel(ctx, end.Uuid)
+				}, func(t *testing.T) {
+					var n int64
+					database.GetDB().Model(&model.TunnelEnd{}).Count(&n)
+					if n != 0 {
+						t.Fatalf("node still holds %d tunnel rows after RemoveTunnel", n)
+					}
+				}},
 				{"DelInbound removes the inbound", []string{"DelInbound"}, func() error {
 					return master.DelInbound(ctx, masterInbound("updated", false))
 				}, func(t *testing.T) {
@@ -360,6 +399,20 @@ func TestMasterNodeContract(t *testing.T) {
 			}
 		})
 	}
+}
+
+// installFakeWattun puts a stand-in daemon where the panel looks for wattun, so a node can
+// run tunnel ends without the real binary.
+func installFakeWattun(t *testing.T) {
+	t.Helper()
+	dir := t.TempDir()
+	t.Setenv("XUI_BIN_FOLDER", dir)
+	script := "#!/bin/sh\nexec sleep 60\n"
+	if err := os.WriteFile(filepath.Join(dir, tunnel.BinaryName()), []byte(script), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	tunnel.ProbeLinkWait = 300 * time.Millisecond
+	t.Cleanup(func() { tunnel.ProbeLinkWait = 0; tunnel.GetManager().StopAll() })
 }
 
 // Remote methods that never reach the node, or that this table must not run.

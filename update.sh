@@ -582,6 +582,7 @@ migrate_legacy_x_ui() {
     fi
     # The managed sidecars live outside the panel and outlive a service stop.
     pkill -f 'mtg-linux-[^ ]* run ' > /dev/null 2>&1 || true
+        pkill -f 'wattun-linux-[^ ]* -config ' > /dev/null 2>&1 || true
     pkill -f 'tuic-server.*-c .*bin/tuic/tuic_[0-9]+\.json' > /dev/null 2>&1 || true
 
     _legacy_move "$old_folder" /usr/local/eternal
@@ -730,6 +731,7 @@ update_eternal() {
         # an inbound port with an outdated secret, silently breaking new clients.
         # The new panel respawns a clean mtg per inbound on next start.
         pkill -f 'mtg-linux-[^ ]* run ' > /dev/null 2>&1 || true
+        pkill -f 'wattun-linux-[^ ]* -config ' > /dev/null 2>&1 || true
         pkill -f 'tuic-server.*-c .*bin/tuic/tuic_[0-9]+\.json' > /dev/null 2>&1 || true
         echo -e "${green}Removing old eternal version...${plain}"
         rm ${xui_folder} -f > /dev/null 2>&1
@@ -776,9 +778,13 @@ update_eternal() {
             mv bin/mtg-linux-$(arch) bin/mtg-linux-arm > /dev/null 2>&1
             chmod +x bin/mtg-linux-arm > /dev/null 2>&1
         fi
+        if [[ -f bin/wattun-linux-$(arch) ]]; then
+            mv bin/wattun-linux-$(arch) bin/wattun-linux-arm > /dev/null 2>&1
+        fi
     fi
 
     chmod +x eternal bin/xray-linux-$(arch) > /dev/null 2>&1
+    chmod +x bin/wattun-linux-* > /dev/null 2>&1
     if [[ -f bin/mtg-linux-arm ]]; then
         chmod +x bin/mtg-linux-arm > /dev/null 2>&1
     elif [[ -f bin/mtg-linux-$(arch) ]]; then

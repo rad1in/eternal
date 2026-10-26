@@ -126,6 +126,7 @@ func allModels() []any {
 		&model.Passkey{},
 		&model.PendingAction{},
 		&model.BotUser{},
+		&model.TunnelEnd{},
 	}
 }
 

@@ -85,6 +85,7 @@ func migrationModels() []any {
 		&model.Passkey{},
 		&model.PendingAction{},
 		&model.BotUser{},
+		&model.TunnelEnd{},
 	}
 }
 

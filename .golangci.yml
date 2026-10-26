@@ -22,6 +22,9 @@ linters:
     paths:
       - frontend
       - internal/web/dist
+      # Vendored WatTunnel (MIT), kept byte-for-byte close to upstream.
+      - internal/wattunnel/wat
+      - cmd/wattun/(config|dnslisten|echladder|linkwatch|main|ports|sig_unix|sig_windows|speedtest|tunnel|udp)\.go
     rules:
       - path: _test\.go
         linters:
@@ -51,3 +54,5 @@ formatters:
     paths:
       - frontend
       - internal/web/dist
+      - internal/wattunnel/wat
+      - cmd/wattun/(config|dnslisten|echladder|linkwatch|main|ports|sig_unix|sig_windows|speedtest|tunnel|udp)\.go

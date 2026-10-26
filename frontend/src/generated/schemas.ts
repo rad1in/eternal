@@ -2428,6 +2428,47 @@ export const SCHEMAS: Record<string, unknown> = {
     ],
     "type": "object"
   },
+  "CarrierResult": {
+    "description": "CarrierResult is the outcome for one carrier.",
+    "properties": {
+      "carrier": {
+        "example": "tcp",
+        "type": "string"
+      },
+      "downMBps": {
+        "example": 31.5,
+        "type": "number"
+      },
+      "ok": {
+        "example": true,
+        "type": "boolean"
+      },
+      "peer": {
+        "example": "203.0.113.7:4443",
+        "type": "string"
+      },
+      "rttMs": {
+        "example": 42,
+        "type": "number"
+      },
+      "upMBps": {
+        "example": 28.2,
+        "type": "number"
+      },
+      "why": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "carrier",
+      "downMBps",
+      "ok",
+      "peer",
+      "rttMs",
+      "upMBps"
+    ],
+    "type": "object"
+  },
   "CleanIPResult": {
     "description": "CleanIPResult is the latest probe of one CDN address from the panel host.\nEach scan replaces the whole table, so a row is never older than the last scan.",
     "properties": {
@@ -3058,6 +3099,30 @@ export const SCHEMAS: Record<string, unknown> = {
     },
     "required": [
       "tag"
+    ],
+    "type": "object"
+  },
+  "ClientSession": {
+    "description": "ClientSession is one live client session on a Kharej end.",
+    "properties": {
+      "ageMs": {
+        "example": 61000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "carrier": {
+        "example": "tcp",
+        "type": "string"
+      },
+      "ip": {
+        "example": "198.51.100.20",
+        "type": "string"
+      }
+    },
+    "required": [
+      "ageMs",
+      "carrier",
+      "ip"
     ],
     "type": "object"
   },
@@ -3721,6 +3786,292 @@ export const SCHEMAS: Record<string, unknown> = {
       "updatedAt",
       "uses",
       "value"
+    ],
+    "type": "object"
+  },
+  "EndConfig": {
+    "description": "EndConfig is one tunnel end as it travels from the panel to the host that runs it. Key is the\nplaintext tunnel key; the transport to a node is TLS and the stored copy is sealed.",
+    "properties": {
+      "address": {
+        "example": "203.0.113.7",
+        "type": "string"
+      },
+      "carrier": {
+        "example": "tcp",
+        "type": "string"
+      },
+      "enable": {
+        "example": true,
+        "type": "boolean"
+      },
+      "icmpType": {
+        "example": "echo",
+        "type": "string"
+      },
+      "key": {
+        "example": "redacted",
+        "type": "string"
+      },
+      "listenPorts": {
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "example": {
+          "tcp": 4443
+        },
+        "type": "object"
+      },
+      "name": {
+        "example": "de-ir",
+        "type": "string"
+      },
+      "options": {
+        "$ref": "#/components/schemas/EndOptions"
+      },
+      "pairUuid": {
+        "example": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+        "type": "string"
+      },
+      "path": {
+        "example": "/wat",
+        "type": "string"
+      },
+      "peer": {
+        "example": "203.0.113.7:4443",
+        "type": "string"
+      },
+      "ports": {
+        "items": {
+          "$ref": "#/components/schemas/PortMap"
+        },
+        "type": "array"
+      },
+      "reverse": {
+        "example": false,
+        "type": "boolean"
+      },
+      "role": {
+        "example": "kharej",
+        "type": "string"
+      },
+      "sni": {
+        "type": "string"
+      },
+      "uuid": {
+        "example": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11",
+        "type": "string"
+      }
+    },
+    "required": [
+      "address",
+      "carrier",
+      "enable",
+      "icmpType",
+      "key",
+      "listenPorts",
+      "name",
+      "options",
+      "pairUuid",
+      "path",
+      "peer",
+      "ports",
+      "reverse",
+      "role",
+      "sni",
+      "uuid"
+    ],
+    "type": "object"
+  },
+  "EndOptions": {
+    "description": "EndOptions are the tuning and anti-censorship settings of the dialing end. Every field is\noptional; the zero value leaves the daemon default in place.",
+    "properties": {
+      "bind": {
+        "example": "0.0.0.0",
+        "type": "string"
+      },
+      "conns": {
+        "example": 0,
+        "type": "integer"
+      },
+      "ech": {
+        "example": "auto",
+        "type": "string"
+      },
+      "fakeMode": {
+        "example": "rst",
+        "type": "string"
+      },
+      "fakeSni": {
+        "example": "www.cloudflare.com",
+        "type": "string"
+      },
+      "fakeTtl": {
+        "example": 0,
+        "type": "integer"
+      },
+      "fec": {
+        "example": "off",
+        "type": "string"
+      },
+      "fp": {
+        "example": "chrome",
+        "type": "string"
+      },
+      "governor": {
+        "example": false,
+        "type": "boolean"
+      },
+      "maxMBps": {
+        "example": 0,
+        "type": "integer"
+      },
+      "poolRotate": {
+        "example": "30m",
+        "type": "string"
+      },
+      "poolRotateBytes": {
+        "example": "4GB",
+        "type": "string"
+      },
+      "sessions": {
+        "example": 1,
+        "type": "integer"
+      },
+      "tlsSmallCh": {
+        "example": false,
+        "type": "boolean"
+      }
+    },
+    "type": "object"
+  },
+  "EndResult": {
+    "description": "EndResult is what applying an end returns: the end with every port the host chose, and\nits first status.",
+    "properties": {
+      "end": {
+        "$ref": "#/components/schemas/EndConfig"
+      },
+      "status": {
+        "$ref": "#/components/schemas/EndStatus"
+      }
+    },
+    "required": [
+      "end",
+      "status"
+    ],
+    "type": "object"
+  },
+  "EndStatus": {
+    "description": "EndStatus is the observed state of one running end.",
+    "properties": {
+      "alive": {
+        "example": true,
+        "type": "boolean"
+      },
+      "bytesIn": {
+        "example": 123456,
+        "format": "int64",
+        "type": "integer"
+      },
+      "bytesOut": {
+        "example": 654321,
+        "format": "int64",
+        "type": "integer"
+      },
+      "carrier": {
+        "example": "tcp",
+        "type": "string"
+      },
+      "clients": {
+        "items": {
+          "$ref": "#/components/schemas/ClientSession"
+        },
+        "type": "array"
+      },
+      "lastError": {
+        "type": "string"
+      },
+      "lastRxAgeMs": {
+        "example": 900,
+        "format": "int64",
+        "type": "integer"
+      },
+      "pid": {
+        "example": 4242,
+        "type": "integer"
+      },
+      "ports": {
+        "items": {
+          "$ref": "#/components/schemas/PortStat"
+        },
+        "type": "array"
+      },
+      "rateBps": {
+        "example": 1000000,
+        "type": "number"
+      },
+      "restarts": {
+        "example": 0,
+        "type": "integer"
+      },
+      "running": {
+        "example": true,
+        "type": "boolean"
+      },
+      "sessions": {
+        "example": 1,
+        "type": "integer"
+      },
+      "srttMs": {
+        "example": 42.5,
+        "type": "number"
+      },
+      "state": {
+        "example": "up",
+        "type": "string"
+      },
+      "streams": {
+        "example": 3,
+        "type": "integer"
+      },
+      "tlsMode": {
+        "example": "chrome+ech",
+        "type": "string"
+      },
+      "uptimeSec": {
+        "example": 3600,
+        "format": "int64",
+        "type": "integer"
+      },
+      "uuid": {
+        "example": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11",
+        "type": "string"
+      },
+      "version": {
+        "example": "2.10.12",
+        "type": "string"
+      }
+    },
+    "required": [
+      "alive",
+      "bytesIn",
+      "bytesOut",
+      "carrier",
+      "clients",
+      "lastError",
+      "lastRxAgeMs",
+      "pid",
+      "ports",
+      "rateBps",
+      "restarts",
+      "running",
+      "sessions",
+      "srttMs",
+      "state",
+      "streams",
+      "tlsMode",
+      "uptimeSec",
+      "uuid",
+      "version"
     ],
     "type": "object"
   },
@@ -6597,6 +6948,103 @@ export const SCHEMAS: Record<string, unknown> = {
     ],
     "type": "object"
   },
+  "PortMap": {
+    "description": "PortMap is one forwarded port. Listen is where users connect on the Iran end, Target is the\nport on the Kharej host (127.0.0.1). Rate and quota are enforced on the Iran listener.",
+    "properties": {
+      "listen": {
+        "example": 443,
+        "type": "integer"
+      },
+      "quotaGB": {
+        "example": 0,
+        "type": "number"
+      },
+      "rateMBps": {
+        "example": 0,
+        "type": "number"
+      },
+      "target": {
+        "example": 443,
+        "type": "integer"
+      },
+      "udp": {
+        "example": false,
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "listen",
+      "target",
+      "udp"
+    ],
+    "type": "object"
+  },
+  "PortStat": {
+    "description": "PortStat are the live counters of one forwarded port.",
+    "properties": {
+      "bytesDown": {
+        "example": 4194304,
+        "format": "int64",
+        "type": "integer"
+      },
+      "bytesUp": {
+        "example": 1048576,
+        "format": "int64",
+        "type": "integer"
+      },
+      "connsActive": {
+        "example": 3,
+        "format": "int64",
+        "type": "integer"
+      },
+      "connsTotal": {
+        "example": 120,
+        "format": "int64",
+        "type": "integer"
+      },
+      "port": {
+        "example": 443,
+        "type": "integer"
+      },
+      "quotaExceeded": {
+        "example": false,
+        "type": "boolean"
+      },
+      "quotaLimit": {
+        "example": 0,
+        "format": "int64",
+        "type": "integer"
+      },
+      "quotaUsed": {
+        "example": 0,
+        "format": "int64",
+        "type": "integer"
+      },
+      "rateDown": {
+        "example": 81920,
+        "format": "int64",
+        "type": "integer"
+      },
+      "rateUp": {
+        "example": 20480,
+        "format": "int64",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "bytesDown",
+      "bytesUp",
+      "connsActive",
+      "connsTotal",
+      "port",
+      "quotaExceeded",
+      "quotaLimit",
+      "quotaUsed",
+      "rateDown",
+      "rateUp"
+    ],
+    "type": "object"
+  },
   "ProbeResultUI": {
     "properties": {
       "cpuPct": {
@@ -7805,6 +8253,28 @@ export const SCHEMAS: Record<string, unknown> = {
     ],
     "type": "object"
   },
+  "SpeedResult": {
+    "description": "SpeedResult is one speed test through a running client end.",
+    "properties": {
+      "downMBps": {
+        "example": 31.5,
+        "type": "number"
+      },
+      "error": {
+        "type": "string"
+      },
+      "upMBps": {
+        "example": 28.2,
+        "type": "number"
+      }
+    },
+    "required": [
+      "downMBps",
+      "error",
+      "upMBps"
+    ],
+    "type": "object"
+  },
   "Sponsor": {
     "description": "Sponsor is one paid placement listed in the owner's sponsors.json.",
     "properties": {
@@ -8253,6 +8723,499 @@ export const SCHEMAS: Record<string, unknown> = {
       "private_key",
       "udp_relay_mode",
       "zero_rtt_handshake"
+    ],
+    "type": "object"
+  },
+  "TunnelAccess": {
+    "description": "TunnelAccess is what a server without a panel needs to join a link. It carries the key,\nso only owners get it.",
+    "properties": {
+      "command": {
+        "example": "curl -fsSL https://panel.example/install-tunnel.sh | bash -s -- --token wat1:...",
+        "type": "string"
+      },
+      "token": {
+        "example": "wat1:...",
+        "type": "string"
+      }
+    },
+    "required": [
+      "command",
+      "token"
+    ],
+    "type": "object"
+  },
+  "TunnelCapabilities": {
+    "description": "Capabilities tells the UI what this panel can do for tunnels.",
+    "properties": {
+      "binaryAvailable": {
+        "example": true,
+        "type": "boolean"
+      },
+      "canSeeToken": {
+        "example": true,
+        "type": "boolean"
+      },
+      "carriers": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "platform": {
+        "example": "linux",
+        "type": "string"
+      },
+      "publicIPv4": {
+        "example": "203.0.113.7",
+        "type": "string"
+      }
+    },
+    "required": [
+      "binaryAvailable",
+      "canSeeToken",
+      "carriers",
+      "platform",
+      "publicIPv4"
+    ],
+    "type": "object"
+  },
+  "TunnelCreateRequest": {
+    "description": "TunnelCreateRequest creates a link. Ports is what users reach on the Iran end.",
+    "properties": {
+      "carrier": {
+        "example": "auto",
+        "type": "string"
+      },
+      "icmpType": {
+        "example": "echo",
+        "type": "string"
+      },
+      "iran": {
+        "$ref": "#/components/schemas/TunnelEndpoint"
+      },
+      "kharej": {
+        "$ref": "#/components/schemas/TunnelEndpoint"
+      },
+      "listenPort": {
+        "example": 0,
+        "type": "integer"
+      },
+      "name": {
+        "example": "de-ir",
+        "type": "string"
+      },
+      "options": {
+        "$ref": "#/components/schemas/EndOptions"
+      },
+      "path": {
+        "example": "/wat",
+        "type": "string"
+      },
+      "ports": {
+        "items": {
+          "$ref": "#/components/schemas/PortMap"
+        },
+        "type": "array"
+      },
+      "reverse": {
+        "example": false,
+        "type": "boolean"
+      },
+      "sni": {
+        "type": "string"
+      },
+      "token": {
+        "description": "Token is the Kharej end's pairing token, when that end is a server without a panel.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "carrier",
+      "icmpType",
+      "iran",
+      "kharej",
+      "listenPort",
+      "name",
+      "options",
+      "path",
+      "ports",
+      "reverse",
+      "sni",
+      "token"
+    ],
+    "type": "object"
+  },
+  "TunnelEnd": {
+    "description": "TunnelEnd is one end of a WatTunnel link: a wattun daemon on this panel's host (NodeId nil)\nor on a node. The two ends of a link share PairUuid; an end on a plain server without a\npanel has no row, and PeerExternal says so on the other one.",
+    "properties": {
+      "address": {
+        "description": "Address is the public host the other end dials; Peer is what this end dials itself.",
+        "example": "203.0.113.7",
+        "type": "string"
+      },
+      "autoPlan": {
+        "description": "AutoPlan is the Kharej end's carrier-to-port plan; an Iran end keeps it to probe again.",
+        "example": "d=udp:4443,tcp:4443;r=",
+        "type": "string"
+      },
+      "carrier": {
+        "description": "Carrier is \"auto\" on a Kharej end that listens on every carrier, else one carrier.",
+        "example": "tcp",
+        "type": "string"
+      },
+      "createdAt": {
+        "example": 1760000000000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "enable": {
+        "example": true,
+        "type": "boolean"
+      },
+      "icmpType": {
+        "example": "echo",
+        "type": "string"
+      },
+      "id": {
+        "example": 1,
+        "type": "integer"
+      },
+      "lastError": {
+        "type": "string"
+      },
+      "listenPorts": {
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "example": {
+          "tcp": 4443
+        },
+        "type": "object"
+      },
+      "name": {
+        "example": "de-ir",
+        "type": "string"
+      },
+      "nodeId": {
+        "example": 2,
+        "nullable": true,
+        "type": "integer"
+      },
+      "options": {
+        "$ref": "#/components/schemas/EndOptions"
+      },
+      "pairUuid": {
+        "example": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+        "type": "string"
+      },
+      "path": {
+        "example": "/wat",
+        "type": "string"
+      },
+      "peer": {
+        "example": "203.0.113.7:4443",
+        "type": "string"
+      },
+      "peerExternal": {
+        "example": false,
+        "type": "boolean"
+      },
+      "ports": {
+        "items": {
+          "$ref": "#/components/schemas/PortMap"
+        },
+        "type": "array"
+      },
+      "probe": {
+        "items": {
+          "$ref": "#/components/schemas/CarrierResult"
+        },
+        "type": "array"
+      },
+      "reverse": {
+        "example": false,
+        "type": "boolean"
+      },
+      "role": {
+        "enum": [
+          "kharej",
+          "iran"
+        ],
+        "example": "kharej",
+        "type": "string"
+      },
+      "rttMs": {
+        "example": 42,
+        "type": "number"
+      },
+      "sni": {
+        "type": "string"
+      },
+      "state": {
+        "description": "Observed state, refreshed by the tunnel job.",
+        "example": "up",
+        "type": "string"
+      },
+      "stateChangedAt": {
+        "example": 1760000000000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "uuid": {
+        "example": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11",
+        "type": "string"
+      }
+    },
+    "required": [
+      "address",
+      "autoPlan",
+      "carrier",
+      "createdAt",
+      "enable",
+      "icmpType",
+      "id",
+      "lastError",
+      "listenPorts",
+      "name",
+      "options",
+      "pairUuid",
+      "path",
+      "peer",
+      "peerExternal",
+      "ports",
+      "probe",
+      "reverse",
+      "role",
+      "rttMs",
+      "sni",
+      "state",
+      "stateChangedAt",
+      "uuid"
+    ],
+    "type": "object"
+  },
+  "TunnelEndView": {
+    "description": "TunnelEndView is one end of a link as the UI shows it.",
+    "properties": {
+      "address": {
+        "example": "203.0.113.7",
+        "type": "string"
+      },
+      "carrier": {
+        "example": "tcp",
+        "type": "string"
+      },
+      "enable": {
+        "example": true,
+        "type": "boolean"
+      },
+      "host": {
+        "example": "local",
+        "type": "string"
+      },
+      "lastError": {
+        "type": "string"
+      },
+      "listenPorts": {
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "type": "object"
+      },
+      "live": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EndStatus"
+          }
+        ],
+        "nullable": true
+      },
+      "nodeId": {
+        "example": 2,
+        "nullable": true,
+        "type": "integer"
+      },
+      "nodeName": {
+        "example": "de-fra-1",
+        "type": "string"
+      },
+      "peer": {
+        "example": "203.0.113.7:4443",
+        "type": "string"
+      },
+      "role": {
+        "example": "kharej",
+        "type": "string"
+      },
+      "rttMs": {
+        "example": 42,
+        "type": "number"
+      },
+      "state": {
+        "example": "up",
+        "type": "string"
+      },
+      "stateChangedAt": {
+        "example": 1760000000000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "uuid": {
+        "example": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11",
+        "type": "string"
+      }
+    },
+    "required": [
+      "address",
+      "carrier",
+      "enable",
+      "host",
+      "lastError",
+      "listenPorts",
+      "nodeName",
+      "peer",
+      "role",
+      "rttMs",
+      "state",
+      "stateChangedAt",
+      "uuid"
+    ],
+    "type": "object"
+  },
+  "TunnelEndpoint": {
+    "description": "TunnelEndpoint says where one end of a new tunnel runs.",
+    "properties": {
+      "address": {
+        "example": "203.0.113.7",
+        "type": "string"
+      },
+      "kind": {
+        "example": "node",
+        "type": "string"
+      },
+      "nodeId": {
+        "example": 2,
+        "nullable": true,
+        "type": "integer"
+      }
+    },
+    "required": [
+      "address",
+      "kind"
+    ],
+    "type": "object"
+  },
+  "TunnelUpdateRequest": {
+    "description": "TunnelUpdateRequest changes what can change without re-pairing; nil fields stay.",
+    "properties": {
+      "enable": {
+        "example": true,
+        "nullable": true,
+        "type": "boolean"
+      },
+      "name": {
+        "example": "de-ir",
+        "nullable": true,
+        "type": "string"
+      },
+      "options": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EndOptions"
+          }
+        ],
+        "nullable": true
+      },
+      "ports": {
+        "items": {
+          "$ref": "#/components/schemas/PortMap"
+        },
+        "nullable": true,
+        "type": "array"
+      }
+    },
+    "type": "object"
+  },
+  "TunnelView": {
+    "description": "TunnelView is a whole link: its two ends and the settings they share. An end that runs on\na server without a panel is nil.",
+    "properties": {
+      "auto": {
+        "example": true,
+        "type": "boolean"
+      },
+      "carrier": {
+        "example": "tcp",
+        "type": "string"
+      },
+      "createdAt": {
+        "example": 1760000000000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "external": {
+        "example": "iran",
+        "type": "string"
+      },
+      "iran": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TunnelEndView"
+          }
+        ],
+        "nullable": true
+      },
+      "kharej": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TunnelEndView"
+          }
+        ],
+        "nullable": true
+      },
+      "name": {
+        "example": "de-ir",
+        "type": "string"
+      },
+      "options": {
+        "$ref": "#/components/schemas/EndOptions"
+      },
+      "pairUuid": {
+        "example": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+        "type": "string"
+      },
+      "ports": {
+        "items": {
+          "$ref": "#/components/schemas/PortMap"
+        },
+        "type": "array"
+      },
+      "probe": {
+        "items": {
+          "$ref": "#/components/schemas/CarrierResult"
+        },
+        "type": "array"
+      },
+      "reverse": {
+        "example": false,
+        "type": "boolean"
+      },
+      "state": {
+        "example": "up",
+        "type": "string"
+      }
+    },
+    "required": [
+      "auto",
+      "carrier",
+      "createdAt",
+      "external",
+      "name",
+      "options",
+      "pairUuid",
+      "ports",
+      "probe",
+      "reverse",
+      "state"
     ],
     "type": "object"
   },

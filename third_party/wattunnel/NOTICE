@@ -1,0 +1,9 @@
+This directory holds the license of WatTunnel (https://github.com/JohnWatsoon/WatTunnel),
+Copyright (c) 2026 Amirreza, MIT License (see LICENSE).
+
+Its source is vendored, with import paths rewritten to this module, in:
+  internal/wattunnel/wat   the transport package (unchanged apart from imports)
+  cmd/wattun               the daemon; ctl.go (setup and probe commands) is Eternal's own
+
+Eternal's own code stays under the GNU GPL v3. The MIT-licensed parts keep their upstream
+attribution headers.

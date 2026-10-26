@@ -18,6 +18,7 @@ import {
   CrownOutlined,
   ShoppingCartOutlined,
   DashboardOutlined,
+  DeploymentUnitOutlined,
   DatabaseOutlined,
   DiscordOutlined,
   ExportOutlined,
@@ -78,6 +79,7 @@ type IconName =
   | 'logout'
   | 'sponsors'
   | 'sales'
+  | 'tunnels'
   | 'apidocs'
   | 'outbound'
   | 'routing'
@@ -98,6 +100,7 @@ const iconByName: Record<IconName, ComponentType> = {
   logout: LogoutOutlined,
   sponsors: CrownOutlined,
   sales: ShoppingCartOutlined,
+  tunnels: DeploymentUnitOutlined,
   apidocs: ApiOutlined,
   outbound: ExportOutlined,
   routing: SwapOutlined,
@@ -214,6 +217,9 @@ export default function AppSidebar() {
           { key: '/clients', icon: 'team', title: t('menu.clients') },
           { key: '/groups', icon: 'groups', title: t('menu.groups') },
           { key: '/nodes', icon: 'cluster', title: t('menu.nodes') },
+          ...(isHostedPanel
+            ? []
+            : [{ key: '/tunnels', icon: 'tunnels' as const, title: t('tunnel.title') }]),
           ...(isHostedPanel
             ? []
             : [{ key: '/reseller', icon: 'reseller' as const, title: t('menu.reseller') }]),

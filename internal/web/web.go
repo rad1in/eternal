@@ -30,6 +30,7 @@ import (
 	"github.com/mhsanaei/3x-ui/v3/internal/sshtunnel"
 	"github.com/mhsanaei/3x-ui/v3/internal/sstp"
 	"github.com/mhsanaei/3x-ui/v3/internal/tuic"
+	"github.com/mhsanaei/3x-ui/v3/internal/tunnel"
 	"github.com/mhsanaei/3x-ui/v3/internal/util/common"
 	"github.com/mhsanaei/3x-ui/v3/internal/util/cronspec"
 	"github.com/mhsanaei/3x-ui/v3/internal/util/sys"
@@ -304,6 +305,7 @@ func (s *Server) initRouter() (*gin.Engine, error) {
 	s.api = controller.NewAPIController(g)
 	controller.NewMetricsController(g)
 	controller.NewNodeJoinController(g)
+	controller.NewTunnelInstallController(g)
 
 	decoySite := s.settingService.DecoySite().Handler()
 	controller.NewShopController(engine.Group("/shop"), decoySite)
@@ -353,6 +355,7 @@ const (
 	cadenceMtproto       = "@every 10s"
 	cadenceAmneziaWG     = "@every 10s"
 	cadenceTuic          = "@every 10s"
+	cadenceTunnel        = "@every 10s"
 	cadenceClientIPScan  = "@every 10s"
 	cadenceNodeHeartbeat = "@every 5s"
 	cadenceNodeTraffic   = "@every 5s"
@@ -431,6 +434,11 @@ func (s *Server) startTask(restartXray bool, loc *time.Location) {
 	tuicJob := job.NewTuicJob()
 	_, _ = s.cron.AddJob(cadenceTuic, tuicJob)
 	go tuicJob.Run()
+
+	// Keep WatTunnel ends running and alert when a link drops
+	tunnelJob := job.NewTunnelJob()
+	_, _ = s.cron.AddJob(cadenceTunnel, tunnelJob)
+	go tunnelJob.Run()
 
 	// check client ips from log file every 10 sec
 	_, _ = s.cron.AddJob(cadenceClientIPScan, job.NewCheckClientIpJob())
@@ -903,6 +911,7 @@ func (s *Server) stop(stopXray bool, stopTgBot bool) error {
 			err2 = err
 		}
 		mtproto.GetManager().StopAll()
+		tunnel.GetManager().StopAll()
 		openvpn.GetManager().StopAll()
 		l2tp.GetManager().StopAll()
 		sshtunnel.GetManager().StopAll()

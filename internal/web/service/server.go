@@ -515,6 +515,15 @@ func (s *ServerService) resolvePublicIPsInBackground() {
 	}()
 }
 
+// PublicIPv4 returns the cached public IPv4 address, "" when it is unknown.
+func (s *ServerService) PublicIPv4() string {
+	ipv4, _ := s.publicIPs()
+	if ipv4 == "N/A" {
+		return ""
+	}
+	return ipv4
+}
+
 func (s *ServerService) publicIPs() (ipv4 string, ipv6 string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()

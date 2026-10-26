@@ -175,6 +175,17 @@ func (t *Tgbot) formatEventMessage(e eventbus.Event) string {
 		}
 		return msg
 
+	case eventbus.EventTunnelDown, eventbus.EventTunnelUp:
+		key, icon := "tgbot.messages.eventTunnelUp", "🟢 "
+		if e.Type == eventbus.EventTunnelDown {
+			key, icon = "tgbot.messages.eventTunnelDown", "🔴 "
+		}
+		msg := header + icon + t.I18nBot(key, "Name=="+e.Source)
+		if data, ok := e.Data.(*eventbus.TunnelEventData); ok && data.Error != "" {
+			msg += "\n" + t.I18nBot("tgbot.messages.eventErrorDetail", "Error=="+data.Error)
+		}
+		return msg
+
 	case eventbus.EventCPUHigh:
 		if data, ok := e.Data.(*eventbus.SystemMetricData); ok {
 			tgCpu, err := t.settingService.GetTgCpu()

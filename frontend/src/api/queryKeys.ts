@@ -30,6 +30,14 @@ export const keys = {
     root: () => ['nodes'] as const,
     list: () => ['nodes', 'list'] as const,
   },
+  tunnels: {
+    root: () => ['tunnels'] as const,
+    list: () => ['tunnels', 'list'] as const,
+    options: () => ['tunnels', 'options'] as const,
+    detail: (pair: string) => ['tunnels', 'detail', pair] as const,
+    logs: (pair: string, role: string) => ['tunnels', 'logs', pair, role] as const,
+    access: (pair: string) => ['tunnels', 'access', pair] as const,
+  },
   hosts: {
     root: () => ['hosts'] as const,
     list: () => ['hosts', 'list'] as const,

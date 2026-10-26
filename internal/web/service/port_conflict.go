@@ -211,10 +211,15 @@ type portConflictDetail struct {
 	ForwardedBy string
 	Transports  transportBits
 	HostedPanel string
+	// Tunnel is the WatTunnel end whose carrier or forwarded port this is.
+	Tunnel string
 }
 
 // String renders the detail as a single-line, user-facing summary.
 func (d *portConflictDetail) String() string {
+	if d.Tunnel != "" {
+		return fmt.Sprintf("port %d is used by tunnel '%s'", d.Port, d.Tunnel)
+	}
 	if d.HostedPanel != "" {
 		return fmt.Sprintf("port %d is reserved for hosted panel '%s'", d.Port, d.HostedPanel)
 	}
@@ -292,6 +297,12 @@ func checkPortConflictTx(db *gorm.DB, inbound *model.Inbound, ignoreId int) (*po
 		if owner != nil {
 			return &portConflictDetail{Port: inbound.Port, HostedPanel: owner.Name}, nil
 		}
+	}
+
+	if name, err := tunnelOwningPort(db, inbound.NodeID, inbound.Port, newBits); err != nil {
+		return nil, err
+	} else if name != "" {
+		return &portConflictDetail{Port: inbound.Port, Tunnel: name}, nil
 	}
 
 	// The internal Xray API inbound (tag "api", loopback TCP) isn't a DB row,

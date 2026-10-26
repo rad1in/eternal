@@ -42,6 +42,9 @@ func NewServerController(g *gin.RouterGroup) *ServerController {
 	return a
 }
 
+// PublicIPv4 is this server's public IPv4 address, or "" while it is not known.
+func (a *ServerController) PublicIPv4() string { return a.serverService.PublicIPv4() }
+
 // initRouter sets up the routes for server status, Xray management, and utility endpoints.
 func (a *ServerController) initRouter(g *gin.RouterGroup) {
 	g.GET("/status", a.status)

@@ -44,6 +44,11 @@ const (
 	EventClientQuotaWarning  EventType = "client.quota_warning"
 	EventClientExpiryWarning EventType = "client.expiry_warning"
 
+	// A tunnel link lost its connection, then got it back; Source is the tunnel's name and
+	// Data a *TunnelEventData.
+	EventTunnelDown EventType = "tunnel.down"
+	EventTunnelUp   EventType = "tunnel.up"
+
 	// Weekly summary; Data is a *WeeklySummaryData.
 	EventWeeklyReport EventType = "report.weekly"
 
@@ -79,6 +84,17 @@ const (
 type OrderEventData struct {
 	OrderId int   `json:"orderId"`
 	TgId    int64 `json:"tgId"`
+}
+
+// TunnelEventData is the tunnel link an event is about. Error is the daemon's last complaint
+// on a down event; DownSeconds is how long the link was down on an up event.
+type TunnelEventData struct {
+	PairUuid    string `json:"pairUuid"`
+	Name        string `json:"name"`
+	Carrier     string `json:"carrier,omitempty"`
+	Node        string `json:"node,omitempty"`
+	Error       string `json:"error,omitempty"`
+	DownSeconds int64  `json:"downSeconds,omitempty"`
 }
 
 // TicketEventData is the ticket a support event is about. Excerpt is the start
