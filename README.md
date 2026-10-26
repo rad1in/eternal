@@ -217,7 +217,7 @@ Open **Nodes → Install command**, copy the command, run it as root on a fresh 
 
 - The token works once and expires in an hour.
 - `--name`, `--port`, `--version`, `--pin` (for a self-signed master), `--detect` (print what is on the server and change nothing) and `--uninstall --yes` are available.
-- Nodes report CPU, memory, latency and Xray state, can have a monthly traffic cap and cost, and take over for a node that goes down. Communication can use mutual TLS.
+- Nodes report CPU, memory, latency and Xray state, can have a monthly traffic cap and cost, and subscriptions can fail over to a backup node when one goes down. Master and node can talk over mutual TLS.
 
 Details: [multi-node guide](docs/content/docs/en/operations/multi-node.mdx).
 
