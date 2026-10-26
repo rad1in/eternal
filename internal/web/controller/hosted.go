@@ -36,9 +36,10 @@ func HostedForbiddenRoutes() []string {
 	return out
 }
 
-// A hosted panel does not sell: its owner runs the shop, so every sales route is closed.
+// A hosted panel does not sell: its owner runs the shop, so every sales route is closed. It
+// does not run tunnels either: those open raw sockets and ports on the shared host.
 func hostedForbidden(method, path string) bool {
-	return hostedForbiddenRoutes[method+" "+path] || strings.HasPrefix(path, "/sales/")
+	return hostedForbiddenRoutes[method+" "+path] || strings.HasPrefix(path, "/sales/") || strings.HasPrefix(path, "/tunnels/")
 }
 
 func hostedGuard(c *gin.Context) {

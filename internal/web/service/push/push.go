@@ -250,6 +250,10 @@ func Format(e eventbus.Event, host string) (Message, bool) {
 		msg.Title, msg.Priority = "Port blocked", 4
 	case eventbus.EventPortRestored:
 		msg.Title = "Port restored"
+	case eventbus.EventTunnelDown:
+		msg.Title, msg.Priority = "Tunnel down", 4
+	case eventbus.EventTunnelUp:
+		msg.Title = "Tunnel up"
 	case eventbus.EventXrayCrash:
 		msg.Title, msg.Priority = "Xray crashed", 5
 	case eventbus.EventLoginAttempt:
@@ -310,6 +314,10 @@ func body(e eventbus.Event) string {
 	case *eventbus.NodeHealthData:
 		if d.XrayError != "" {
 			lines = append(lines, d.XrayError)
+		}
+	case *eventbus.TunnelEventData:
+		if d.Error != "" {
+			lines = append(lines, d.Error)
 		}
 	case *eventbus.PortProbeData:
 		lines = append(lines, net.JoinHostPort(d.Host, strconv.Itoa(d.Port)))

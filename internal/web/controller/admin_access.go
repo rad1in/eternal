@@ -42,6 +42,14 @@ var ownerOnlyRoutes = map[string]bool{
 	"POST /sales/config/save":                     true,
 	"GET /server/getDb":                           true,
 	"POST /server/importDB":                       true,
+	"GET /tunnels/token/:pair":                    true,
+	"POST /tunnels/agent/apply":                   true,
+	"POST /tunnels/agent/remove/:uuid":            true,
+	"GET /tunnels/agent/status":                   true,
+	"GET /tunnels/agent/logs/:uuid":               true,
+	"POST /tunnels/agent/restart/:uuid":           true,
+	"POST /tunnels/agent/probe":                   true,
+	"POST /tunnels/agent/speedtest/:uuid":         true,
 }
 
 // selfServiceRoutes act only on the caller's own account, so every role may use them.

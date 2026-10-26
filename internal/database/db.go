@@ -125,6 +125,7 @@ func allModels() []any {
 		&model.TicketMessage{},
 		&model.Passkey{},
 		&model.PendingAction{},
+		&model.TunnelEnd{},
 	}
 }
 

@@ -97,32 +97,39 @@ var monitorScopeAllow = map[string]struct{}{
 // nodeSyncScopeAllow is the node-sync route/method allowlist relative to
 // /panel/api; Gin patterns prevent concrete parameters broadening authority.
 var nodeSyncScopeAllow = map[string]map[string]struct{}{
-	"/server/status":               {http.MethodGet: {}},
-	"/inbounds/list":               {http.MethodGet: {}},
-	"/inbounds/add":                {http.MethodPost: {}},
-	"/inbounds/del/:id":            {http.MethodPost: {}},
-	"/inbounds/update/:id":         {http.MethodPost: {}},
-	"/inbounds/:id/subSortIndex":   {http.MethodPost: {}},
-	"/clients/add":                 {http.MethodPost: {}},
-	"/clients/del/:email":          {http.MethodPost: {}},
-	"/clients/:email/detach":       {http.MethodPost: {}},
-	"/clients/update/:email":       {http.MethodPost: {}},
-	"/server/restartXrayService":   {http.MethodPost: {}},
-	"/server/getWebCertFiles":      {http.MethodGet: {}},
-	"/server/descendants":          {http.MethodGet: {}},
-	"/clients/resetTraffic/:email": {http.MethodPost: {}},
-	"/clients/bulkResetTraffic":    {http.MethodPost: {}},
-	"/clients/disconnect/:email":   {http.MethodPost: {}},
-	"/inbounds/resetAllTraffics":   {http.MethodPost: {}},
-	"/inbounds/:id/resetTraffic":   {http.MethodPost: {}},
-	"/clients/onlinesByGuid":       {http.MethodPost: {}},
-	"/clients/onlines":             {http.MethodPost: {}},
-	"/clients/lastOnline":          {http.MethodPost: {}},
-	"/clients/activeInbounds":      {http.MethodPost: {}},
-	"/inbounds/pushClientTraffics": {http.MethodPost: {}},
-	"/server/clientIps":            {http.MethodGet: {}, http.MethodPost: {}},
-	"/clients/clientIpsByGuid":     {http.MethodPost: {}},
-	"/hosts/list":                  {http.MethodGet: {}},
+	"/server/status":                 {http.MethodGet: {}},
+	"/inbounds/list":                 {http.MethodGet: {}},
+	"/inbounds/add":                  {http.MethodPost: {}},
+	"/inbounds/del/:id":              {http.MethodPost: {}},
+	"/inbounds/update/:id":           {http.MethodPost: {}},
+	"/inbounds/:id/subSortIndex":     {http.MethodPost: {}},
+	"/clients/add":                   {http.MethodPost: {}},
+	"/clients/del/:email":            {http.MethodPost: {}},
+	"/clients/:email/detach":         {http.MethodPost: {}},
+	"/clients/update/:email":         {http.MethodPost: {}},
+	"/server/restartXrayService":     {http.MethodPost: {}},
+	"/server/getWebCertFiles":        {http.MethodGet: {}},
+	"/server/descendants":            {http.MethodGet: {}},
+	"/clients/resetTraffic/:email":   {http.MethodPost: {}},
+	"/clients/bulkResetTraffic":      {http.MethodPost: {}},
+	"/clients/disconnect/:email":     {http.MethodPost: {}},
+	"/inbounds/resetAllTraffics":     {http.MethodPost: {}},
+	"/inbounds/:id/resetTraffic":     {http.MethodPost: {}},
+	"/clients/onlinesByGuid":         {http.MethodPost: {}},
+	"/clients/onlines":               {http.MethodPost: {}},
+	"/clients/lastOnline":            {http.MethodPost: {}},
+	"/clients/activeInbounds":        {http.MethodPost: {}},
+	"/inbounds/pushClientTraffics":   {http.MethodPost: {}},
+	"/server/clientIps":              {http.MethodGet: {}, http.MethodPost: {}},
+	"/clients/clientIpsByGuid":       {http.MethodPost: {}},
+	"/hosts/list":                    {http.MethodGet: {}},
+	"/tunnels/agent/apply":           {http.MethodPost: {}},
+	"/tunnels/agent/remove/:uuid":    {http.MethodPost: {}},
+	"/tunnels/agent/status":          {http.MethodGet: {}},
+	"/tunnels/agent/logs/:uuid":      {http.MethodGet: {}},
+	"/tunnels/agent/restart/:uuid":   {http.MethodPost: {}},
+	"/tunnels/agent/probe":           {http.MethodPost: {}},
+	"/tunnels/agent/speedtest/:uuid": {http.MethodPost: {}},
 }
 
 // enforceTokenScope applies explicit allowlists to monitor and node-sync tokens.
@@ -228,6 +235,7 @@ func (a *APIController) initRouter(g *gin.RouterGroup) {
 	NewSecurityController(api.Group("/security"))
 	NewHostedController(api.Group("/hosted"))
 	NewHostedPanelController(api.Group("/hostedPanels"))
+	NewTunnelController(api.Group("/tunnels"), a.serverController.PublicIPv4)
 
 	// Extra routes
 	api.POST("/backuptotgbot", a.BackuptoTgbot)
