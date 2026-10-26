@@ -1263,7 +1263,7 @@ config_after_install() {
         fi
     fi
 
-    if [[ "$existing_hasDefaultCredential" == "true" && -z "${XUI_USERNAME:-}" && -z "${XUI_PASSWORD:-}" \
+    if [[ "$existing_hasDefaultCredential" == "true" && "$NONINTERACTIVE" != "1" && -z "${XUI_USERNAME:-}" && -z "${XUI_PASSWORD:-}" \
         && "${XUI_DB_TYPE:-sqlite}" == "sqlite" ]]; then
         if prepare_setup_wizard "${server_ip}"; then
             ${xui_folder}/eternal migrate
