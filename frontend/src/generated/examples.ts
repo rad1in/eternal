@@ -588,6 +588,15 @@ export const EXAMPLES: Record<string, unknown> = {
     "holderName": "Ali Rezaei",
     "instructions": ""
   },
+  "CarrierResult": {
+    "carrier": "tcp",
+    "downMBps": 31.5,
+    "ok": true,
+    "peer": "203.0.113.7:4443",
+    "rttMs": 42,
+    "upMBps": 28.2,
+    "why": ""
+  },
   "CleanIPResult": {
     "id": 1,
     "ip": "104.16.124.96",
@@ -772,6 +781,11 @@ export const EXAMPLES: Record<string, unknown> = {
   "ClientReverse": {
     "tag": ""
   },
+  "ClientSession": {
+    "ageMs": 61000,
+    "carrier": "tcp",
+    "ip": "198.51.100.20"
+  },
   "ClientSlim": {
     "comment": "Primary device",
     "createdAt": 1735000000000,
@@ -914,6 +928,192 @@ export const EXAMPLES: Record<string, unknown> = {
     "updatedAt": 0,
     "uses": 3,
     "value": 10
+  },
+  "EndConfig": {
+    "address": "203.0.113.7",
+    "carrier": "tcp",
+    "enable": true,
+    "icmpType": "echo",
+    "key": "redacted",
+    "listenPorts": {
+      "tcp": 4443
+    },
+    "name": "de-ir",
+    "options": {
+      "bind": "0.0.0.0",
+      "conns": 0,
+      "ech": "auto",
+      "fakeMode": "rst",
+      "fakeSni": "www.cloudflare.com",
+      "fakeTtl": 0,
+      "fec": "off",
+      "fp": "chrome",
+      "governor": false,
+      "maxMBps": 0,
+      "poolRotate": "30m",
+      "poolRotateBytes": "4GB",
+      "sessions": 1,
+      "tlsSmallCh": false
+    },
+    "pairUuid": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+    "path": "/wat",
+    "peer": "203.0.113.7:4443",
+    "ports": [
+      {
+        "listen": 443,
+        "quotaGB": 0,
+        "rateMBps": 0,
+        "target": 443,
+        "udp": false
+      }
+    ],
+    "reverse": false,
+    "role": "kharej",
+    "sni": "",
+    "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11"
+  },
+  "EndOptions": {
+    "bind": "0.0.0.0",
+    "conns": 0,
+    "ech": "auto",
+    "fakeMode": "rst",
+    "fakeSni": "www.cloudflare.com",
+    "fakeTtl": 0,
+    "fec": "off",
+    "fp": "chrome",
+    "governor": false,
+    "maxMBps": 0,
+    "poolRotate": "30m",
+    "poolRotateBytes": "4GB",
+    "sessions": 1,
+    "tlsSmallCh": false
+  },
+  "EndResult": {
+    "end": {
+      "address": "203.0.113.7",
+      "carrier": "tcp",
+      "enable": true,
+      "icmpType": "echo",
+      "key": "redacted",
+      "listenPorts": {
+        "tcp": 4443
+      },
+      "name": "de-ir",
+      "options": {
+        "bind": "0.0.0.0",
+        "conns": 0,
+        "ech": "auto",
+        "fakeMode": "rst",
+        "fakeSni": "www.cloudflare.com",
+        "fakeTtl": 0,
+        "fec": "off",
+        "fp": "chrome",
+        "governor": false,
+        "maxMBps": 0,
+        "poolRotate": "30m",
+        "poolRotateBytes": "4GB",
+        "sessions": 1,
+        "tlsSmallCh": false
+      },
+      "pairUuid": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+      "path": "/wat",
+      "peer": "203.0.113.7:4443",
+      "ports": [
+        {
+          "listen": 443,
+          "quotaGB": 0,
+          "rateMBps": 0,
+          "target": 443,
+          "udp": false
+        }
+      ],
+      "reverse": false,
+      "role": "kharej",
+      "sni": "",
+      "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11"
+    },
+    "status": {
+      "alive": true,
+      "bytesIn": 123456,
+      "bytesOut": 654321,
+      "carrier": "tcp",
+      "clients": [
+        {
+          "ageMs": 61000,
+          "carrier": "tcp",
+          "ip": "198.51.100.20"
+        }
+      ],
+      "lastError": "",
+      "lastRxAgeMs": 900,
+      "pid": 4242,
+      "ports": [
+        {
+          "bytesDown": 4194304,
+          "bytesUp": 1048576,
+          "connsActive": 3,
+          "connsTotal": 120,
+          "port": 443,
+          "quotaExceeded": false,
+          "quotaLimit": 0,
+          "quotaUsed": 0,
+          "rateDown": 81920,
+          "rateUp": 20480
+        }
+      ],
+      "rateBps": 1000000,
+      "restarts": 0,
+      "running": true,
+      "sessions": 1,
+      "srttMs": 42.5,
+      "state": "up",
+      "streams": 3,
+      "tlsMode": "chrome+ech",
+      "uptimeSec": 3600,
+      "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11",
+      "version": "2.10.12"
+    }
+  },
+  "EndStatus": {
+    "alive": true,
+    "bytesIn": 123456,
+    "bytesOut": 654321,
+    "carrier": "tcp",
+    "clients": [
+      {
+        "ageMs": 61000,
+        "carrier": "tcp",
+        "ip": "198.51.100.20"
+      }
+    ],
+    "lastError": "",
+    "lastRxAgeMs": 900,
+    "pid": 4242,
+    "ports": [
+      {
+        "bytesDown": 4194304,
+        "bytesUp": 1048576,
+        "connsActive": 3,
+        "connsTotal": 120,
+        "port": 443,
+        "quotaExceeded": false,
+        "quotaLimit": 0,
+        "quotaUsed": 0,
+        "rateDown": 81920,
+        "rateUp": 20480
+      }
+    ],
+    "rateBps": 1000000,
+    "restarts": 0,
+    "running": true,
+    "sessions": 1,
+    "srttMs": 42.5,
+    "state": "up",
+    "streams": 3,
+    "tlsMode": "chrome+ech",
+    "uptimeSec": 3600,
+    "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11",
+    "version": "2.10.12"
   },
   "FallbackParentInfo": {
     "masterId": 0,
@@ -1613,6 +1813,25 @@ export const EXAMPLES: Record<string, unknown> = {
     "totalGB": 53687091200,
     "updatedAt": 0
   },
+  "PortMap": {
+    "listen": 443,
+    "quotaGB": 0,
+    "rateMBps": 0,
+    "target": 443,
+    "udp": false
+  },
+  "PortStat": {
+    "bytesDown": 4194304,
+    "bytesUp": 1048576,
+    "connsActive": 3,
+    "connsTotal": 120,
+    "port": 443,
+    "quotaExceeded": false,
+    "quotaLimit": 0,
+    "quotaUsed": 0,
+    "rateDown": 81920,
+    "rateUp": 20480
+  },
   "ProbeResultUI": {
     "cpuPct": 12.5,
     "error": "",
@@ -1940,6 +2159,11 @@ export const EXAMPLES: Record<string, unknown> = {
     "expiresAt": 1792411200000,
     "url": "https://sub.example.com:2096/sub/Ab3dE5gH9k?exp=1792411200\u0026sig=Zk3Wq1"
   },
+  "SpeedResult": {
+    "downMBps": 31.5,
+    "error": "",
+    "upMBps": 28.2
+  },
   "Sponsor": {
     "enable": true,
     "from": "2026-10-01T00:00:00Z",
@@ -2077,6 +2301,202 @@ export const EXAMPLES: Record<string, unknown> = {
     "sni": "",
     "udp_relay_mode": "",
     "zero_rtt_handshake": false
+  },
+  "TunnelAccess": {
+    "command": "curl -fsSL https://panel.example/install-tunnel.sh | bash -s -- --token wat1:...",
+    "token": "wat1:..."
+  },
+  "TunnelCapabilities": {
+    "binaryAvailable": true,
+    "canSeeToken": true,
+    "carriers": [
+      ""
+    ],
+    "platform": "linux",
+    "publicIPv4": "203.0.113.7"
+  },
+  "TunnelCreateRequest": {
+    "carrier": "auto",
+    "icmpType": "echo",
+    "iran": {
+      "address": "203.0.113.7",
+      "kind": "node",
+      "nodeId": 2
+    },
+    "kharej": {
+      "address": "203.0.113.7",
+      "kind": "node",
+      "nodeId": 2
+    },
+    "listenPort": 0,
+    "name": "de-ir",
+    "options": {
+      "bind": "0.0.0.0",
+      "conns": 0,
+      "ech": "auto",
+      "fakeMode": "rst",
+      "fakeSni": "www.cloudflare.com",
+      "fakeTtl": 0,
+      "fec": "off",
+      "fp": "chrome",
+      "governor": false,
+      "maxMBps": 0,
+      "poolRotate": "30m",
+      "poolRotateBytes": "4GB",
+      "sessions": 1,
+      "tlsSmallCh": false
+    },
+    "path": "/wat",
+    "ports": [
+      {
+        "listen": 443,
+        "quotaGB": 0,
+        "rateMBps": 0,
+        "target": 443,
+        "udp": false
+      }
+    ],
+    "reverse": false,
+    "sni": "",
+    "token": ""
+  },
+  "TunnelEnd": {
+    "address": "203.0.113.7",
+    "autoPlan": "d=udp:4443,tcp:4443;r=",
+    "carrier": "tcp",
+    "createdAt": 1760000000000,
+    "enable": true,
+    "icmpType": "echo",
+    "id": 1,
+    "lastError": "",
+    "listenPorts": {
+      "tcp": 4443
+    },
+    "name": "de-ir",
+    "nodeId": 2,
+    "options": {
+      "bind": "0.0.0.0",
+      "conns": 0,
+      "ech": "auto",
+      "fakeMode": "rst",
+      "fakeSni": "www.cloudflare.com",
+      "fakeTtl": 0,
+      "fec": "off",
+      "fp": "chrome",
+      "governor": false,
+      "maxMBps": 0,
+      "poolRotate": "30m",
+      "poolRotateBytes": "4GB",
+      "sessions": 1,
+      "tlsSmallCh": false
+    },
+    "pairUuid": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+    "path": "/wat",
+    "peer": "203.0.113.7:4443",
+    "peerExternal": false,
+    "ports": [
+      {
+        "listen": 443,
+        "quotaGB": 0,
+        "rateMBps": 0,
+        "target": 443,
+        "udp": false
+      }
+    ],
+    "probe": [
+      {
+        "carrier": "tcp",
+        "downMBps": 31.5,
+        "ok": true,
+        "peer": "203.0.113.7:4443",
+        "rttMs": 42,
+        "upMBps": 28.2,
+        "why": ""
+      }
+    ],
+    "reverse": false,
+    "role": "kharej",
+    "rttMs": 42,
+    "sni": "",
+    "state": "up",
+    "stateChangedAt": 1760000000000,
+    "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11"
+  },
+  "TunnelEndView": {
+    "address": "203.0.113.7",
+    "carrier": "tcp",
+    "enable": true,
+    "host": "local",
+    "lastError": "",
+    "listenPorts": {},
+    "live": null,
+    "nodeId": 2,
+    "nodeName": "de-fra-1",
+    "peer": "203.0.113.7:4443",
+    "role": "kharej",
+    "rttMs": 42,
+    "state": "up",
+    "stateChangedAt": 1760000000000,
+    "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11"
+  },
+  "TunnelEndpoint": {
+    "address": "203.0.113.7",
+    "kind": "node",
+    "nodeId": 2
+  },
+  "TunnelUpdateRequest": {
+    "enable": true,
+    "name": "de-ir",
+    "options": null,
+    "ports": null
+  },
+  "TunnelView": {
+    "auto": true,
+    "carrier": "tcp",
+    "createdAt": 1760000000000,
+    "external": "iran",
+    "iran": null,
+    "kharej": null,
+    "name": "de-ir",
+    "options": {
+      "bind": "0.0.0.0",
+      "conns": 0,
+      "ech": "auto",
+      "fakeMode": "rst",
+      "fakeSni": "www.cloudflare.com",
+      "fakeTtl": 0,
+      "fec": "off",
+      "fp": "chrome",
+      "governor": false,
+      "maxMBps": 0,
+      "poolRotate": "30m",
+      "poolRotateBytes": "4GB",
+      "sessions": 1,
+      "tlsSmallCh": false
+    },
+    "pairUuid": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+    "ports": [
+      {
+        "listen": 443,
+        "quotaGB": 0,
+        "rateMBps": 0,
+        "target": 443,
+        "udp": false
+      }
+    ],
+    "probe": [
+      {
+        "carrier": "tcp",
+        "downMBps": 31.5,
+        "ok": true,
+        "peer": "203.0.113.7:4443",
+        "rttMs": 42,
+        "upMBps": 28.2,
+        "why": ""
+      }
+    ],
+    "reverse": false,
+    "state": "up"
   },
   "User": {
     "createdAt": 0,

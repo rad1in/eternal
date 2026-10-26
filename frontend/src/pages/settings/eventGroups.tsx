@@ -1,5 +1,6 @@
 import {
   ApiOutlined,
+  DeploymentUnitOutlined,
   CloudServerOutlined,
   DesktopOutlined,
   SafetyOutlined,
@@ -60,6 +61,14 @@ export const EVENT_GROUPS: NotificationGroupConfig[] = [
     events: [
       { key: 'port.blocked', label: 'eventPortBlocked', settingKey: '' },
       { key: 'port.restored', label: 'eventPortRestored', settingKey: '' },
+    ],
+  },
+  {
+    icon: <DeploymentUnitOutlined />,
+    title: 'eventGroupTunnel',
+    events: [
+      { key: 'tunnel.down', label: 'eventTunnelDown', settingKey: '' },
+      { key: 'tunnel.up', label: 'eventTunnelUp', settingKey: '' },
     ],
   },
   {

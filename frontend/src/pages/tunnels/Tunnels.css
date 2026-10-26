@@ -1,0 +1,89 @@
+.tunnels-page .toolbar {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tunnels-page .route-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tunnels-page .route-end {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.tunnels-page .route-end small {
+  opacity: 0.65;
+}
+
+.tunnel-ports {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tunnel-ports-head,
+.tunnel-ports-row {
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) minmax(80px, 1fr) 44px minmax(80px, 1fr) minmax(
+      80px,
+      1fr
+    ) 32px;
+  gap: 8px;
+  align-items: center;
+}
+
+.tunnel-ports-head {
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.tunnel-ports-row .ant-input-number {
+  width: 100%;
+}
+
+.tunnel-command {
+  direction: ltr;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.tunnel-log {
+  direction: ltr;
+  font-family: monospace;
+  font-size: 12px;
+  max-height: 340px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  padding: 8px;
+  border-radius: 6px;
+  background: var(--ant-color-fill-quaternary);
+}
+
+.tunnel-end-pick {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--ant-color-border-secondary);
+  border-radius: 8px;
+}
+
+@media (max-width: 576px) {
+  .tunnel-ports-head {
+    display: none;
+  }
+
+  .tunnel-ports-row {
+    grid-template-columns: 1fr 1fr 44px 32px;
+  }
+}

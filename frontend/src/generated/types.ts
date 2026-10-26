@@ -574,6 +574,16 @@ export interface CardPayConfig {
   instructions: string;
 }
 
+export interface CarrierResult {
+  carrier: string;
+  downMBps: number;
+  ok: boolean;
+  peer: string;
+  rttMs: number;
+  upMBps: number;
+  why?: string;
+}
+
 export interface CleanIPResult {
   id: number;
   ip: string;
@@ -720,6 +730,12 @@ export interface ClientReverse {
   tag: string;
 }
 
+export interface ClientSession {
+  ageMs: number;
+  carrier: string;
+  ip: string;
+}
+
 export interface ClientSlim {
   comment?: string;
   createdAt: number;
@@ -845,6 +861,70 @@ export interface DiscountCode {
   updatedAt: number;
   uses: number;
   value: number;
+}
+
+export interface EndConfig {
+  address: string;
+  carrier: string;
+  enable: boolean;
+  icmpType: string;
+  key: string;
+  listenPorts: Record<string, number>;
+  name: string;
+  options: EndOptions;
+  pairUuid: string;
+  path: string;
+  peer: string;
+  ports: PortMap[];
+  reverse: boolean;
+  role: string;
+  sni: string;
+  uuid: string;
+}
+
+export interface EndOptions {
+  bind?: string;
+  conns?: number;
+  ech?: string;
+  fakeMode?: string;
+  fakeSni?: string;
+  fakeTtl?: number;
+  fec?: string;
+  fp?: string;
+  governor?: boolean;
+  maxMBps?: number;
+  poolRotate?: string;
+  poolRotateBytes?: string;
+  sessions?: number;
+  tlsSmallCh?: boolean;
+}
+
+export interface EndResult {
+  end: EndConfig;
+  status: EndStatus;
+}
+
+export interface EndStatus {
+  alive: boolean;
+  bytesIn: number;
+  bytesOut: number;
+  carrier: string;
+  clients: ClientSession[];
+  lastError: string;
+  lastRxAgeMs: number;
+  pid: number;
+  ports: PortStat[];
+  rateBps: number;
+  restarts: number;
+  running: boolean;
+  sessions: number;
+  srttMs: number;
+  state: string;
+  streams: number;
+  tlsMode: string;
+  uptimeSec: number;
+  uuid: string;
+  version: string;
 }
 
 export interface FallbackParentInfo {
@@ -1466,6 +1546,27 @@ export interface Plan {
   updatedAt: number;
 }
 
+export interface PortMap {
+  listen: number;
+  quotaGB?: number;
+  rateMBps?: number;
+  target: number;
+  udp: boolean;
+}
+
+export interface PortStat {
+  bytesDown: number;
+  bytesUp: number;
+  connsActive: number;
+  connsTotal: number;
+  port: number;
+  quotaExceeded: boolean;
+  quotaLimit: number;
+  quotaUsed: number;
+  rateDown: number;
+  rateUp: number;
+}
+
 export interface ProbeResultUI {
   cpuPct: number;
   error: string;
@@ -1711,6 +1812,12 @@ export interface SignedSubLink {
   url: string;
 }
 
+export interface SpeedResult {
+  downMBps: number;
+  error: string;
+  upMBps: number;
+}
+
 export interface Sponsor {
   enable?: boolean | null;
   from?: string | null;
@@ -1814,6 +1921,109 @@ export interface TuicServerSettings {
   sni?: string;
   udp_relay_mode: string;
   zero_rtt_handshake: boolean;
+}
+
+export interface TunnelAccess {
+  command: string;
+  token: string;
+}
+
+export interface TunnelCapabilities {
+  binaryAvailable: boolean;
+  canSeeToken: boolean;
+  carriers: string[];
+  platform: string;
+  publicIPv4: string;
+}
+
+export interface TunnelCreateRequest {
+  carrier: string;
+  icmpType: string;
+  iran: TunnelEndpoint;
+  kharej: TunnelEndpoint;
+  listenPort: number;
+  name: string;
+  options: EndOptions;
+  path: string;
+  ports: PortMap[];
+  reverse: boolean;
+  sni: string;
+  token: string;
+}
+
+export interface TunnelEnd {
+  address: string;
+  autoPlan: string;
+  carrier: string;
+  createdAt: number;
+  enable: boolean;
+  icmpType: string;
+  id: number;
+  lastError: string;
+  listenPorts: Record<string, number>;
+  name: string;
+  nodeId?: number | null;
+  options: EndOptions;
+  pairUuid: string;
+  path: string;
+  peer: string;
+  peerExternal: boolean;
+  ports: PortMap[];
+  probe: CarrierResult[];
+  reverse: boolean;
+  role: string;
+  rttMs: number;
+  sni: string;
+  state: string;
+  stateChangedAt: number;
+  uuid: string;
+}
+
+export interface TunnelEndView {
+  address: string;
+  carrier: string;
+  enable: boolean;
+  host: string;
+  lastError: string;
+  listenPorts: Record<string, number>;
+  live?: EndStatus | null;
+  nodeId?: number | null;
+  nodeName: string;
+  peer: string;
+  role: string;
+  rttMs: number;
+  state: string;
+  stateChangedAt: number;
+  uuid: string;
+}
+
+export interface TunnelEndpoint {
+  address: string;
+  kind: string;
+  nodeId?: number | null;
+}
+
+export interface TunnelUpdateRequest {
+  enable?: boolean | null;
+  name?: string | null;
+  options?: EndOptions | null;
+  ports?: PortMap[] | null;
+}
+
+export interface TunnelView {
+  auto: boolean;
+  carrier: string;
+  createdAt: number;
+  external: string;
+  iran?: TunnelEndView | null;
+  kharej?: TunnelEndView | null;
+  name: string;
+  options: EndOptions;
+  pairUuid: string;
+  ports: PortMap[];
+  probe: CarrierResult[];
+  reverse: boolean;
+  state: string;
 }
 
 export interface User {

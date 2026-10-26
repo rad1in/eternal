@@ -18,6 +18,7 @@ const TITLE_KEYS: Record<string, string> = {
   '/api-docs': 'menu.apiDocs',
   '/sponsors': 'menu.sponsors',
   '/sales': 'menu.sales',
+  '/tunnels': 'tunnel.title',
   '/audit': 'menu.audit',
   '/admins': 'menu.admins',
   '/sessions': 'menu.sessions',
