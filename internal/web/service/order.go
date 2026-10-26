@@ -13,6 +13,7 @@ import (
 
 	"github.com/mhsanaei/3x-ui/v3/internal/database"
 	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
+	"github.com/mhsanaei/3x-ui/v3/internal/eventbus"
 	"github.com/mhsanaei/3x-ui/v3/internal/logger"
 	"github.com/mhsanaei/3x-ui/v3/internal/web/service/payment"
 
@@ -53,6 +54,9 @@ const (
 	ErrTicketLimit         = "ticket_limit"
 	ErrTicketClosed        = "ticket_closed"
 	ErrRateLimited         = "rate_limited"
+	ErrCustomInvalid       = "custom_invalid"
+	ErrAddonUnsupported    = "addon_unsupported"
+	ErrBanned              = "banned"
 )
 
 // SalesError is a refusal that is safe to show a customer verbatim by code.
@@ -70,11 +74,14 @@ type OrderPage struct {
 
 // CreateOrderInput is what a customer submits to start a purchase.
 type CreateOrderInput struct {
-	PlanId  int    `json:"planId"`
-	Kind    string `json:"kind"`
-	Email   string `json:"email"`
-	Contact string `json:"contact"`
-	Gateway string `json:"gateway"`
+	// PlanId 0 sells the calculator offer: CustomGB and CustomDays.
+	PlanId     int    `json:"planId"`
+	CustomGB   int    `json:"customGb"`
+	CustomDays int    `json:"customDays"`
+	Kind       string `json:"kind"`
+	Email      string `json:"email"`
+	Contact    string `json:"contact"`
+	Gateway    string `json:"gateway"`
 	// DiscountCode and ReferralCode are optional coupons. Proof is the client's
 	// subscription id, which a wallet payment needs to show the account is theirs.
 	DiscountCode string `json:"discountCode"`
@@ -90,10 +97,13 @@ type CreateOrderInput struct {
 var shopUsername = regexp.MustCompile(`^[a-z0-9][a-z0-9._-]{2,31}$`)
 
 const (
-	maxContactLen     = 100
-	maxReceiptRefLen  = 64
-	maxReceiptNoteLen = 500
-	maxRejectReason   = 300
+	maxOpenOrdersPerTelegram = 5
+	maxContactLen            = 100
+	maxReceiptRefLen         = 64
+	maxReceiptFileLen        = 256
+	receiptPhotoRef          = "photo"
+	maxReceiptNoteLen        = 500
+	maxRejectReason          = 300
 )
 
 // OrderService runs the purchase lifecycle of plans.
@@ -102,6 +112,7 @@ type OrderService struct {
 	config    SalesConfigService
 	clients   ClientService
 	referrals ReferralService
+	users     BotUserService
 	// gatewayFactory replaces the real payment clients in tests.
 	gatewayFactory func(name string, cfg *SalesConfig) payment.Starter
 }
@@ -182,26 +193,37 @@ func gatewayEnabled(cfg *SalesConfig, gateway string) bool {
 // CreateOrder opens a pending order for an enabled plan on an enabled payment
 // method. A new purchase needs a free username, a renewal an existing client.
 func (s *OrderService) CreateOrder(in CreateOrderInput) (*model.Order, error) {
-	if in.Kind != model.OrderKindNew && in.Kind != model.OrderKindRenew {
+	if !validOrderKind(in.Kind) {
 		return nil, salesErr(ErrInvalidKind)
 	}
 	cfg, err := s.config.Get()
 	if err != nil {
 		return nil, err
 	}
-	if !gatewayEnabled(cfg, in.Gateway) || (in.Gateway == GatewayWallet && in.Kind != model.OrderKindRenew) {
+	if !gatewayEnabled(cfg, in.Gateway) || (in.Gateway == GatewayWallet && in.Kind == model.OrderKindNew) {
 		return nil, salesErr(ErrGatewayUnavailable)
+	}
+	if in.TgId != 0 && s.users.IsBanned(in.TgId) {
+		return nil, salesErr(ErrBanned)
 	}
 	orderCreateMu.Lock()
 	defer orderCreateMu.Unlock()
-	plan, err := s.plans.GetPlan(in.PlanId)
-	if err != nil || !plan.Enabled {
-		return nil, salesErr(ErrPlanUnavailable)
+	plan, err := s.offerFor(cfg, in.PlanId, in.Kind, in.CustomGB, in.CustomDays)
+	if err != nil {
+		return nil, err
 	}
 	if !gatewayAcceptsCurrency(in.Gateway, plan.Currency) {
 		return nil, salesErr(ErrCurrencyUnsupported)
 	}
+	if err := s.checkOpenOrders(in.TgId); err != nil {
+		return nil, err
+	}
 	email := strings.TrimSpace(in.Email)
+	if email == "" && in.TgId != 0 && in.Kind == model.OrderKindNew {
+		if email, err = s.TelegramUsername(in.TgId); err != nil {
+			return nil, err
+		}
+	}
 	if in.Kind == model.OrderKindNew {
 		email = strings.ToLower(email)
 		if !shopUsername.MatchString(email) {
@@ -215,6 +237,11 @@ func (s *OrderService) CreateOrder(in CreateOrderInput) (*model.Order, error) {
 	}
 	if err := s.checkTelegramOwner(in, email); err != nil {
 		return nil, err
+	}
+	if in.Kind == model.OrderKindAddon {
+		if err := s.checkAddon(email, plan); err != nil {
+			return nil, err
+		}
 	}
 	referrer, err := s.referrerFor(cfg, in, email)
 	if err != nil {
@@ -333,6 +360,9 @@ func (s *OrderService) Checkout(inboundSvc *InboundService, in CreateOrderInput)
 // QuoteInput asks what a plan would cost with a coupon.
 type QuoteInput struct {
 	PlanId       int    `json:"planId"`
+	Kind         string `json:"kind"`
+	CustomGB     int    `json:"customGb"`
+	CustomDays   int    `json:"customDays"`
 	DiscountCode string `json:"discountCode"`
 	Email        string `json:"email"`
 }
@@ -347,9 +377,20 @@ type Quote struct {
 }
 
 func (s *OrderService) Quote(in QuoteInput) (*Quote, error) {
-	plan, err := s.plans.GetPlan(in.PlanId)
-	if err != nil || !plan.Enabled {
-		return nil, salesErr(ErrPlanUnavailable)
+	cfg, err := s.config.Get()
+	if err != nil {
+		return nil, err
+	}
+	kind := in.Kind
+	if kind == "" {
+		kind = model.OrderKindNew
+	}
+	if !validOrderKind(kind) {
+		return nil, salesErr(ErrInvalidKind)
+	}
+	plan, err := s.offerFor(cfg, in.PlanId, kind, in.CustomGB, in.CustomDays)
+	if err != nil {
+		return nil, err
 	}
 	price, err := priceOrder(plan, in.DiscountCode, strings.ToLower(strings.TrimSpace(in.Email)))
 	if err != nil {
@@ -362,14 +403,14 @@ func (s *OrderService) Quote(in QuoteInput) (*Quote, error) {
 	return quote, nil
 }
 
-// checkUsername enforces the new/renew rule against clients and open orders.
+// checkUsername enforces the new vs renew/add-on rule against clients and open orders.
 func (s *OrderService) checkUsername(kind, email string) error {
 	db := database.GetDB()
 	var clients int64
 	if err := db.Model(&model.ClientRecord{}).Where("email = ?", email).Count(&clients).Error; err != nil {
 		return err
 	}
-	if kind == model.OrderKindRenew {
+	if kind != model.OrderKindNew {
 		if clients == 0 {
 			return salesErr(ErrEmailUnknown)
 		}
@@ -395,21 +436,52 @@ func (s *OrderService) checkUsername(kind, email string) error {
 // SubmitReceipt records the customer's card transfer reference and puts the
 // order in front of the admin.
 func (s *OrderService) SubmitReceipt(token, ref, note string) (*model.Order, error) {
-	ref = strings.TrimSpace(ref)
-	if ref == "" || len(ref) > maxReceiptRefLen {
-		return nil, salesErr(ErrReceiptInvalid)
+	if err := validateReceiptRef(ref, ""); err != nil {
+		return nil, err
 	}
 	order, err := s.GetOrderByToken(token)
 	if err != nil {
 		return nil, err
 	}
+	return s.recordReceipt(order, ref, note, "")
+}
+
+// SubmitTelegramReceipt records a receipt the bot received from the order's own
+// buyer: a typed reference, a photo (Telegram file id), or both.
+func (s *OrderService) SubmitTelegramReceipt(tgId int64, id int, ref, note, fileID string) (*model.Order, error) {
+	order, err := s.TelegramOrder(tgId, id)
+	if err != nil {
+		return nil, err
+	}
+	return s.recordReceipt(order, ref, note, fileID)
+}
+
+// validateReceiptRef: a receipt needs a reference or a photo, and both are
+// bounded.
+func validateReceiptRef(ref, fileID string) error {
+	ref = strings.TrimSpace(ref)
+	if (ref == "" && fileID == "") || len(ref) > maxReceiptRefLen || len(fileID) > maxReceiptFileLen {
+		return salesErr(ErrReceiptInvalid)
+	}
+	return nil
+}
+
+func (s *OrderService) recordReceipt(order *model.Order, ref, note, fileID string) (*model.Order, error) {
+	if err := validateReceiptRef(ref, fileID); err != nil {
+		return nil, err
+	}
+	ref = strings.TrimSpace(ref)
+	if ref == "" {
+		ref = receiptPhotoRef
+	}
 	res := database.GetDB().Model(&model.Order{}).
 		Where("id = ? AND gateway = ? AND status IN ?", order.Id, GatewayCard,
 			[]string{model.OrderStatusPending, model.OrderStatusReview}).
 		Updates(map[string]any{
-			"status":       model.OrderStatusReview,
-			"receipt_ref":  ref,
-			"receipt_note": truncate(strings.TrimSpace(note), maxReceiptNoteLen),
+			"status":          model.OrderStatusReview,
+			"receipt_ref":     ref,
+			"receipt_note":    truncate(strings.TrimSpace(note), maxReceiptNoteLen),
+			"receipt_file_id": fileID,
 		})
 	if res.Error != nil {
 		return nil, res.Error
@@ -417,7 +489,11 @@ func (s *OrderService) SubmitReceipt(token, ref, note string) (*model.Order, err
 	if res.RowsAffected == 0 {
 		return nil, salesErr(ErrOrderState)
 	}
-	return s.getOrder(order.Id)
+	updated, err := s.getOrder(order.Id)
+	if err == nil {
+		publishOrder(eventbus.EventOrderReceipt, updated)
+	}
+	return updated, err
 }
 
 // RejectOrder closes an order that has not been paid for good; a wallet order
@@ -441,6 +517,9 @@ func (s *OrderService) RejectOrder(id int, reason string) (*model.Order, error) 
 	order, err := s.getOrder(id)
 	if err == nil && order.Gateway == GatewayWallet {
 		err = s.refundWallet(order)
+	}
+	if err == nil {
+		publishOrder(eventbus.EventOrderRejected, order)
 	}
 	return order, err
 }
@@ -489,6 +568,9 @@ func (s *OrderService) FulfilOrder(inboundSvc *InboundService, id int) (bool, er
 		return needRestart, err
 	}
 	s.referrals.creditBonus(order)
+	if order.Gateway != GatewayWallet {
+		publishOrder(eventbus.EventOrderFulfilled, order)
+	}
 	return needRestart, nil
 }
 

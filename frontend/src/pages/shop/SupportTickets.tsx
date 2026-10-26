@@ -1,20 +1,24 @@
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Button, Card, Input, List, Space, Tag, Typography } from 'antd';
+import { Alert, Button, Card, Input, List, Select, Space, Tag, Typography } from 'antd';
 
-import type { Ticket, TicketDetail } from '@/generated/zod';
+import type { ShopService, Ticket, TicketDetail } from '@/generated/zod';
 import { errorKey, shopApi, type TicketAuth } from '@/lib/shopApi';
 
 interface SupportTicketsProps {
   // An order token the customer already holds; without it they enter the
   // username and subscription id.
   orderToken: string;
+  // The services of a signed-in Mini App buyer: the account is then picked,
+  // not proven with a subscription id.
+  services?: ShopService[];
 }
 
-export default function SupportTickets({ orderToken }: SupportTicketsProps) {
+export default function SupportTickets({ orderToken, services }: SupportTicketsProps) {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [proof, setProof] = useState('');
+  const [account, setAccount] = useState(services?.[0]?.email ?? '');
   const [auth, setAuth] = useState<TicketAuth | null>(null);
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [current, setCurrent] = useState<TicketDetail | null>(null);
@@ -39,6 +43,10 @@ export default function SupportTickets({ orderToken }: SupportTicketsProps) {
   }, []);
 
   function signIn() {
+    if (services && services.length > 0) {
+      void load({ email: account, proof: '' });
+      return;
+    }
     void load(orderToken ? { order: orderToken } : { email: email.trim(), proof: proof.trim() });
   }
 
@@ -74,7 +82,17 @@ export default function SupportTickets({ orderToken }: SupportTicketsProps) {
         {error && <Alert type="error" showIcon title={t(error)} />}
         {!auth && (
           <>
-            {!orderToken && (
+            {services && services.length > 0 && (
+              <Select
+                value={account}
+                options={services.map((s) => ({
+                  value: s.email,
+                  label: s.email,
+                }))}
+                onChange={setAccount}
+              />
+            )}
+            {!orderToken && !(services && services.length > 0) && (
               <>
                 <Input
                   dir="ltr"

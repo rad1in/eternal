@@ -59,7 +59,27 @@ const (
 	// "ticket-<id>", Data a *TicketEventData.
 	EventTicketOpened  EventType = "ticket.opened"
 	EventTicketReplied EventType = "ticket.replied"
+	// EventTicketAnswered is an admin's reply; it is meant for the customer.
+	EventTicketAnswered EventType = "ticket.answered"
 )
+
+// Shop order events. They are addressed to the buyer (and, for a receipt, to
+// the admins who must review it), so they are not part of the admin-selectable
+// notification list.
+const (
+	EventOrderReceipt   EventType = "order.receipt"
+	EventOrderFulfilled EventType = "order.fulfilled"
+	EventOrderRejected  EventType = "order.rejected"
+	EventOrderExpired   EventType = "order.expired"
+	EventOrderReminder  EventType = "order.reminder"
+)
+
+// OrderEventData names the order a shop event is about. The bot re-reads the
+// order, so nothing sensitive travels on the bus.
+type OrderEventData struct {
+	OrderId int   `json:"orderId"`
+	TgId    int64 `json:"tgId"`
+}
 
 // TicketEventData is the ticket a support event is about. Excerpt is the start
 // of the message, plain text.

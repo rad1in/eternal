@@ -581,6 +581,10 @@ export const EXAMPLES: Record<string, unknown> = {
     "name": "panel.example.com_2026-10-17_030000.db.gz",
     "pruned": 1
   },
+  "BotLink": {
+    "label": "Tutorials",
+    "url": "https://t.me/mychannel"
+  },
   "CardPayConfig": {
     "bankName": "Melli",
     "cardNumber": "6037991812345678",
@@ -883,6 +887,18 @@ export const EXAMPLES: Record<string, unknown> = {
     "ipnSecret": "",
     "sandbox": false
   },
+  "CustomOfferConfig": {
+    "currency": "IRT",
+    "enabled": false,
+    "limitIp": 2,
+    "maxDays": 365,
+    "maxGb": 500,
+    "minDays": 7,
+    "minGb": 5,
+    "pricePerDay": 1000,
+    "pricePerGb": 2000,
+    "templateId": 1
+  },
   "DashboardLayout": {
     "widgets": [
       {
@@ -918,6 +934,10 @@ export const EXAMPLES: Record<string, unknown> = {
   "FallbackParentInfo": {
     "masterId": 0,
     "path": ""
+  },
+  "ForceJoinChat": {
+    "chat": "@mychannel",
+    "link": "https://t.me/mychannel"
   },
   "GeoCategory": {
     "attributes": [
@@ -1599,6 +1619,7 @@ export const EXAMPLES: Record<string, unknown> = {
     "target": "inbound #3"
   },
   "Plan": {
+    "category": "Monthly",
     "createdAt": 0,
     "currency": "IRT",
     "description": "Valid for 30 days",
@@ -1677,6 +1698,22 @@ export const EXAMPLES: Record<string, unknown> = {
     "oldSni": "www.microsoft.com"
   },
   "SalesConfig": {
+    "bot": {
+      "forceJoin": [
+        {
+          "chat": "@mychannel",
+          "link": "https://t.me/mychannel"
+        }
+      ],
+      "links": [
+        {
+          "label": "Tutorials",
+          "url": "https://t.me/mychannel"
+        }
+      ],
+      "miniApp": false,
+      "receiptChatId": -1001234567890
+    },
     "card": {
       "bankName": "Melli",
       "cardNumber": "6037991812345678",
@@ -1692,6 +1729,18 @@ export const EXAMPLES: Record<string, unknown> = {
       "enabled": false,
       "ipnSecret": "",
       "sandbox": false
+    },
+    "custom": {
+      "currency": "IRT",
+      "enabled": false,
+      "limitIp": 2,
+      "maxDays": 365,
+      "maxGb": 500,
+      "minDays": 7,
+      "minGb": 5,
+      "pricePerDay": 1000,
+      "pricePerGb": 2000,
+      "templateId": 1
     },
     "idpay": {
       "apiKey": "",
@@ -1724,6 +1773,22 @@ export const EXAMPLES: Record<string, unknown> = {
     }
   },
   "SalesConfigView": {
+    "bot": {
+      "forceJoin": [
+        {
+          "chat": "@mychannel",
+          "link": "https://t.me/mychannel"
+        }
+      ],
+      "links": [
+        {
+          "label": "Tutorials",
+          "url": "https://t.me/mychannel"
+        }
+      ],
+      "miniApp": false,
+      "receiptChatId": -1001234567890
+    },
     "card": {
       "bankName": "Melli",
       "cardNumber": "6037991812345678",
@@ -1739,6 +1804,18 @@ export const EXAMPLES: Record<string, unknown> = {
       "enabled": false,
       "ipnSecret": "",
       "sandbox": false
+    },
+    "custom": {
+      "currency": "IRT",
+      "enabled": false,
+      "limitIp": 2,
+      "maxDays": 365,
+      "maxGb": 500,
+      "minDays": 7,
+      "minGb": 5,
+      "pricePerDay": 1000,
+      "pricePerGb": 2000,
+      "templateId": 1
     },
     "hasCryptoApiKey": false,
     "hasCryptoIpnSecret": false,
@@ -1870,12 +1947,30 @@ export const EXAMPLES: Record<string, unknown> = {
     "ipCount": 7,
     "lastSeen": 1760003600000
   },
+  "ShopBotConfig": {
+    "forceJoin": [
+      {
+        "chat": "@mychannel",
+        "link": "https://t.me/mychannel"
+      }
+    ],
+    "links": [
+      {
+        "label": "Tutorials",
+        "url": "https://t.me/mychannel"
+      }
+    ],
+    "miniApp": false,
+    "receiptChatId": -1001234567890
+  },
   "ShopCatalog": {
+    "custom": null,
     "methods": [
       ""
     ],
     "plans": [
       {
+        "category": "Monthly",
         "currency": "IRT",
         "description": "",
         "durationDays": 30,
@@ -1886,6 +1981,15 @@ export const EXAMPLES: Record<string, unknown> = {
         "totalGB": 53687091200
       }
     ]
+  },
+  "ShopCustom": {
+    "currency": "IRT",
+    "maxDays": 365,
+    "maxGb": 500,
+    "minDays": 7,
+    "minGb": 5,
+    "pricePerDay": 1000,
+    "pricePerGb": 2000
   },
   "ShopOrderView": {
     "amount": 250000,
@@ -1906,6 +2010,7 @@ export const EXAMPLES: Record<string, unknown> = {
     "token": "3f9c2a7e5b1d4c8a9e0f6b2d7a1c4e8f"
   },
   "ShopPlan": {
+    "category": "Monthly",
     "currency": "IRT",
     "description": "",
     "durationDays": 30,
@@ -1914,6 +2019,34 @@ export const EXAMPLES: Record<string, unknown> = {
     "name": "Monthly 50 GB",
     "price": 250000,
     "totalGB": 53687091200
+  },
+  "ShopService": {
+    "down": 2097152,
+    "email": "alice",
+    "enable": true,
+    "expiryTime": 1735689600000,
+    "id": 12,
+    "subscriptionUrl": "",
+    "total": 53687091200,
+    "up": 1048576
+  },
+  "ShopSession": {
+    "lang": "fa",
+    "name": "Ali",
+    "services": [
+      {
+        "down": 2097152,
+        "email": "alice",
+        "enable": true,
+        "expiryTime": 1735689600000,
+        "id": 12,
+        "subscriptionUrl": "",
+        "total": 53687091200,
+        "up": 1048576
+      }
+    ],
+    "tgId": 123456789,
+    "token": ""
   },
   "ShopWallet": {
     "balances": [

@@ -3060,7 +3060,8 @@
         "referrer": "推薦人",
         "kinds": {
           "new": "新購",
-          "renew": "續費"
+          "renew": "續費",
+          "addon": "加購"
         },
         "statuses": {
           "pending": "待付款",
@@ -3273,6 +3274,241 @@
       "errPath": "只能使用字母、數字和 . _ ~ -"
     }
   },
+  "shopbot": {
+    "disabled": "商店暫時無法使用。",
+    "banned": "您的帳號無法使用商店。如認為有誤，請聯絡營運者。",
+    "slowDown": "點擊過於頻繁，請稍候。",
+    "expired": "您的選擇已過期，請開啟選單重新開始。",
+    "unlimited": "不限量",
+    "noExpiry": "無到期時間",
+    "menu": {
+      "welcome": "👋 您好，{{ .Name }}！\n請問需要什麼服務？"
+    },
+    "join": {
+      "required": "使用商店前請先加入我們的頻道，然後點選「我已加入」。",
+      "open": "加入 {{ .Channel }}",
+      "channel": "頻道",
+      "done": "✅ 我已加入"
+    },
+    "btn": {
+      "buy": "🛒 購買",
+      "services": "📦 我的服務",
+      "wallet": "👛 錢包",
+      "invite": "🎁 邀請好友",
+      "trial": "🧪 免費試用",
+      "support": "🆘 客服",
+      "orders": "🧾 我的訂單",
+      "language": "🌐 語言",
+      "miniapp": "🚀 開啟商店應用",
+      "admin": "🛠 管理",
+      "menu": "🏠 選單",
+      "back": "⬅️ 返回",
+      "cancel": "✖️ 取消",
+      "skip": "略過",
+      "refresh": "🔄 重新整理",
+      "custom": "✨ 自訂方案",
+      "newAccount": "🆕 新帳號",
+      "renew": "🔄 續費 {{ .Email }}",
+      "code": "🏷 優惠碼",
+      "receipt": "📤 傳送憑證",
+      "pay": "💳 前往付款",
+      "link": "🔗 連結",
+      "qr": "📷 QR 碼",
+      "renewThis": "🔄 續費",
+      "addon": "➕ 加流量 / 加時長",
+      "newTicket": "✍️ 新工單",
+      "reply": "↩️ 回覆",
+      "openTicket": "💬 檢視工單",
+      "openOrder": "🧾 檢視訂單",
+      "approve": "✅ 通過",
+      "reject": "❌ 拒絕",
+      "today": "📊 今日",
+      "waiting": "🧾 待審核憑證",
+      "ban": "🚫 封鎖使用者",
+      "unban": "✅ 解除封鎖"
+    },
+    "plans": {
+      "title": "🛒 請選擇方案：",
+      "none": "目前沒有在售方案。",
+      "misc": "其他",
+      "detail": "<b>{{ .Name }}</b>\n{{ .Description }}📊 流量：{{ .Quota }}\n⏳ 時長：{{ .Duration }}\n📱 裝置數：{{ .Devices }}\n💰 價格：{{ .Price }}\n\n用於哪個帳號？"
+    },
+    "kind": {
+      "new": "新帳號",
+      "renew": "續費",
+      "addon": "加購"
+    },
+    "confirm": "🧾 <b>{{ .Item }}</b>\n{{ .Kind }} · <code>{{ .Email }}</code>\n💰 <b>{{ .Amount }}</b>{{ .Discount }}\n\n請選擇付款方式：",
+    "discountLine": "\n🏷 原價 {{ .List }} · 優惠碼 {{ .Code }}",
+    "gw": {
+      "card": "💳 銀行卡轉帳",
+      "wallet": "👛 錢包",
+      "zarinpal": "Zarinpal",
+      "idpay": "IDPay",
+      "crypto": "🪙 加密貨幣",
+      "stripe": "Stripe",
+      "paypal": "PayPal"
+    },
+    "askCode": "請把優惠碼以訊息傳送給我。",
+    "custom": {
+      "item": "自訂方案：{{ .Parts }}",
+      "addonItem": "加購：{{ .Parts }}",
+      "askGB": "需要多少流量？請選擇或傳送 GB 數（{{ .Min }}-{{ .Max }}）。\n單價：每 GB {{ .Price }}。",
+      "askDays": "需要多少天？請選擇或傳送天數（{{ .Min }}-{{ .Max }}）。\n單價：每天 {{ .Price }}。",
+      "badGB": "請傳送 {{ .Min }} 到 {{ .Max }} 之間的 GB 數。",
+      "badDays": "請傳送 {{ .Min }} 到 {{ .Max }} 之間的天數。",
+      "notNumber": "請傳送一個整數。"
+    },
+    "addon": {
+      "off": "目前無法加購流量或時長。"
+    },
+    "order": {
+      "head": "🧾 訂單 #{{ .Id }} - {{ .Item }}\n{{ .Kind }} · {{ .Amount }}\n狀態：{{ .Status }}",
+      "card": "\n\n💳 請向以下銀行卡準確轉帳 {{ .Amount }}：\n<code>{{ .Card }}</code>\n{{ .Holder }} {{ .Bank }}\n{{ .Instructions }}\n\n然後點選「傳送憑證」，傳送轉帳截圖或交易流水號。",
+      "reason": "\n❗ {{ .Reason }}"
+    },
+    "orders": {
+      "title": "🧾 您最近的訂單：",
+      "none": "您還沒有訂單。"
+    },
+    "askReceipt": "請傳送付款憑證截圖，或轉帳的交易流水號。",
+    "receiptSent": "✅ 憑證已傳送，我們會盡快確認。",
+    "delivered": {
+      "new": "✅ 已付款並開通。您的服務已就緒：",
+      "renew": "✅ 已付款並續費。您的服務：",
+      "addon": "✅ 已付款，流量與時長已加上："
+    },
+    "svc": {
+      "none": "您還沒有任何服務。",
+      "list": "📦 您的服務：",
+      "card": "📦 <b>{{ .Email }}</b>\n{{ .State }}\n📊 {{ .Usage }}\n⏳ {{ .Expiry }}",
+      "state": {
+        "active": "🟢 正常",
+        "disabled": "⛔ 已停用",
+        "depleted": "📉 流量已用完",
+        "expired": "⌛ 已到期"
+      },
+      "daysLeft": "剩餘 {{ .Days }} 天",
+      "startsOnUse": "首次連線後 {{ .Days }} 天",
+      "link": "🔗 訂閱連結：\n<code>{{ .URL }}</code>",
+      "jsonLink": "\n\nJSON 連結：\n<code>{{ .URL }}</code>",
+      "noLink": "暫無訂閱連結，請聯絡客服。",
+      "qrCaption": "📷 {{ .Email }} 的 QR 碼"
+    },
+    "wallet": {
+      "title": "👛 各服務的錢包餘額：",
+      "empty": "無餘額",
+      "hint": "\n\n餘額可用於支付續費與加購。",
+      "none": "擁有服務後即可使用錢包。"
+    },
+    "ref": {
+      "off": "推薦計畫目前未開啟。",
+      "needService": "請先購買服務，即可取得您的專屬邀請連結。",
+      "info": "🎁 <b>邀請好友</b>\n好友透過您的連結首次購買服務後，價格的 {{ .Percent }}% 會進入您的錢包。\n\n您的邀請碼：<code>{{ .Code }}</code>\n您的連結：\n{{ .Link }}"
+    },
+    "support": {
+      "noService": "工單僅限已有服務的客戶使用。請透過選單中的連結聯絡我們。",
+      "pick": "問題與哪個服務有關？",
+      "title": "🆘 <code>{{ .Email }}</code> 的客服",
+      "ticket": "💬 <b>工單 #{{ .Id }}</b> - {{ .Subject }}\n狀態：{{ .Status }}",
+      "you": "您",
+      "staff": "客服",
+      "askNew": "請用一則訊息描述問題，第一行將作為工單主旨。",
+      "askReply": "請把回覆以訊息傳送。",
+      "sent": "✅ 工單 #{{ .Id }} 已建立，我們會在這裡回覆您。",
+      "replied": "✅ 回覆已傳送。"
+    },
+    "lang": {
+      "choose": "🌐 請選擇語言："
+    },
+    "notify": {
+      "fulfilled": "✅ 訂單 #{{ .Id }}（{{ .Item }}）的付款已確認。",
+      "rejected": "❌ 訂單 #{{ .Id }} 未被接受。",
+      "expired": "⌛ 訂單 #{{ .Id }} 因未收到付款已過期。",
+      "reminder": "⏰ 訂單 #{{ .Id }}（{{ .Item }}，{{ .Amount }}）仍在等待付款。",
+      "ticket": "💬 客服已回覆工單 #{{ .Id }}（{{ .Subject }}）：\n\n{{ .Excerpt }}"
+    },
+    "reject": {
+      "none": "不填原因直接拒絕",
+      "notFound": "找不到這筆付款",
+      "amount": "金額不符",
+      "duplicate": "此憑證已被使用過"
+    },
+    "admin": {
+      "title": "🛠 商店管理",
+      "web": "網頁商店",
+      "receipt": "🧾 <b>訂單 #{{ .Id }} 的付款憑證</b>\n買家：{{ .Buyer }}\n帳號：<code>{{ .Account }}</code>\n{{ .Item }} · {{ .Kind }}\n金額：<b>{{ .Amount }}</b>\n流水號：{{ .Ref }}\n備註：{{ .Note }}",
+      "approvedBy": "✅ 已由 {{ .Name }} 通過",
+      "rejectedBy": "❌ 已由 {{ .Name }} 拒絕",
+      "alreadyHandled": "訂單 #{{ .Id }} 已處理過。",
+      "failed": "無法處理訂單 #{{ .Id }}，請查看面板日誌。",
+      "stats": "📊 <b>今日</b>\n{{ .Paid }}\n\n未付款訂單：{{ .Pending }}\n待審核憑證：{{ .Review }}",
+      "salesLine": "已付款 {{ .Orders }} 筆：{{ .Amount }}",
+      "noSales": "今天還沒有已付款訂單。",
+      "noneWaiting": "沒有待審核的憑證。",
+      "waitingTitle": "🧾 等待審核的憑證：",
+      "askBan": "請傳送要封鎖的 Telegram 數字 ID。",
+      "askUnban": "請傳送要解除封鎖的 Telegram 數字 ID。",
+      "badID": "這不是有效的 Telegram ID。",
+      "cannotBanAdmin": "無法封鎖管理員。",
+      "banned": "🚫 {{ .ID }} 已被禁止使用商店。",
+      "unbanned": "✅ {{ .ID }} 可以重新使用商店。"
+    },
+    "currency": {
+      "IRT": "土曼",
+      "IRR": "里亞爾"
+    },
+    "commandDesc": "開啟商店",
+    "app": {
+      "signedIn": "已透過 Telegram 登入：{name}",
+      "services": "您的服務",
+      "noServices": "您還沒有任何服務。",
+      "disabled": "已停用",
+      "usage": "已用 {used} GB / 共 {total} GB",
+      "expiresOn": "到期：{date}",
+      "renew": "續費",
+      "addon": "加流量 / 加時長",
+      "copyLink": "複製訂閱連結",
+      "renewing": "正在為 {email} 續費：請在下方選擇方案。",
+      "adding": "正在為 {email} 加購：請選擇要增加的流量與天數。",
+      "addonAccount": "加購到我的帳號",
+      "pickService": "選擇一個服務",
+      "categoryOther": "其他",
+      "custom": "自訂方案",
+      "customGb": "流量（GB）",
+      "customDays": "天",
+      "customBounds": "流量 {minGb}-{maxGb} GB，時長 {minDays}-{maxDays} 天。",
+      "customTotal": "合計",
+      "continue": "繼續",
+      "sessionExpired": "此 Telegram 工作階段已過期。請關閉商店，再從機器人重新開啟。"
+    },
+    "cfg": {
+      "botTitle": "Telegram 商店機器人",
+      "miniApp": "Mini App 按鈕",
+      "miniAppHint": "在機器人選單加入「開啟商店應用」按鈕。買家在 Telegram 內開啟網頁商店並自動登入。需要開啟公開商店，且基礎網址使用 https。",
+      "receiptChat": "憑證群組或頻道 ID",
+      "receiptChatHint": "選填，例如 -1001234567890。銀行卡轉帳憑證也會傳到那裡，並附有「通過」與「拒絕」按鈕；只有機器人設定中列出的管理員能決定。請先把機器人加入該聊天。填 0 則只傳給管理員的私人聊天。",
+      "forceJoin": "必須加入的頻道",
+      "forceJoinHint": "買家需先加入這些頻道才能使用商店。每行一個：@頻道 或數字聊天 ID，可在其後加 | 加入連結（私人頻道需要）。請將機器人設為各頻道的管理員，以便檢查成員身分。",
+      "links": "選單連結",
+      "linksHint": "機器人選單上的額外按鈕，每行一個：名稱 | https://…（最多 6 個）。",
+      "customTitle": "自訂方案（計算器）",
+      "customEnabled": "販售自訂流量與天數",
+      "customHint": "買家自選流量與時長；價格 = 流量 × 每 GB 單價 + 天數 × 每天單價。同時可販售加購，在不重置已用流量的情況下為現有帳號增加額度。",
+      "customTemplate": "客戶端範本",
+      "customCurrency": "幣別",
+      "pricePerGb": "每 GB 單價",
+      "pricePerDay": "每天單價",
+      "minGb": "最少 GB",
+      "maxGb": "最多 GB",
+      "minDays": "最少天數",
+      "maxDays": "最多天數"
+    },
+    "plan": {
+      "category": "分類",
+      "categoryHint": "分類相同的方案會在機器人與商店中歸為一組。留空則不分組。"
+    }
+  },
   "shop": {
     "title": "商店",
     "noPlans": "目前沒有在售方案",
@@ -3354,7 +3590,10 @@
       "ticket_limit": "未關閉的工單過多。請等待回覆或關閉其中一個。",
       "ticket_closed": "此工單已關閉。",
       "rate_limited": "請求過多，請稍候再試。",
-      "network": "發生錯誤，請重試。"
+      "network": "發生錯誤，請重試。",
+      "custom_invalid": "流量或時長超出允許範圍。",
+      "addon_unsupported": "此帳號無法加購：不限量的流量或不限期的時長無法再增加。",
+      "banned": "您的帳號無法使用商店。"
     }
   },
   "setup": {
@@ -3670,40 +3909,6 @@
       "chooseClient": "為入站 {{ .Inbound }} 選擇一個客戶",
       "chooseInbound": "選擇一個入站",
       "qrCodeForClient": "客戶端 {{ .Email }} 的二維碼："
-    },
-    "shop": {
-      "disabled": "商店暫時無法使用。",
-      "menu": "🛒 商店\r\n你想做什麼？",
-      "plansTitle": "🛒 請選擇方案:",
-      "noPlans": "目前沒有販售中的方案。",
-      "planDetail": "<b>{{ .Name }}</b>\r\n{{ .Description }}\r\n流量: {{ .Quota }}\r\n期限: {{ .Duration }}\r\n裝置數: {{ .Devices }}\r\n價格: {{ .Price }}\r\n\r\n為哪個帳號購買？",
-      "noExpiry": "永不到期",
-      "confirm": "<b>{{ .Plan }}</b> - <code>{{ .Email }}</code>\r\n合計: {{ .Amount }}\r\n請選擇付款方式:",
-      "discountLine": "\r\n原價 {{ .List }}，優惠碼 {{ .Code }}",
-      "askCode": "請以訊息傳送你的優惠碼。",
-      "askReceipt": "請以訊息傳送轉帳的追蹤編號。",
-      "receiptSent": "✅ 憑證已送出，將很快審核。",
-      "expired": "你的選擇已過期。傳送 /shop 重新開始。",
-      "ordersTitle": "📦 你最近的訂單:",
-      "noOrders": "你還沒有訂單。",
-      "order": "📦 訂單 #{{ .Id }} - {{ .Plan }}\r\n金額: {{ .Amount }}\r\n狀態: {{ .Status }}",
-      "cardInfo": "\r\n\r\n請向此卡轉帳準確金額 {{ .Amount }}:\r\n<code>{{ .Card }}</code>\r\n{{ .Holder }} {{ .Bank }}\r\n{{ .Instructions }}",
-      "payLink": "\r\n\r\n完成付款: {{ .URL }}",
-      "delivered": "✅ 已付款並開通。你的訂閱:",
-      "buttons": {
-        "plans": "🛒 方案",
-        "orders": "📦 我的訂單",
-        "newAccount": "🆕 新帳號",
-        "renew": "🔄 續費 {{ .Email }}",
-        "code": "🏷 優惠碼",
-        "card": "💳 卡對卡轉帳",
-        "wallet": "👛 錢包",
-        "zarinpal": "Zarinpal",
-        "idpay": "IDPay",
-        "crypto": "加密貨幣",
-        "receipt": "🧾 傳送憑證",
-        "refresh": "🔄 重新整理"
-      }
     }
   },
   "discord": {

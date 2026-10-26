@@ -3060,7 +3060,8 @@
         "referrer": "Recomendado por",
         "kinds": {
           "new": "Nuevo",
-          "renew": "Renovación"
+          "renew": "Renovación",
+          "addon": "Ampliación"
         },
         "statuses": {
           "pending": "Pago pendiente",
@@ -3273,6 +3274,241 @@
       "errPath": "Usa solo letras, dígitos y . _ ~ -"
     }
   },
+  "shopbot": {
+    "disabled": "La tienda no está disponible ahora mismo.",
+    "banned": "Tu cuenta no puede usar la tienda. Si crees que es un error, contacta con el operador.",
+    "slowDown": "Demasiadas pulsaciones. Espera un momento.",
+    "expired": "Tu selección ha caducado. Abre el menú para empezar de nuevo.",
+    "unlimited": "Ilimitado",
+    "noExpiry": "Sin caducidad",
+    "menu": {
+      "welcome": "👋 ¡Hola, {{ .Name }}!\n¿Qué quieres hacer?"
+    },
+    "join": {
+      "required": "Para usar la tienda, únete primero a nuestro canal y pulsa «Ya me uní».",
+      "open": "Unirse a {{ .Channel }}",
+      "channel": "el canal",
+      "done": "✅ Ya me uní"
+    },
+    "btn": {
+      "buy": "🛒 Comprar",
+      "services": "📦 Mis servicios",
+      "wallet": "👛 Monedero",
+      "invite": "🎁 Invitar amigos",
+      "trial": "🧪 Prueba gratis",
+      "support": "🆘 Soporte",
+      "orders": "🧾 Mis pedidos",
+      "language": "🌐 Idioma",
+      "miniapp": "🚀 Abrir la app de la tienda",
+      "admin": "🛠 Admin",
+      "menu": "🏠 Menú",
+      "back": "⬅️ Atrás",
+      "cancel": "✖️ Cancelar",
+      "skip": "Omitir",
+      "refresh": "🔄 Actualizar",
+      "custom": "✨ Crea tu plan",
+      "newAccount": "🆕 Cuenta nueva",
+      "renew": "🔄 Renovar {{ .Email }}",
+      "code": "🏷 Código de descuento",
+      "receipt": "📤 Enviar comprobante",
+      "pay": "💳 Pagar ahora",
+      "link": "🔗 Enlace",
+      "qr": "📷 Código QR",
+      "renewThis": "🔄 Renovar",
+      "addon": "➕ Añadir datos / tiempo",
+      "newTicket": "✍️ Nuevo ticket",
+      "reply": "↩️ Responder",
+      "openTicket": "💬 Abrir ticket",
+      "openOrder": "🧾 Abrir pedido",
+      "approve": "✅ Aprobar",
+      "reject": "❌ Rechazar",
+      "today": "📊 Hoy",
+      "waiting": "🧾 Comprobantes pendientes",
+      "ban": "🚫 Bloquear usuario",
+      "unban": "✅ Desbloquear usuario"
+    },
+    "plans": {
+      "title": "🛒 Elige un plan:",
+      "none": "No hay planes a la venta ahora mismo.",
+      "misc": "Otros",
+      "detail": "<b>{{ .Name }}</b>\n{{ .Description }}📊 Datos: {{ .Quota }}\n⏳ Duración: {{ .Duration }}\n📱 Dispositivos: {{ .Devices }}\n💰 Precio: {{ .Price }}\n\n¿Para qué cuenta?"
+    },
+    "kind": {
+      "new": "Cuenta nueva",
+      "renew": "Renovación",
+      "addon": "Ampliación"
+    },
+    "confirm": "🧾 <b>{{ .Item }}</b>\n{{ .Kind }} · <code>{{ .Email }}</code>\n💰 <b>{{ .Amount }}</b>{{ .Discount }}\n\nElige cómo pagar:",
+    "discountLine": "\n🏷 Precio de lista {{ .List }} · código {{ .Code }}",
+    "gw": {
+      "card": "💳 Transferencia a tarjeta",
+      "wallet": "👛 Monedero",
+      "zarinpal": "Zarinpal",
+      "idpay": "IDPay",
+      "crypto": "🪙 Cripto",
+      "stripe": "Stripe",
+      "paypal": "PayPal"
+    },
+    "askCode": "Envía tu código de descuento en un mensaje.",
+    "custom": {
+      "item": "Plan a medida: {{ .Parts }}",
+      "addonItem": "Ampliación: {{ .Parts }}",
+      "askGB": "¿Cuántos datos necesitas? Elige un tamaño o envía un número de GB ({{ .Min }}-{{ .Max }}).\nPrecio: {{ .Price }} por GB.",
+      "askDays": "¿Para cuántos días? Elige una duración o envía un número ({{ .Min }}-{{ .Max }}).\nPrecio: {{ .Price }} por día.",
+      "badGB": "Envía un número de GB entre {{ .Min }} y {{ .Max }}.",
+      "badDays": "Envía un número de días entre {{ .Min }} y {{ .Max }}.",
+      "notNumber": "Envía un número entero."
+    },
+    "addon": {
+      "off": "Ahora mismo no se pueden añadir datos ni tiempo."
+    },
+    "order": {
+      "head": "🧾 Pedido #{{ .Id }} - {{ .Item }}\n{{ .Kind }} · {{ .Amount }}\nEstado: {{ .Status }}",
+      "card": "\n\n💳 Transfiere exactamente {{ .Amount }} a esta tarjeta:\n<code>{{ .Card }}</code>\n{{ .Holder }} {{ .Bank }}\n{{ .Instructions }}\n\nLuego pulsa «Enviar comprobante» y envía una foto del recibo o el número de seguimiento.",
+      "reason": "\n❗ {{ .Reason }}"
+    },
+    "orders": {
+      "title": "🧾 Tus últimos pedidos:",
+      "none": "Aún no tienes pedidos."
+    },
+    "askReceipt": "Envía una foto del comprobante de pago o el número de seguimiento de la transferencia.",
+    "receiptSent": "✅ Comprobante enviado. Lo confirmaremos en breve.",
+    "delivered": {
+      "new": "✅ Pagado y activado. Tu servicio está listo:",
+      "renew": "✅ Pagado y renovado. Tu servicio:",
+      "addon": "✅ Pagado. Se añadieron los datos y el tiempo:"
+    },
+    "svc": {
+      "none": "Aún no tienes servicios.",
+      "list": "📦 Tus servicios:",
+      "card": "📦 <b>{{ .Email }}</b>\n{{ .State }}\n📊 {{ .Usage }}\n⏳ {{ .Expiry }}",
+      "state": {
+        "active": "🟢 Activo",
+        "disabled": "⛔ Desactivado",
+        "depleted": "📉 Datos agotados",
+        "expired": "⌛ Caducado"
+      },
+      "daysLeft": "quedan {{ .Days }} días",
+      "startsOnUse": "{{ .Days }} días desde la primera conexión",
+      "link": "🔗 Enlace de suscripción:\n<code>{{ .URL }}</code>",
+      "jsonLink": "\n\nEnlace JSON:\n<code>{{ .URL }}</code>",
+      "noLink": "El enlace de suscripción no está disponible. Contacta con soporte.",
+      "qrCaption": "📷 Código QR de {{ .Email }}"
+    },
+    "wallet": {
+      "title": "👛 Saldo del monedero por servicio:",
+      "empty": "sin saldo",
+      "hint": "\n\nEl saldo sirve para pagar renovaciones y ampliaciones.",
+      "none": "El monedero estará disponible cuando tengas un servicio."
+    },
+    "ref": {
+      "off": "El programa de referidos está desactivado ahora mismo.",
+      "needService": "Compra primero un servicio y recibirás tu propio enlace de invitación.",
+      "info": "🎁 <b>Invita a tus amigos</b>\nCuando un amigo compre su primer servicio con tu enlace, el {{ .Percent }}% del precio irá a tu monedero.\n\nTu código: <code>{{ .Code }}</code>\nTu enlace:\n{{ .Link }}"
+    },
+    "support": {
+      "noService": "Los tickets son para clientes con un servicio. Usa los enlaces del menú para contactarnos.",
+      "pick": "¿Sobre qué servicio es?",
+      "title": "🆘 Soporte para <code>{{ .Email }}</code>",
+      "ticket": "💬 <b>Ticket #{{ .Id }}</b> - {{ .Subject }}\nEstado: {{ .Status }}",
+      "you": "Tú",
+      "staff": "Soporte",
+      "askNew": "Describe tu problema en un solo mensaje. La primera línea será el asunto.",
+      "askReply": "Envía tu respuesta en un mensaje.",
+      "sent": "✅ Ticket #{{ .Id }} abierto. Responderemos aquí.",
+      "replied": "✅ Respuesta enviada."
+    },
+    "lang": {
+      "choose": "🌐 Elige tu idioma:"
+    },
+    "notify": {
+      "fulfilled": "✅ Pago confirmado del pedido #{{ .Id }} ({{ .Item }}).",
+      "rejected": "❌ El pedido #{{ .Id }} no fue aceptado.",
+      "expired": "⌛ El pedido #{{ .Id }} caducó porque no llegó el pago.",
+      "reminder": "⏰ El pedido #{{ .Id }} ({{ .Item }}, {{ .Amount }}) sigue esperando el pago.",
+      "ticket": "💬 Soporte respondió al ticket #{{ .Id }} ({{ .Subject }}):\n\n{{ .Excerpt }}"
+    },
+    "reject": {
+      "none": "Rechazar sin motivo",
+      "notFound": "No se encontró el pago",
+      "amount": "El importe no coincide",
+      "duplicate": "Este comprobante ya se usó"
+    },
+    "admin": {
+      "title": "🛠 Administración de la tienda",
+      "web": "tienda web",
+      "receipt": "🧾 <b>Comprobante del pedido #{{ .Id }}</b>\nComprador: {{ .Buyer }}\nCuenta: <code>{{ .Account }}</code>\n{{ .Item }} · {{ .Kind }}\nImporte: <b>{{ .Amount }}</b>\nReferencia: {{ .Ref }}\nNota: {{ .Note }}",
+      "approvedBy": "✅ Aprobado por {{ .Name }}",
+      "rejectedBy": "❌ Rechazado por {{ .Name }}",
+      "alreadyHandled": "El pedido #{{ .Id }} ya fue gestionado.",
+      "failed": "No se pudo procesar el pedido #{{ .Id }}. Revisa el registro del panel.",
+      "stats": "📊 <b>Hoy</b>\n{{ .Paid }}\n\nPedidos sin pagar: {{ .Pending }}\nComprobantes pendientes: {{ .Review }}",
+      "salesLine": "{{ .Orders }} pedido(s) pagado(s): {{ .Amount }}",
+      "noSales": "Aún no hay pedidos pagados hoy.",
+      "noneWaiting": "No hay comprobantes pendientes.",
+      "waitingTitle": "🧾 Comprobantes pendientes de aprobación:",
+      "askBan": "Envía el id numérico de Telegram que quieres bloquear.",
+      "askUnban": "Envía el id numérico de Telegram que quieres desbloquear.",
+      "badID": "Eso no es un id de Telegram.",
+      "cannotBanAdmin": "No se puede bloquear a un administrador.",
+      "banned": "🚫 {{ .ID }} está bloqueado en la tienda.",
+      "unbanned": "✅ {{ .ID }} puede volver a usar la tienda."
+    },
+    "currency": {
+      "IRT": "tomanes",
+      "IRR": "riales"
+    },
+    "commandDesc": "Abrir la tienda",
+    "app": {
+      "signedIn": "Sesión iniciada con Telegram como {name}",
+      "services": "Tus servicios",
+      "noServices": "Aún no tienes servicios.",
+      "disabled": "Desactivado",
+      "usage": "{used} GB usados de {total} GB",
+      "expiresOn": "Caduca el {date}",
+      "renew": "Renovar",
+      "addon": "Añadir datos / tiempo",
+      "copyLink": "Copiar enlace de suscripción",
+      "renewing": "Renovando {email}: elige un plan abajo.",
+      "adding": "Ampliando {email}: elige los datos y los días que añadir.",
+      "addonAccount": "Añadir a mi cuenta",
+      "pickService": "Elige un servicio",
+      "categoryOther": "Otros",
+      "custom": "Crea tu plan",
+      "customGb": "Datos (GB)",
+      "customDays": "días",
+      "customBounds": "Datos {minGb}-{maxGb} GB, tiempo {minDays}-{maxDays} días.",
+      "customTotal": "Total",
+      "continue": "Continuar",
+      "sessionExpired": "La sesión de Telegram ha caducado. Cierra la tienda y ábrela de nuevo desde el bot."
+    },
+    "cfg": {
+      "botTitle": "Bot de la tienda de Telegram",
+      "miniApp": "Botón de Mini App",
+      "miniAppHint": "Añade al menú del bot un botón «Abrir la app de la tienda». Los compradores abren la tienda web dentro de Telegram y entran automáticamente. Requiere la tienda pública activada y una URL base https.",
+      "receiptChat": "Id del grupo o canal de comprobantes",
+      "receiptChatHint": "Opcional, como -1001234567890. Los comprobantes de pago por tarjeta llegan también allí con botones Aprobar y Rechazar; solo deciden los admins indicados en los ajustes del bot. Añade antes el bot a ese chat. Con 0 los comprobantes van solo a los chats privados de los admins.",
+      "forceJoin": "Canales obligatorios",
+      "forceJoinHint": "Los compradores deben ser miembros antes de usar la tienda. Uno por línea: @canal o un id numérico de chat, seguido opcionalmente de | enlace de unión (necesario en canales privados). Haz al bot administrador de cada canal para que pueda comprobar la pertenencia.",
+      "links": "Enlaces del menú",
+      "linksHint": "Botones extra en el menú del bot, uno por línea: etiqueta | https://… (hasta 6).",
+      "customTitle": "Plan a medida (calculadora)",
+      "customEnabled": "Vender datos y días a medida",
+      "customHint": "El comprador elige cuota y duración; el precio es cuota × precio por GB más días × precio por día. También vende ampliaciones que suman a una cuenta existente sin reiniciar su consumo.",
+      "customTemplate": "Plantilla de cliente",
+      "customCurrency": "Moneda",
+      "pricePerGb": "Precio por GB",
+      "pricePerDay": "Precio por día",
+      "minGb": "GB mínimos",
+      "maxGb": "GB máximos",
+      "minDays": "Días mínimos",
+      "maxDays": "Días máximos"
+    },
+    "plan": {
+      "category": "Categoría",
+      "categoryHint": "Los planes con la misma categoría se agrupan en el bot y en la tienda. Déjalo vacío para no agrupar."
+    }
+  },
   "shop": {
     "title": "Tienda",
     "noPlans": "No hay planes a la venta ahora",
@@ -3354,7 +3590,10 @@
       "ticket_limit": "Tienes demasiados tickets abiertos. Espera una respuesta o cierra uno.",
       "ticket_closed": "Este ticket está cerrado.",
       "rate_limited": "Demasiadas solicitudes. Espera un poco e inténtalo de nuevo.",
-      "network": "Algo salió mal. Inténtalo de nuevo."
+      "network": "Algo salió mal. Inténtalo de nuevo.",
+      "custom_invalid": "Esa cantidad de datos o de tiempo está fuera del rango permitido.",
+      "addon_unsupported": "Esta cuenta no admite esa ampliación: una cuota o una duración ilimitadas no se pueden ampliar.",
+      "banned": "Tu cuenta no puede usar la tienda."
     }
   },
   "setup": {
@@ -3670,40 +3909,6 @@
       "chooseClient": "Elige un Cliente para Inbound {{ .Inbound }}",
       "chooseInbound": "Elige un Inbound",
       "qrCodeForClient": "Código QR para el cliente {{ .Email }}:"
-    },
-    "shop": {
-      "disabled": "La tienda no está disponible ahora.",
-      "menu": "🛒 Tienda\r\n¿Qué quieres hacer?",
-      "plansTitle": "🛒 Elige un plan:",
-      "noPlans": "No hay planes a la venta ahora.",
-      "planDetail": "<b>{{ .Name }}</b>\r\n{{ .Description }}\r\nDatos: {{ .Quota }}\r\nDuración: {{ .Duration }}\r\nDispositivos: {{ .Devices }}\r\nPrecio: {{ .Price }}\r\n\r\n¿Para quién?",
-      "noExpiry": "Sin caducidad",
-      "confirm": "<b>{{ .Plan }}</b> para <code>{{ .Email }}</code>\r\nTotal: {{ .Amount }}\r\nElige cómo pagar:",
-      "discountLine": "\r\nPrecio de lista {{ .List }}, código {{ .Code }}",
-      "askCode": "Envía tu código de descuento en un mensaje.",
-      "askReceipt": "Envía en un mensaje el número de seguimiento de tu transferencia.",
-      "receiptSent": "✅ Comprobante enviado. Se revisará en breve.",
-      "expired": "Tu selección ha caducado. Envía /shop para empezar de nuevo.",
-      "ordersTitle": "📦 Tus últimos pedidos:",
-      "noOrders": "Aún no tienes pedidos.",
-      "order": "📦 Pedido #{{ .Id }} - {{ .Plan }}\r\nImporte: {{ .Amount }}\r\nEstado: {{ .Status }}",
-      "cardInfo": "\r\n\r\nTransfiere exactamente {{ .Amount }} a esta tarjeta:\r\n<code>{{ .Card }}</code>\r\n{{ .Holder }} {{ .Bank }}\r\n{{ .Instructions }}",
-      "payLink": "\r\n\r\nCompleta el pago: {{ .URL }}",
-      "delivered": "✅ Pagado y activado. Tu suscripción:",
-      "buttons": {
-        "plans": "🛒 Planes",
-        "orders": "📦 Mis pedidos",
-        "newAccount": "🆕 Cuenta nueva",
-        "renew": "🔄 Renovar {{ .Email }}",
-        "code": "🏷 Código de descuento",
-        "card": "💳 Tarjeta a tarjeta",
-        "wallet": "👛 Monedero",
-        "zarinpal": "Zarinpal",
-        "idpay": "IDPay",
-        "crypto": "Cripto",
-        "receipt": "🧾 Enviar comprobante",
-        "refresh": "🔄 Actualizar"
-      }
     }
   },
   "discord": {

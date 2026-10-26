@@ -2834,7 +2834,7 @@ export const sections: readonly Section[] = [
     id: 'shop',
     title: 'Public Shop',
     description:
-      'The customer-facing purchase API. It needs no panel session: a customer holds only the order token. It lives at /shop/api, outside the panel base path, and answers 404 (or the decoy site) until the shop is switched on in the sales configuration. Refusals come back as success false with a stable code in msg (plan_unavailable, invalid_email, invalid_kind, email_taken, email_unknown, gateway_unavailable, order_not_found, order_state, receipt_invalid, currency_unsupported, gateway_failed, bad_signature, amount_mismatch, discount_invalid, discount_used, referral_invalid, wallet_insufficient, proof_invalid, ticket_invalid, ticket_not_found, ticket_limit, ticket_closed, rate_limited); rate_limited also arrives with HTTP 429 and internal_error with 500. Writes are limited to 30 per 10 minutes per address.',
+      'The customer-facing purchase API. It needs no panel session: a customer holds only the order token. It lives at /shop/api, outside the panel base path, and answers 404 (or the decoy site) until the shop is switched on in the sales configuration. Refusals come back as success false with a stable code in msg (plan_unavailable, invalid_email, invalid_kind, email_taken, email_unknown, gateway_unavailable, order_not_found, order_state, receipt_invalid, currency_unsupported, gateway_failed, bad_signature, amount_mismatch, discount_invalid, discount_used, referral_invalid, wallet_insufficient, proof_invalid, ticket_invalid, ticket_not_found, ticket_limit, ticket_closed, rate_limited, custom_invalid, addon_unsupported, banned); rate_limited also arrives with HTTP 429 and internal_error with 500. Writes are limited to 30 per 10 minutes per address.',
     endpoints: [
       {
         method: 'GET',
@@ -2848,7 +2848,22 @@ export const sections: readonly Section[] = [
         summary:
           'Preview the price of a plan with a discount code, without reserving the code. A refused code answers success false with discount_invalid (unknown, disabled, expired, wrong plan or currency, or it would make the order free) or discount_used (use limit reached, or already used by this client).',
         params: [
-          { name: 'planId', in: 'body (json)', type: 'integer' },
+          {
+            name: 'planId',
+            in: 'body (json)',
+            type: 'integer',
+            desc: 'Plan to price; 0 prices the calculator offer.',
+          },
+          {
+            name: 'kind',
+            in: 'body (json)',
+            type: 'string',
+            optional: true,
+            enum: ['new', 'renew', 'addon'],
+            desc: 'Defaults to new. An add-on can only be priced with the calculator.',
+          },
+          { name: 'customGb', in: 'body (json)', type: 'integer', optional: true },
+          { name: 'customDays', in: 'body (json)', type: 'integer', optional: true },
           { name: 'discountCode', in: 'body (json)', type: 'string', optional: true },
           {
             name: 'email',
@@ -2877,14 +2892,32 @@ export const sections: readonly Section[] = [
         summary:
           'Start a purchase. kind new needs a free username (3 to 32 of a-z, 0-9, dot, underscore, dash; it is lower-cased) with no open order; renew needs the exact username of an existing client. The reply is the order as the customer sees it, including the card details while a transfer is expected.',
         params: [
-          { name: 'planId', in: 'body (json)', type: 'integer', desc: 'Plan to buy.' },
-          { name: 'kind', in: 'body (json)', type: 'string', enum: ['new', 'renew'] },
-          { name: 'email', in: 'body (json)', type: 'string', desc: 'Client username.' },
+          {
+            name: 'planId',
+            in: 'body (json)',
+            type: 'integer',
+            desc: 'Plan to buy; 0 buys the calculator offer sized by customGb and customDays (see the custom block of the plans reply).',
+          },
+          { name: 'customGb', in: 'body (json)', type: 'integer', optional: true },
+          { name: 'customDays', in: 'body (json)', type: 'integer', optional: true },
+          {
+            name: 'kind',
+            in: 'body (json)',
+            type: 'string',
+            enum: ['new', 'renew', 'addon'],
+            desc: 'An add-on adds quota and days to an existing client without resetting its usage; only the calculator sells it, and either customGb or customDays may be 0.',
+          },
+          {
+            name: 'email',
+            in: 'body (json)',
+            type: 'string',
+            desc: 'Client username. A Mini App session may leave it blank on a new purchase and gets tg<id>.',
+          },
           {
             name: 'gateway',
             in: 'body (json)',
             type: 'string',
-            desc: 'Payment method: card, zarinpal, idpay, crypto, stripe, paypal or wallet. A wallet payment is for renewals only, needs proof and is delivered at once.',
+            desc: 'Payment method: card, zarinpal, idpay, crypto, stripe, paypal or wallet. A wallet payment is for renewals and add-ons only, needs proof (not needed in a Mini App session for the buyer\'s own clients) and is delivered at once.',
           },
           {
             name: 'discountCode',
@@ -3062,6 +3095,25 @@ export const sections: readonly Section[] = [
           { name: 'body', in: 'body (json)', type: 'string' },
         ],
         responseSchema: 'TicketDetail',
+      },
+      {
+        method: 'POST',
+        path: '/shop/api/telegram/session',
+        summary:
+          'Sign a Telegram Mini App visitor in. initData is the launch string Telegram hands the page; it is verified server side (HMAC-SHA256 keyed by the bot token, at most 24 hours old) and nothing it claims is trusted before that. Needs the Mini App switched on in the sales configuration. The reply carries a session token (12 hours) to send as the X-Shop-Session header on later calls, the Telegram account, and the services bound to it. A bad or stale launch answers proof_invalid, a barred account banned.',
+        params: [{ name: 'initData', in: 'body (json)', type: 'string', desc: 'Telegram WebApp initData.' }],
+        responseSchema: 'ShopSession',
+      },
+      {
+        method: 'GET',
+        path: '/shop/api/telegram/me',
+        summary:
+          'Refresh the signed-in buyer\'s services and their usage. Needs the X-Shop-Session header; a missing, forged or expired one answers 401 proof_invalid.',
+        params: [
+          { name: 'X-Shop-Session', in: 'header', type: 'string', desc: 'Session token from the session call.' },
+        ],
+        responseSchema: 'ShopService',
+        responseSchemaArray: true,
       },
       {
         method: 'GET',

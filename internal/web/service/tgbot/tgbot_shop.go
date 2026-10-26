@@ -1,17 +1,14 @@
 package tgbot
 
 import (
-	"html"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
 	"github.com/mhsanaei/3x-ui/v3/internal/logger"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/common"
+	"github.com/mhsanaei/3x-ui/v3/internal/web/locale"
 	"github.com/mhsanaei/3x-ui/v3/internal/web/service"
-	"github.com/mhsanaei/3x-ui/v3/internal/web/websocket"
 
 	"github.com/mymmrac/telego"
 	tu "github.com/mymmrac/telego/telegoutil"
@@ -19,16 +16,29 @@ import (
 
 const (
 	shopCallbackPrefix = "shop:"
-	shopStateCode      = "shop_code"
-	shopStateReceipt   = "shop_receipt:"
-	shopOrderListSize  = 5
 	shopSelectionTTL   = 30 * time.Minute
+)
+
+// Conversation states a typed message can answer. The id after the colon names
+// the order, service or ticket the answer is for.
+const (
+	shopStateCode        = "shop_code"
+	shopStateReceipt     = "shop_receipt:"
+	shopStateGB          = "shop_gb"
+	shopStateDays        = "shop_days"
+	shopStateTicketNew   = "shop_ticket_new:"
+	shopStateTicketReply = "shop_ticket_reply:"
+	shopStateBan         = "shop_ban"
+	shopStateUnban       = "shop_unban"
 )
 
 // shopSelection is what one customer has picked so far; callback data is too
 // short to carry it, so it is kept here per chat user.
 type shopSelection struct {
 	planID int
+	custom bool
+	gb     int
+	days   int
 	kind   string
 	email  string
 	code   string
@@ -63,6 +73,12 @@ func getShopSelection(actor chatUser) *shopSelection {
 	return &copied
 }
 
+func clearShopSelection(actor chatUser) {
+	shopSelectionsMu.Lock()
+	delete(shopSelections, actor)
+	shopSelectionsMu.Unlock()
+}
+
 func (t *Tgbot) shopEnabled() bool {
 	cfg, err := t.salesConfig.Get()
 	return err == nil && cfg.TelegramShop
@@ -70,355 +86,252 @@ func (t *Tgbot) shopEnabled() bool {
 
 func isShopCallback(data string) bool { return strings.HasPrefix(data, shopCallbackPrefix) }
 
-func money(amount int64, currency string) string {
-	return strconv.FormatInt(amount, 10) + " " + currency
-}
-
 // shopError answers a refusal in the customer's words; anything that is not a
 // customer-safe SalesError is logged and shown as the generic failure.
-func (t *Tgbot) shopError(err error) string {
+func (c *shopCtx) shopError(err error) string {
 	if code := service.SalesErrorCode(err); code != "" {
-		if text := t.I18nBot("shop.errors." + code); text != "shop.errors."+code {
+		key := "shop.errors." + code
+		if text := c.tr(key); text != key {
 			return text
 		}
 	}
 	logger.Warning("tgbot shop:", err)
-	return t.I18nBot("shop.errors.network")
+	return c.tr("shop.errors.network")
 }
 
-func (t *Tgbot) shopMenuKeyboard() *telego.InlineKeyboardMarkup {
-	return tu.InlineKeyboard(
-		tu.InlineKeyboardRow(tu.InlineKeyboardButton(t.I18nBot("tgbot.shop.buttons.plans")).WithCallbackData("shop:plans")),
-		tu.InlineKeyboardRow(tu.InlineKeyboardButton(t.I18nBot("tgbot.shop.buttons.orders")).WithCallbackData("shop:orders")),
-	)
-}
-
-// handleShop answers /shop. While the shop is off a stranger gets nothing, as
-// for every other command it is not allowed.
+// handleShop answers /shop and the shop entry of /start. While the shop is off
+// a stranger gets nothing, as for every other command it is not allowed.
 func (t *Tgbot) handleShop(chatId int64, from *telego.User) {
 	if !t.shopEnabled() {
 		if t.levelOf(from.ID) != levelStranger {
-			t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.disabled"))
+			t.SendMsgToTgbot(chatId, locale.BotText(t.shopLangOf(from.ID), "shopbot.disabled"))
 		}
 		return
 	}
-	t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.menu"), t.shopMenuKeyboard())
+	c, ok := t.newShopCtx(chatId, from, 0)
+	if !ok {
+		return
+	}
+	if missing := c.missingChannels(); len(missing) > 0 {
+		c.showJoinGate(missing)
+		return
+	}
+	c.showMenu()
+}
+
+func (c *shopCtx) trialAvailable() bool {
+	enabled, err := c.t.settingService.GetTgTrialEnable()
+	if err != nil || !enabled {
+		return false
+	}
+	templateID, err := c.t.settingService.GetTgTrialTemplateId()
+	return err == nil && templateID > 0 && !c.t.clientService.TrialUsed(c.from.ID)
+}
+
+// miniAppURL is the shop page Telegram opens inside the chat; Telegram only
+// accepts https, and Bale has no Mini Apps.
+func (c *shopCtx) miniAppURL() string {
+	if !c.cfg.Bot.MiniApp || !c.cfg.PublicEnabled || baleMode.Load() || !strings.HasPrefix(c.cfg.PublicBaseURL, "https://") {
+		return ""
+	}
+	return c.cfg.PublicBaseURL + "/shop/"
+}
+
+func (c *shopCtx) menuKeyboard() *telego.InlineKeyboardMarkup {
+	rows := [][]telego.InlineKeyboardButton{
+		rowOf(btn(c.tr("shopbot.btn.buy"), "shop:buy"), btn(c.tr("shopbot.btn.services"), "shop:sv")),
+		rowOf(btn(c.tr("shopbot.btn.wallet"), "shop:wallet"), btn(c.tr("shopbot.btn.invite"), "shop:ref")),
+	}
+	row3 := []telego.InlineKeyboardButton{}
+	if c.trialAvailable() {
+		row3 = append(row3, btn(c.tr("shopbot.btn.trial"), "shop:trial"))
+	}
+	row3 = append(row3, btn(c.tr("shopbot.btn.support"), "shop:sup"))
+	rows = append(rows, rowOf(row3...), rowOf(btn(c.tr("shopbot.btn.orders"), "shop:orders"), btn(c.tr("shopbot.btn.language"), "shop:lang")))
+	for _, l := range c.cfg.Bot.Links {
+		rows = append(rows, rowOf(urlBtn(l.Label, l.URL)))
+	}
+	if url := c.miniAppURL(); url != "" {
+		rows = append(rows, rowOf(tu.InlineKeyboardButton(c.tr("shopbot.btn.miniapp")).WithWebApp(&telego.WebAppInfo{URL: url})))
+	}
+	if c.admin {
+		rows = append(rows, rowOf(btn(c.tr("shopbot.btn.admin"), "shop:ad")))
+	}
+	return keyboard(rows...)
+}
+
+func (c *shopCtx) showMenu() {
+	c.show(c.tr("shopbot.menu.welcome", "Name=="+esc(c.from.FirstName)), c.menuKeyboard())
 }
 
 // answerShopCallback serves every shop button. Each step re-checks the switch
 // and derives the buyer from the tapping account, never from the data.
 func (t *Tgbot) answerShopCallback(query *telego.CallbackQuery) {
-	chatId := query.Message.GetChat().ID
-	t.sendCallbackAnswerTgBot(query.ID, "")
-	if !t.shopEnabled() {
-		t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.disabled"))
+	chat := query.Message.GetChat()
+	parts := strings.Split(strings.TrimPrefix(query.Data, shopCallbackPrefix), ":")
+	if !shopLimiter.allow(query.From.ID, time.Now()) {
+		t.sendCallbackAnswerTgBot(query.ID, locale.BotText(t.shopLangOf(query.From.ID), "shopbot.slowDown"))
 		return
 	}
-	actor := callbackActor(query)
-	tgID := query.From.ID
-	parts := strings.Split(strings.TrimPrefix(query.Data, shopCallbackPrefix), ":")
+	t.sendCallbackAnswerTgBot(query.ID, "")
+	if adminOnlyAction(parts[0]) {
+		t.answerShopAdmin(query, parts)
+		return
+	}
+	if !t.shopEnabled() {
+		t.SendMsgToTgbot(chat.ID, locale.BotText(t.shopLangOf(query.From.ID), "shopbot.disabled"))
+		return
+	}
+	if chat.Type != "" && chat.Type != telego.ChatTypePrivate {
+		return
+	}
+	c, ok := t.newShopCtx(chat.ID, &query.From, query.Message.GetMessageID())
+	if !ok {
+		return
+	}
+	if parts[0] != "lang" && parts[0] != "sl" {
+		if missing := c.missingChannels(); len(missing) > 0 {
+			c.showJoinGate(missing)
+			return
+		}
+	}
 	arg := ""
 	if len(parts) > 1 {
 		arg = parts[1]
 	}
-	switch parts[0] {
+	c.route(parts[0], arg)
+}
+
+func (c *shopCtx) route(action, arg string) {
+	switch action {
 	case "menu":
-		t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.menu"), t.shopMenuKeyboard())
-	case "plans":
-		t.shopShowPlans(chatId)
+		c.showMenu()
+	case "buy":
+		c.shopStartBuying(&shopSelection{})
+	case "cat":
+		c.shopShowCategory(arg)
 	case "p":
-		t.shopChoosePlan(chatId, tgID, actor, arg)
+		c.shopChoosePlan(arg)
 	case "k":
-		t.shopChooseAccount(chatId, tgID, actor, arg)
+		c.shopChooseAccount(arg)
+	case "cu":
+		c.shopStartCalculator()
+	case "cg":
+		c.shopPickGB(arg)
+	case "cd":
+		c.shopPickDays(arg)
 	case "code":
-		if getShopSelection(actor) == nil {
-			t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.expired"))
-			return
-		}
-		userStateMgr.set(actor, shopStateCode)
-		t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.askCode"))
+		c.shopAskCode()
 	case "g":
-		t.shopCheckout(chatId, tgID, actor, arg)
+		c.shopCheckout(arg)
 	case "orders":
-		t.shopShowOrders(chatId, tgID)
+		c.shopShowOrders()
 	case "o":
-		t.shopShowOrder(chatId, tgID, arg)
+		c.shopShowOrder(arg)
 	case "rc":
-		id, err := strconv.Atoi(arg)
-		if err != nil {
-			return
+		c.shopAskReceipt(arg)
+	case "sv":
+		c.shopShowServices(arg)
+	case "lk":
+		c.shopSendLink(arg)
+	case "qr":
+		c.shopSendQR(arg)
+	case "rn":
+		c.shopRenewService(arg)
+	case "ao":
+		c.shopAddonService(arg)
+	case "wallet":
+		c.shopShowWallet()
+	case "ref":
+		c.shopShowReferral()
+	case "trial":
+		c.shopTrial()
+	case "sup":
+		c.shopSupport(arg)
+	case "tk":
+		c.shopShowTicket(arg)
+	case "tn":
+		c.shopAskNewTicket(arg)
+	case "tr":
+		c.shopAskTicketReply(arg)
+	case "lang":
+		c.shopShowLanguages()
+	case "sl":
+		c.shopSetLanguage(arg)
+	}
+}
+
+func (c *shopCtx) shopTrial() {
+	outcome, email := c.t.grantTrial(c.from.ID)
+	back := keyboard(rowOf(btn(c.tr("shopbot.btn.menu"), "shop:menu")))
+	switch outcome {
+	case trialUnavailable:
+		c.show(c.tr("tgbot.messages.trialDisabled"), back)
+	case trialUsed:
+		c.show(c.tr("tgbot.messages.trialUsed"), back)
+	case trialFailed:
+		c.show(c.tr("tgbot.messages.trialFailed"), back)
+	case trialGranted:
+		c.show(c.trialReadyText(), back)
+		c.sendServiceLinks(email)
+	}
+}
+
+func (c *shopCtx) trialReadyText() string {
+	templateID, _ := c.t.settingService.GetTgTrialTemplateId()
+	tpl, err := c.t.clientService.GetClientTemplate(templateID)
+	if err != nil {
+		return c.tr("tgbot.messages.trialFailed")
+	}
+	quota := c.tr("shopbot.unlimited")
+	if tpl.TotalGB > 0 {
+		quota = formatBytes(tpl.TotalGB)
+	}
+	return c.tr("tgbot.messages.trialReady", "Hours=="+strconv.Itoa(tpl.ExpiryDays*24), "Quota=="+quota)
+}
+
+func (c *shopCtx) shopShowLanguages() {
+	langs := locale.BotLanguages()
+	rows := make([][]telego.InlineKeyboardButton, 0, len(langs)/2+2)
+	for i := 0; i < len(langs); i += 2 {
+		row := []telego.InlineKeyboardButton{btn(langs[i].Name, "shop:sl:"+langs[i].Code)}
+		if i+1 < len(langs) {
+			row = append(row, btn(langs[i+1].Name, "shop:sl:"+langs[i+1].Code))
 		}
-		if _, err := t.orderService.TelegramOrder(tgID, id); err != nil {
-			t.SendMsgToTgbot(chatId, t.shopError(err))
-			return
-		}
-		userStateMgr.set(actor, shopStateReceipt+arg)
-		t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.askReceipt"))
+		rows = append(rows, rowOf(row...))
 	}
+	rows = append(rows, rowOf(btn(c.tr("shopbot.btn.menu"), "shop:menu")))
+	c.show(c.tr("shopbot.lang.choose"), keyboard(rows...))
 }
 
-func (t *Tgbot) shopShowPlans(chatId int64) {
-	catalog, err := t.orderService.Catalog()
-	if err != nil {
-		t.SendMsgToTgbot(chatId, t.shopError(err))
+func (c *shopCtx) shopSetLanguage(code string) {
+	if err := locale.ValidBotLang(code); err != nil {
 		return
 	}
-	if len(catalog.Plans) == 0 {
-		t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.noPlans"))
+	if err := c.t.botUsers.SetLang(c.from.ID, code); err != nil {
+		logger.Warning("tgbot shop: saving language:", err)
 		return
 	}
-	rows := make([][]telego.InlineKeyboardButton, 0, len(catalog.Plans))
-	for _, p := range catalog.Plans {
-		label := p.Name + " - " + money(p.Price, p.Currency)
-		rows = append(rows, tu.InlineKeyboardRow(tu.InlineKeyboardButton(label).WithCallbackData("shop:p:"+strconv.Itoa(p.Id))))
-	}
-	t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.plansTitle"), tu.InlineKeyboard(rows...))
+	c.lang = code
+	c.showMenu()
 }
 
-func (t *Tgbot) shopPlan(id int) (*service.ShopPlan, error) {
-	catalog, err := t.orderService.Catalog()
-	if err != nil {
-		return nil, err
-	}
-	for i := range catalog.Plans {
-		if catalog.Plans[i].Id == id {
-			return &catalog.Plans[i], nil
-		}
-	}
-	return nil, &service.SalesError{Code: service.ErrPlanUnavailable}
-}
+const referralStartPrefix = "ref_"
 
-func (t *Tgbot) planDetail(p *service.ShopPlan) string {
-	quota := t.I18nBot("tgbot.unlimited")
-	if p.TotalGB > 0 {
-		quota = common.FormatTraffic(p.TotalGB)
-	}
-	duration := t.I18nBot("tgbot.shop.noExpiry")
-	if p.DurationDays > 0 {
-		duration = strconv.Itoa(p.DurationDays) + " " + t.I18nBot("tgbot.days")
-	}
-	return t.I18nBot("tgbot.shop.planDetail",
-		"Name=="+html.EscapeString(p.Name), "Description=="+html.EscapeString(p.Description),
-		"Quota=="+quota, "Duration=="+duration, "Devices=="+strconv.Itoa(p.LimitIP),
-		"Price=="+money(p.Price, p.Currency))
-}
-
-func (t *Tgbot) shopChoosePlan(chatId, tgID int64, actor chatUser, arg string) {
-	id, err := strconv.Atoi(arg)
-	if err != nil {
-		return
-	}
-	plan, err := t.shopPlan(id)
-	if err != nil {
-		t.SendMsgToTgbot(chatId, t.shopError(err))
-		return
-	}
-	setShopSelection(actor, &shopSelection{planID: id})
-	rows := [][]telego.InlineKeyboardButton{
-		tu.InlineKeyboardRow(tu.InlineKeyboardButton(t.I18nBot("tgbot.shop.buttons.newAccount")).WithCallbackData("shop:k:n")),
-	}
-	records, _ := t.clientService.GetRecordsByTgID(tgID)
-	for _, rec := range records {
-		label := t.I18nBot("tgbot.shop.buttons.renew", "Email=="+rec.Email)
-		rows = append(rows, tu.InlineKeyboardRow(tu.InlineKeyboardButton(label).WithCallbackData("shop:k:r"+strconv.Itoa(rec.Id))))
-	}
-	t.SendMsgToTgbot(chatId, t.planDetail(plan), tu.InlineKeyboard(rows...))
-}
-
-// shopChooseAccount fixes who the plan is for: a renewal must name one of the
-// tapping account's own clients; a new purchase gets a generated username.
-func (t *Tgbot) shopChooseAccount(chatId, tgID int64, actor chatUser, arg string) {
-	sel := getShopSelection(actor)
-	if sel == nil {
-		t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.expired"))
-		return
-	}
-	if arg == "n" {
-		name, err := t.orderService.TelegramUsername(tgID)
-		if err != nil {
-			t.SendMsgToTgbot(chatId, t.shopError(err))
-			return
-		}
-		sel.kind, sel.email = model.OrderKindNew, name
-	} else {
-		recID, err := strconv.Atoi(strings.TrimPrefix(arg, "r"))
-		rec, gerr := t.clientService.GetByID(recID)
-		if err != nil || gerr != nil || rec.TgID != tgID {
-			t.SendMsgToTgbot(chatId, t.shopError(&service.SalesError{Code: service.ErrEmailUnknown}))
-			return
-		}
-		sel.kind, sel.email = model.OrderKindRenew, rec.Email
-	}
-	sel.code = ""
-	setShopSelection(actor, sel)
-	t.shopShowConfirm(chatId, sel)
-}
-
-var shopGatewayButtons = map[string]string{
-	service.GatewayCard: "card", service.GatewayWallet: "wallet", service.GatewayZarinpal: "zarinpal",
-	service.GatewayIDPay: "idpay", service.GatewayCrypto: "crypto",
-}
-
-func (t *Tgbot) shopShowConfirm(chatId int64, sel *shopSelection) {
-	quote, err := t.orderService.Quote(service.QuoteInput{PlanId: sel.planID, DiscountCode: sel.code, Email: sel.email})
-	if err != nil {
-		t.SendMsgToTgbot(chatId, t.shopError(err))
-		return
-	}
-	catalog, err := t.orderService.Catalog()
-	if err != nil {
-		t.SendMsgToTgbot(chatId, t.shopError(err))
-		return
-	}
-	plan, err := t.shopPlan(sel.planID)
-	if err != nil {
-		t.SendMsgToTgbot(chatId, t.shopError(err))
-		return
-	}
-	msg := t.I18nBot("tgbot.shop.confirm", "Plan=="+html.EscapeString(plan.Name), "Email=="+html.EscapeString(sel.email),
-		"Amount=="+money(quote.Final, quote.Currency))
-	if quote.Discount > 0 {
-		msg += t.I18nBot("tgbot.shop.discountLine", "List=="+money(quote.List, quote.Currency), "Code=="+html.EscapeString(quote.DiscountCode))
-	}
-	rows := [][]telego.InlineKeyboardButton{}
-	for _, gw := range catalog.Methods {
-		if gw == service.GatewayWallet && sel.kind != model.OrderKindRenew {
-			continue
-		}
-		label := t.I18nBot("tgbot.shop.buttons." + shopGatewayButtons[gw])
-		rows = append(rows, tu.InlineKeyboardRow(tu.InlineKeyboardButton(label).WithCallbackData("shop:g:"+gw)))
-	}
-	if len(rows) == 0 {
-		t.SendMsgToTgbot(chatId, t.shopError(&service.SalesError{Code: service.ErrGatewayUnavailable}))
-		return
-	}
-	rows = append(rows, tu.InlineKeyboardRow(tu.InlineKeyboardButton(t.I18nBot("tgbot.shop.buttons.code")).WithCallbackData("shop:code")))
-	t.SendMsgToTgbot(chatId, msg, tu.InlineKeyboard(rows...))
-}
-
-func (t *Tgbot) shopCheckout(chatId, tgID int64, actor chatUser, gateway string) {
-	sel := getShopSelection(actor)
-	if sel == nil || sel.kind == "" {
-		t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.expired"))
-		return
-	}
-	order, needRestart, err := t.orderService.Checkout(&t.inboundService, service.CreateOrderInput{
-		PlanId: sel.planID, Kind: sel.kind, Email: sel.email, Gateway: gateway, DiscountCode: sel.code, TgId: tgID,
-	})
-	if needRestart {
-		t.xrayService.SetToNeedRestart()
-	}
-	if err != nil {
-		t.SendMsgToTgbot(chatId, t.shopError(err))
-		return
-	}
-	if order.FulfilledAt > 0 {
-		websocket.BroadcastInvalidate(websocket.MessageTypeClients)
-	}
-	shopSelectionsMu.Lock()
-	delete(shopSelections, actor)
-	shopSelectionsMu.Unlock()
-	t.sendShopOrder(chatId, order)
-}
-
-func (t *Tgbot) shopShowOrders(chatId, tgID int64) {
-	orders, err := t.orderService.TelegramOrders(tgID, shopOrderListSize)
-	if err != nil {
-		t.SendMsgToTgbot(chatId, t.shopError(err))
-		return
-	}
-	if len(orders) == 0 {
-		t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.noOrders"))
-		return
-	}
-	rows := make([][]telego.InlineKeyboardButton, 0, len(orders))
-	for _, o := range orders {
-		label := "#" + strconv.Itoa(o.Id) + " " + o.PlanName + " - " + t.I18nBot("shop.statuses."+o.Status)
-		rows = append(rows, tu.InlineKeyboardRow(tu.InlineKeyboardButton(label).WithCallbackData("shop:o:"+strconv.Itoa(o.Id))))
-	}
-	t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.ordersTitle"), tu.InlineKeyboard(rows...))
-}
-
-func (t *Tgbot) shopShowOrder(chatId, tgID int64, arg string) {
-	id, err := strconv.Atoi(arg)
-	if err != nil {
-		return
-	}
-	order, err := t.orderService.TelegramOrder(tgID, id)
-	if err != nil {
-		t.SendMsgToTgbot(chatId, t.shopError(err))
-		return
-	}
-	t.sendShopOrder(chatId, order)
-}
-
-// sendShopOrder shows an order the way the shop page does: card details or a
-// payment link while payment is due, the subscription once it is delivered.
-func (t *Tgbot) sendShopOrder(chatId int64, order *model.Order) {
-	view, err := t.orderService.PublicView(order, "")
-	if err != nil {
-		t.SendMsgToTgbot(chatId, t.shopError(err))
-		return
-	}
-	msg := t.I18nBot("tgbot.shop.order", "Id=="+strconv.Itoa(order.Id), "Plan=="+html.EscapeString(order.PlanName),
-		"Amount=="+money(order.Amount, order.Currency), "Status=="+t.I18nBot("shop.statuses."+order.Status))
-	rows := [][]telego.InlineKeyboardButton{}
-	if view.Card != nil {
-		msg += t.I18nBot("tgbot.shop.cardInfo", "Amount=="+money(order.Amount, order.Currency), "Card=="+html.EscapeString(view.Card.CardNumber),
-			"Holder=="+html.EscapeString(view.Card.HolderName), "Bank=="+html.EscapeString(view.Card.BankName),
-			"Instructions=="+html.EscapeString(view.Card.Instructions))
-		if order.Status == model.OrderStatusPending || order.Status == model.OrderStatusReview {
-			rows = append(rows, tu.InlineKeyboardRow(tu.InlineKeyboardButton(t.I18nBot("tgbot.shop.buttons.receipt")).WithCallbackData("shop:rc:"+strconv.Itoa(order.Id))))
-		}
-	}
-	if view.PayURL != "" {
-		msg += t.I18nBot("tgbot.shop.payLink", "URL=="+html.EscapeString(view.PayURL))
-	}
-	if order.Status == model.OrderStatusRejected && order.RejectReason != "" {
-		msg += "\r\n" + html.EscapeString(order.RejectReason)
-	}
-	rows = append(rows, tu.InlineKeyboardRow(tu.InlineKeyboardButton(t.I18nBot("tgbot.shop.buttons.refresh")).WithCallbackData("shop:o:"+strconv.Itoa(order.Id))))
-	t.SendMsgToTgbot(chatId, msg, tu.InlineKeyboard(rows...))
-	if view.Fulfilled {
-		t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.delivered"))
-		t.sendClientSubLinks(chatId, order.ClientEmail)
-	}
-}
-
-// handleShopInput consumes the text a customer was asked for and reports
-// whether the state was a shop one.
-func (t *Tgbot) handleShopInput(message *telego.Message, actor chatUser, state string) bool {
-	chatId := message.Chat.ID
-	switch {
-	case state == shopStateCode:
-		userStateMgr.clear(actor)
-		sel := getShopSelection(actor)
-		if sel == nil || !t.shopEnabled() {
-			t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.expired"))
-			return true
-		}
-		sel.code = strings.TrimSpace(message.Text)
-		if _, err := t.orderService.Quote(service.QuoteInput{PlanId: sel.planID, DiscountCode: sel.code, Email: sel.email}); err != nil {
-			t.SendMsgToTgbot(chatId, t.shopError(err))
-			return true
-		}
-		setShopSelection(actor, sel)
-		t.shopShowConfirm(chatId, sel)
-	case strings.HasPrefix(state, shopStateReceipt):
-		userStateMgr.clear(actor)
-		id, _ := strconv.Atoi(strings.TrimPrefix(state, shopStateReceipt))
-		order, err := t.orderService.TelegramOrder(actor.userID, id)
-		if err == nil {
-			order, err = t.orderService.SubmitReceipt(order.Token, message.Text, "")
-		}
-		if err != nil {
-			t.SendMsgToTgbot(chatId, t.shopError(err))
-			return true
-		}
-		t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.shop.receiptSent"))
-		t.sendShopOrder(chatId, order)
-	default:
+// startWithReferral handles /start ref_CODE: the code is kept for the first
+// purchase and the customer lands in the shop. It reports whether the
+// argument was a referral link.
+func (t *Tgbot) startWithReferral(chatId int64, from *telego.User, arg string) bool {
+	code, ok := strings.CutPrefix(arg, referralStartPrefix)
+	if !ok {
 		return false
 	}
+	if !t.shopEnabled() {
+		return false
+	}
+	if err := t.botUsers.RememberReferral(from.ID, code); err != nil {
+		logger.Warning("tgbot shop: saving referral:", err)
+	}
+	t.handleShop(chatId, from)
 	return true
 }

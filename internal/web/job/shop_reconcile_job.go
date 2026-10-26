@@ -1,6 +1,8 @@
 package job
 
 import (
+	"time"
+
 	"github.com/mhsanaei/3x-ui/v3/internal/logger"
 	"github.com/mhsanaei/3x-ui/v3/internal/web/service"
 	"github.com/mhsanaei/3x-ui/v3/internal/web/websocket"
@@ -19,6 +21,9 @@ func NewShopReconcileJob() *ShopReconcileJob {
 }
 
 func (j *ShopReconcileJob) Run() {
+	if err := j.orders.SweepUnpaid(time.Now()); err != nil {
+		logger.Warning("shop sweep:", err)
+	}
 	fulfilled, needRestart, err := j.orders.ReconcileOnline(&j.inboundService)
 	if err != nil {
 		logger.Warning("shop reconcile:", err)

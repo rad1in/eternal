@@ -13,7 +13,7 @@ const maxTelegramUsernames = 50
 // checkTelegramOwner keeps a bot buyer to the clients bound to their own
 // Telegram id: the binding stands in for the subscription id a visitor proves.
 func (s *OrderService) checkTelegramOwner(in CreateOrderInput, email string) error {
-	if in.TgId == 0 || in.Kind != model.OrderKindRenew {
+	if in.TgId == 0 || in.Kind == model.OrderKindNew {
 		return nil
 	}
 	rec, err := s.clients.GetRecordByEmail(nil, email)
