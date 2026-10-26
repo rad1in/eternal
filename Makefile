@@ -65,6 +65,13 @@ node-e2e: dist-stub ## Master+node sync end to end with two real panel processes
 	go build -o $(NODE_E2E_BIN) .
 	XUI_NODE_E2E_BINARY=$(NODE_E2E_BIN) go test -count=1 -timeout 20m -v ./internal/nodee2e/
 
+.PHONY: tunnel-e2e
+# Real wattun daemons carry bytes; test-go only runs internal/tunnel's e2e as a skip.
+TUNNEL_E2E_BIN = $(CURDIR)/.cache/tunnel-e2e/wattun$(shell go env GOEXE)
+tunnel-e2e: dist-stub ## Real wattun processes carry traffic and the carrier probe picks one
+	go build -o $(TUNNEL_E2E_BIN) ./cmd/wattun
+	WATTUN_E2E_BINARY=$(TUNNEL_E2E_BIN) go test -count=1 -v -run TestReal ./internal/tunnel/
+
 .PHONY: test-fe
 test-fe: ## Frontend tests (vitest)
 	cd $(FRONTEND) && npm test

@@ -1944,6 +1944,7 @@ migrate_legacy_x_ui() {
     fi
     # The managed sidecars live outside the panel and outlive a service stop.
     pkill -f 'mtg-linux-[^ ]* run ' > /dev/null 2>&1 || true
+        pkill -f 'wattun-linux-[^ ]* -config ' > /dev/null 2>&1 || true
     pkill -f 'tuic-server.*-c .*bin/tuic/tuic_[0-9]+\.json' > /dev/null 2>&1 || true
 
     _legacy_move "$old_folder" /usr/local/eternal
@@ -2087,6 +2088,7 @@ install_eternal() {
         # an inbound port with an outdated secret, silently breaking new clients.
         # The freshly installed panel respawns a clean mtg per inbound on start.
         pkill -f 'mtg-linux-[^ ]* run ' > /dev/null 2>&1 || true
+        pkill -f 'wattun-linux-[^ ]* -config ' > /dev/null 2>&1 || true
         pkill -f 'tuic-server.*-c .*bin/tuic/tuic_[0-9]+\.json' > /dev/null 2>&1 || true
 
         # bin/ is about to be wiped wholesale by the tar extraction below. The
@@ -2145,8 +2147,12 @@ install_eternal() {
             mv bin/mtg-linux-$(arch) bin/mtg-linux-arm
             chmod +x bin/mtg-linux-arm
         fi
+        if [[ -f bin/wattun-linux-$(arch) ]]; then
+            mv bin/wattun-linux-$(arch) bin/wattun-linux-arm
+        fi
     fi
     chmod +x eternal bin/xray-linux-$(arch)
+    chmod +x bin/wattun-linux-* 2>/dev/null || true
     if [[ -f bin/mtg-linux-arm ]]; then
         chmod +x bin/mtg-linux-arm
     elif [[ -f bin/mtg-linux-$(arch) ]]; then

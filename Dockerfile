@@ -29,6 +29,8 @@ ENV CGO_ENABLED=1
 ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE"
 RUN go build -ldflags "-w -s" -o build/eternal main.go
 RUN ./DockerInit.sh "$TARGETARCH"
+# Tunnel daemon (vendored WatTunnel); the panel looks for wattun-<goos>-<goarch> beside xray.
+RUN CGO_ENABLED=0 go build -trimpath -ldflags "-w -s" -o "build/bin/wattun-linux-$(go env GOARCH)" ./cmd/wattun
 
 # ========================================================
 # Stage: Final Image of 3x-ui

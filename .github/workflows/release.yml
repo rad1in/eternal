@@ -108,6 +108,8 @@ jobs:
             LDFLAGS="$LDFLAGS -X github.com/mhsanaei/3x-ui/v3/internal/config.buildCommit=${GITHUB_SHA::8} -X github.com/mhsanaei/3x-ui/v3/internal/config.buildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           fi
           go build -buildvcs=true -ldflags "$LDFLAGS" -o xui-release -v .
+          # wattun (tunnel daemon, vendored WatTunnel) is pure Go: no CGO, so the musl toolchain is not needed.
+          CGO_ENABLED=0 go build -trimpath -ldflags "-w -s" -o wattun-release ./cmd/wattun
           file xui-release
           ldd xui-release || echo "Static binary confirmed"
 
@@ -160,6 +162,7 @@ jobs:
           fetch -O geoip_RU.dat https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geoip.dat
           fetch -O geosite_RU.dat https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geosite.dat
           mv xray xray-linux-${{ matrix.platform }}
+          cp ../../wattun-release wattun-linux-${{ matrix.platform }}
           # mtg-multi (MTProto sidecar) ships prebuilt release binaries whose
           # platform labels match our matrix, so download and unpack the matching
           # archive. Only the platforms the fork publishes are packaged — the tag
@@ -184,6 +187,9 @@ jobs:
         run: |
           tar -zcvf eternal-linux-${{ matrix.platform }}.tar.gz eternal
           sha256sum eternal-linux-${{ matrix.platform }}.tar.gz > eternal-linux-${{ matrix.platform }}.tar.gz.sha256
+          # Standalone wattun so install-tunnel.sh on a panel-less server need not fetch the whole archive.
+          cp wattun-release wattun-linux-${{ matrix.platform }}
+          sha256sum wattun-linux-${{ matrix.platform }} > wattun-linux-${{ matrix.platform }}.sha256
 
       - name: Upload files to Artifacts
         uses: actions/upload-artifact@v7
@@ -192,6 +198,8 @@ jobs:
           path: |
             ./eternal-linux-${{ matrix.platform }}.tar.gz
             ./eternal-linux-${{ matrix.platform }}.tar.gz.sha256
+            ./wattun-linux-${{ matrix.platform }}
+            ./wattun-linux-${{ matrix.platform }}.sha256
 
       - name: Upload files to GH release
         uses: svenstaro/upload-release-action@v2
@@ -199,7 +207,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ inputs.release_tag || github.ref_name }}
-          file: eternal-linux-${{ matrix.platform }}.tar.gz*
+          file: "{eternal-linux-${{ matrix.platform }}.tar.gz*,wattun-linux-${{ matrix.platform }}*}"
           file_glob: true
           overwrite: true
           prerelease: true
@@ -281,6 +289,8 @@ jobs:
             LDFLAGS="$LDFLAGS -X github.com/mhsanaei/3x-ui/v3/internal/config.buildCommit=${GITHUB_SHA:0:8} -X github.com/mhsanaei/3x-ui/v3/internal/config.buildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           fi
           go build -buildvcs=true -ldflags "$LDFLAGS" -o xui-release.exe -v .
+          # Tunnel daemon without the raw-socket carriers (icmp, fake-sni): Windows has none.
+          CGO_ENABLED=0 go build -trimpath -ldflags "-w -s" -o wattun-release.exe ./cmd/wattun
 
       - name: Copy and download resources
         shell: pwsh
@@ -304,6 +314,7 @@ jobs:
           Invoke-WebRequest @retry -Uri "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geoip.dat" -OutFile "geoip_RU.dat"
           Invoke-WebRequest @retry -Uri "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geosite.dat" -OutFile "geosite_RU.dat"
           Rename-Item xray.exe xray-windows-amd64.exe
+          Copy-Item ..\..\wattun-release.exe wattun-windows-amd64.exe
 
           # mtg-multi (MTProto sidecar) publishes a prebuilt Windows binary, so
           # download and unpack it instead of compiling. The tag comes from the
