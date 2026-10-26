@@ -3060,7 +3060,8 @@
         "referrer": "Recomendado por",
         "kinds": {
           "new": "Nuevo",
-          "renew": "Renovación"
+          "renew": "Renovación",
+          "addon": "Ampliación"
         },
         "statuses": {
           "pending": "Pago pendiente",
@@ -3457,7 +3458,56 @@
       "IRT": "tomanes",
       "IRR": "riales"
     },
-    "commandDesc": "Abrir la tienda"
+    "commandDesc": "Abrir la tienda",
+    "app": {
+      "signedIn": "Sesión iniciada con Telegram como {name}",
+      "services": "Tus servicios",
+      "noServices": "Aún no tienes servicios.",
+      "disabled": "Desactivado",
+      "usage": "{used} GB usados de {total} GB",
+      "expiresOn": "Caduca el {date}",
+      "renew": "Renovar",
+      "addon": "Añadir datos / tiempo",
+      "copyLink": "Copiar enlace de suscripción",
+      "renewing": "Renovando {email}: elige un plan abajo.",
+      "adding": "Ampliando {email}: elige los datos y los días que añadir.",
+      "addonAccount": "Añadir a mi cuenta",
+      "pickService": "Elige un servicio",
+      "categoryOther": "Otros",
+      "custom": "Crea tu plan",
+      "customGb": "Datos (GB)",
+      "customDays": "días",
+      "customBounds": "Datos {minGb}-{maxGb} GB, tiempo {minDays}-{maxDays} días.",
+      "customTotal": "Total",
+      "continue": "Continuar",
+      "sessionExpired": "La sesión de Telegram ha caducado. Cierra la tienda y ábrela de nuevo desde el bot."
+    },
+    "cfg": {
+      "botTitle": "Bot de la tienda de Telegram",
+      "miniApp": "Botón de Mini App",
+      "miniAppHint": "Añade al menú del bot un botón «Abrir la app de la tienda». Los compradores abren la tienda web dentro de Telegram y entran automáticamente. Requiere la tienda pública activada y una URL base https.",
+      "receiptChat": "Id del grupo o canal de comprobantes",
+      "receiptChatHint": "Opcional, como -1001234567890. Los comprobantes de pago por tarjeta llegan también allí con botones Aprobar y Rechazar; solo deciden los admins indicados en los ajustes del bot. Añade antes el bot a ese chat. Con 0 los comprobantes van solo a los chats privados de los admins.",
+      "forceJoin": "Canales obligatorios",
+      "forceJoinHint": "Los compradores deben ser miembros antes de usar la tienda. Uno por línea: @canal o un id numérico de chat, seguido opcionalmente de | enlace de unión (necesario en canales privados). Haz al bot administrador de cada canal para que pueda comprobar la pertenencia.",
+      "links": "Enlaces del menú",
+      "linksHint": "Botones extra en el menú del bot, uno por línea: etiqueta | https://… (hasta 6).",
+      "customTitle": "Plan a medida (calculadora)",
+      "customEnabled": "Vender datos y días a medida",
+      "customHint": "El comprador elige cuota y duración; el precio es cuota × precio por GB más días × precio por día. También vende ampliaciones que suman a una cuenta existente sin reiniciar su consumo.",
+      "customTemplate": "Plantilla de cliente",
+      "customCurrency": "Moneda",
+      "pricePerGb": "Precio por GB",
+      "pricePerDay": "Precio por día",
+      "minGb": "GB mínimos",
+      "maxGb": "GB máximos",
+      "minDays": "Días mínimos",
+      "maxDays": "Días máximos"
+    },
+    "plan": {
+      "category": "Categoría",
+      "categoryHint": "Los planes con la misma categoría se agrupan en el bot y en la tienda. Déjalo vacío para no agrupar."
+    }
   },
   "shop": {
     "title": "Tienda",

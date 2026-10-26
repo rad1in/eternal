@@ -2,20 +2,36 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Button, Input, Radio, Select, Space, Typography } from 'antd';
 
-import type { ShopOrderView, ShopPlan } from '@/generated/zod';
+import type { ShopOrderView, ShopSession } from '@/generated/zod';
 import { formatMoney } from '@/lib/money';
-import { errorKey, shopApi } from '@/lib/shopApi';
+import { errorKey, shopApi, type OrderInput } from '@/lib/shopApi';
+import type { Offer, Preset } from './offer';
+
+type Kind = OrderInput['kind'];
 
 interface CheckoutFormProps {
-  plan: ShopPlan;
+  offer: Offer;
   methods: string[];
+  session: ShopSession | null;
+  preset: Preset | null;
   onOrder: (view: ShopOrderView) => void;
 }
 
-export default function CheckoutForm({ plan, methods, onOrder }: CheckoutFormProps) {
+export default function CheckoutForm({
+  offer,
+  methods,
+  session,
+  preset,
+  onOrder,
+}: CheckoutFormProps) {
   const { t } = useTranslation();
-  const [kind, setKind] = useState<'new' | 'renew'>('new');
-  const [email, setEmail] = useState('');
+  const kinds: Kind[] = preset
+    ? [preset.kind]
+    : offer.custom
+      ? ['new', 'renew', 'addon']
+      : ['new', 'renew'];
+  const [kind, setKind] = useState<Kind>(kinds[0]);
+  const [email, setEmail] = useState(preset?.email ?? '');
   const [contact, setContact] = useState('');
   const [discountCode, setDiscountCode] = useState('');
   const [referralCode, setReferralCode] = useState('');
@@ -25,16 +41,34 @@ export default function CheckoutForm({ plan, methods, onOrder }: CheckoutFormPro
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
+  const ownsAccount = session?.services.some((s) => s.email === email) ?? false;
   const wallet = gateway === 'wallet';
   const methodOptions = methods
-    .filter((m) => m !== 'wallet' || kind === 'renew')
-    .map((m) => ({ value: m, label: t(`pages.sales.gateways.${m}`, { defaultValue: m }) }));
+    .filter((m) => m !== 'wallet' || kind !== 'new')
+    .map((m) => ({
+      value: m,
+      label: t(`pages.sales.gateways.${m}`, { defaultValue: m }),
+    }));
+  const sizeBody = offer.custom
+    ? { customGb: offer.custom.gb, customDays: offer.custom.days }
+    : undefined;
+  const kindLabel: Record<Kind, string> = {
+    new: t('shop.newAccount'),
+    renew: t('shop.renewAccount'),
+    addon: t('shopbot.app.addonAccount'),
+  };
 
   async function applyCode() {
     setError('');
     setFinal(null);
     if (!discountCode.trim()) return;
-    const res = await shopApi.quote({ planId: plan.id, discountCode, email });
+    const res = await shopApi.quote({
+      planId: offer.planId,
+      kind,
+      ...sizeBody,
+      discountCode,
+      email,
+    });
     if (res.ok) setFinal(res.data.final);
     else setError(errorKey(res.code));
   }
@@ -43,14 +77,15 @@ export default function CheckoutForm({ plan, methods, onOrder }: CheckoutFormPro
     setBusy(true);
     setError('');
     const res = await shopApi.createOrder({
-      planId: plan.id,
+      planId: offer.planId,
+      ...sizeBody,
       kind,
       email,
       gateway,
       contact,
       discountCode,
       referralCode: kind === 'new' ? referralCode : '',
-      proof: wallet ? proof : '',
+      proof: wallet && !ownsAccount ? proof : '',
     });
     setBusy(false);
     if (!res.ok) {
@@ -63,29 +98,50 @@ export default function CheckoutForm({ plan, methods, onOrder }: CheckoutFormPro
 
   if (methods.length === 0) return <Alert type="warning" showIcon title={t('shop.noMethods')} />;
 
+  const pickFromServices = session != null && kind !== 'new' && !preset;
   return (
     <Space direction="vertical" size={12} style={{ width: '100%' }}>
       <Typography.Text strong dir="auto">
-        {plan.name}: {formatMoney(final ?? plan.price, plan.currency)}
+        {offer.name}: {formatMoney(final ?? offer.price, offer.currency)}
       </Typography.Text>
-      <Radio.Group
-        value={kind}
-        onChange={(e) => {
-          setKind(e.target.value);
-          if (e.target.value === 'new' && gateway === 'wallet')
-            setGateway(methods.find((m) => m !== 'wallet') ?? '');
-        }}
-      >
-        <Radio.Button value="new">{t('shop.newAccount')}</Radio.Button>
-        <Radio.Button value="renew">{t('shop.renewAccount')}</Radio.Button>
-      </Radio.Group>
-      <Input
-        dir="ltr"
-        value={email}
-        maxLength={64}
-        placeholder={kind === 'new' ? t('shop.chooseUsername') : t('shop.yourUsername')}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      {kinds.length > 1 && (
+        <Radio.Group
+          value={kind}
+          onChange={(e) => {
+            const next = e.target.value as Kind;
+            setKind(next);
+            setFinal(null);
+            if (next === 'new' && gateway === 'wallet')
+              setGateway(methods.find((m) => m !== 'wallet') ?? '');
+          }}
+        >
+          {kinds.map((k) => (
+            <Radio.Button key={k} value={k}>
+              {kindLabel[k]}
+            </Radio.Button>
+          ))}
+        </Radio.Group>
+      )}
+      {pickFromServices ? (
+        <Select
+          value={email || undefined}
+          placeholder={t('shopbot.app.pickService')}
+          options={session.services.map((s) => ({
+            value: s.email,
+            label: s.email,
+          }))}
+          onChange={setEmail}
+        />
+      ) : (
+        <Input
+          dir="ltr"
+          value={email}
+          maxLength={64}
+          disabled={preset != null}
+          placeholder={kind === 'new' ? t('shop.chooseUsername') : t('shop.yourUsername')}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      )}
       <Input
         dir="auto"
         value={contact}
@@ -120,7 +176,7 @@ export default function CheckoutForm({ plan, methods, onOrder }: CheckoutFormPro
         onChange={setGateway}
         aria-label={t('shop.payWith')}
       />
-      {wallet && (
+      {wallet && !ownsAccount && (
         <Input.Password
           dir="ltr"
           value={proof}
@@ -133,7 +189,7 @@ export default function CheckoutForm({ plan, methods, onOrder }: CheckoutFormPro
         type="primary"
         block
         loading={busy}
-        disabled={!email.trim() || !gateway}
+        disabled={(!email.trim() && !(session && kind === 'new')) || !gateway}
         onClick={submit}
       >
         {t('shop.buy')}

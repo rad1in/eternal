@@ -25,7 +25,9 @@ export default function PlanFormModal({
   onSubmit,
 }: PlanFormModalProps) {
   const { t } = useTranslation();
-  const methods = useZodForm<PlanFormValues>(planFormSchema, { defaultValues: initial });
+  const methods = useZodForm<PlanFormValues>(planFormSchema, {
+    defaultValues: initial,
+  });
   const currency = useWatch({ control: methods.control, name: 'currency' });
   const templateOptions = useMemo(
     () => templates.flatMap((tpl) => (tpl.id == null ? [] : [{ value: tpl.id, label: tpl.name }])),
@@ -52,6 +54,13 @@ export default function PlanFormModal({
         <Form layout="vertical">
           <FormField label={t('pages.sales.plans.name')} name="name" required>
             <Input maxLength={80} />
+          </FormField>
+          <FormField
+            label={t('shopbot.plan.category')}
+            name="category"
+            extra={t('shopbot.plan.categoryHint')}
+          >
+            <Input maxLength={40} />
           </FormField>
           <FormField label={t('pages.sales.plans.details')} name="description">
             <Input.TextArea rows={2} maxLength={300} />

@@ -3060,7 +3060,8 @@
         "referrer": "推薦人",
         "kinds": {
           "new": "新購",
-          "renew": "續費"
+          "renew": "續費",
+          "addon": "加購"
         },
         "statuses": {
           "pending": "待付款",
@@ -3457,7 +3458,56 @@
       "IRT": "土曼",
       "IRR": "里亞爾"
     },
-    "commandDesc": "開啟商店"
+    "commandDesc": "開啟商店",
+    "app": {
+      "signedIn": "已透過 Telegram 登入：{name}",
+      "services": "您的服務",
+      "noServices": "您還沒有任何服務。",
+      "disabled": "已停用",
+      "usage": "已用 {used} GB / 共 {total} GB",
+      "expiresOn": "到期：{date}",
+      "renew": "續費",
+      "addon": "加流量 / 加時長",
+      "copyLink": "複製訂閱連結",
+      "renewing": "正在為 {email} 續費：請在下方選擇方案。",
+      "adding": "正在為 {email} 加購：請選擇要增加的流量與天數。",
+      "addonAccount": "加購到我的帳號",
+      "pickService": "選擇一個服務",
+      "categoryOther": "其他",
+      "custom": "自訂方案",
+      "customGb": "流量（GB）",
+      "customDays": "天",
+      "customBounds": "流量 {minGb}-{maxGb} GB，時長 {minDays}-{maxDays} 天。",
+      "customTotal": "合計",
+      "continue": "繼續",
+      "sessionExpired": "此 Telegram 工作階段已過期。請關閉商店，再從機器人重新開啟。"
+    },
+    "cfg": {
+      "botTitle": "Telegram 商店機器人",
+      "miniApp": "Mini App 按鈕",
+      "miniAppHint": "在機器人選單加入「開啟商店應用」按鈕。買家在 Telegram 內開啟網頁商店並自動登入。需要開啟公開商店，且基礎網址使用 https。",
+      "receiptChat": "憑證群組或頻道 ID",
+      "receiptChatHint": "選填，例如 -1001234567890。銀行卡轉帳憑證也會傳到那裡，並附有「通過」與「拒絕」按鈕；只有機器人設定中列出的管理員能決定。請先把機器人加入該聊天。填 0 則只傳給管理員的私人聊天。",
+      "forceJoin": "必須加入的頻道",
+      "forceJoinHint": "買家需先加入這些頻道才能使用商店。每行一個：@頻道 或數字聊天 ID，可在其後加 | 加入連結（私人頻道需要）。請將機器人設為各頻道的管理員，以便檢查成員身分。",
+      "links": "選單連結",
+      "linksHint": "機器人選單上的額外按鈕，每行一個：名稱 | https://…（最多 6 個）。",
+      "customTitle": "自訂方案（計算器）",
+      "customEnabled": "販售自訂流量與天數",
+      "customHint": "買家自選流量與時長；價格 = 流量 × 每 GB 單價 + 天數 × 每天單價。同時可販售加購，在不重置已用流量的情況下為現有帳號增加額度。",
+      "customTemplate": "客戶端範本",
+      "customCurrency": "幣別",
+      "pricePerGb": "每 GB 單價",
+      "pricePerDay": "每天單價",
+      "minGb": "最少 GB",
+      "maxGb": "最多 GB",
+      "minDays": "最少天數",
+      "maxDays": "最多天數"
+    },
+    "plan": {
+      "category": "分類",
+      "categoryHint": "分類相同的方案會在機器人與商店中歸為一組。留空則不分組。"
+    }
   },
   "shop": {
     "title": "商店",

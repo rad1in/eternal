@@ -16,9 +16,9 @@ import {
   type TicketPage,
   type Plan,
   type WalletView,
+  type SalesConfig,
   type SalesConfigView,
 } from '@/generated/zod';
-import type { SalesConfigValues } from '@/schemas/sales';
 import { HttpUtil } from '@/utils';
 import { parseMsg } from '@/utils/zodValidate';
 
@@ -160,7 +160,7 @@ export function useSalesConfig() {
   const queryClient = useQueryClient();
   const query = useQuery({ queryKey: keys.sales.config(), queryFn: fetchSalesConfig });
   const save = useMutation({
-    mutationFn: (cfg: SalesConfigValues) =>
+    mutationFn: (cfg: SalesConfig) =>
       HttpUtil.post('/panel/api/sales/config/save', cfg, JSON_HEADERS),
     onSuccess: (msg) => {
       if (msg?.success) void queryClient.invalidateQueries({ queryKey: keys.sales.config() });

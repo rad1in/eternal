@@ -3060,7 +3060,8 @@
         "referrer": "Referred by",
         "kinds": {
           "new": "New",
-          "renew": "Renewal"
+          "renew": "Renewal",
+          "addon": "Add-on"
         },
         "statuses": {
           "pending": "Awaiting payment",
@@ -3457,7 +3458,56 @@
       "IRT": "Toman",
       "IRR": "Rial"
     },
-    "commandDesc": "Open the shop"
+    "commandDesc": "Open the shop",
+    "app": {
+      "signedIn": "Signed in with Telegram as {name}",
+      "services": "Your services",
+      "noServices": "You have no services yet.",
+      "disabled": "Disabled",
+      "usage": "{used} GB of {total} GB used",
+      "expiresOn": "Expires {date}",
+      "renew": "Renew",
+      "addon": "Add data / time",
+      "copyLink": "Copy subscription link",
+      "renewing": "Renewing {email}: choose a plan below.",
+      "adding": "Adding to {email}: choose the data and days to add.",
+      "addonAccount": "Add to my account",
+      "pickService": "Choose a service",
+      "categoryOther": "Other",
+      "custom": "Build your own plan",
+      "customGb": "Data (GB)",
+      "customDays": "days",
+      "customBounds": "Data {minGb}-{maxGb} GB, time {minDays}-{maxDays} days.",
+      "customTotal": "Total",
+      "continue": "Continue",
+      "sessionExpired": "This Telegram session has expired. Close the shop and open it again from the bot."
+    },
+    "cfg": {
+      "botTitle": "Telegram shop bot",
+      "miniApp": "Mini App button",
+      "miniAppHint": "Adds an “Open the shop app” button to the bot menu. Buyers open the web shop inside Telegram and are signed in automatically. Needs the public shop switched on and an https base URL.",
+      "receiptChat": "Receipts group or channel id",
+      "receiptChatHint": "Optional, like -1001234567890. Card receipts also arrive there with Approve and Reject buttons; only admins listed in the bot settings can decide. Add the bot to that chat first. Use 0 to send receipts to the admins' private chats only.",
+      "forceJoin": "Required channels",
+      "forceJoinHint": "Buyers must be members before they can use the shop. One per line: @channel or a numeric chat id, optionally followed by | join link (needed for private channels). Make the bot an admin of each channel so it can check membership.",
+      "links": "Menu links",
+      "linksHint": "Extra buttons on the bot menu, one per line: label | https://… (up to 6).",
+      "customTitle": "Build-your-own plan (calculator)",
+      "customEnabled": "Sell custom data and days",
+      "customHint": "Buyers pick a quota and a duration; the price is quota × price per GB plus days × price per day. It also sells add-ons that top up an existing account without resetting its usage.",
+      "customTemplate": "Client template",
+      "customCurrency": "Currency",
+      "pricePerGb": "Price per GB",
+      "pricePerDay": "Price per day",
+      "minGb": "Minimum GB",
+      "maxGb": "Maximum GB",
+      "minDays": "Minimum days",
+      "maxDays": "Maximum days"
+    },
+    "plan": {
+      "category": "Category",
+      "categoryHint": "Plans with the same category are grouped in the bot and the shop. Leave empty for no group."
+    }
   },
   "shop": {
     "title": "Shop",

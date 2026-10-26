@@ -28,12 +28,14 @@ describe('plan money', () => {
       templateId: 4,
       enabled: false,
       sortOrder: 1,
+      category: 'Monthly',
       createdAt: 0,
       updatedAt: 0,
     };
     const form = planToForm(wire);
     expect(form.price).toBe(19.99);
     expect(form.totalGb).toBe(50);
+    expect(form.category).toBe('Monthly');
     expect(formToPlan(form)).toMatchObject({
       id: 3,
       price: 1999,

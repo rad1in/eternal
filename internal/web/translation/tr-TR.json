@@ -3060,7 +3060,8 @@
         "referrer": "Yönlendiren",
         "kinds": {
           "new": "Yeni",
-          "renew": "Yenileme"
+          "renew": "Yenileme",
+          "addon": "Ek paket"
         },
         "statuses": {
           "pending": "Ödeme bekliyor",
@@ -3457,7 +3458,56 @@
       "IRT": "Toman",
       "IRR": "Riyal"
     },
-    "commandDesc": "Mağazayı aç"
+    "commandDesc": "Mağazayı aç",
+    "app": {
+      "signedIn": "Telegram ile {name} olarak giriş yapıldı",
+      "services": "Hizmetleriniz",
+      "noServices": "Henüz hizmetiniz yok.",
+      "disabled": "Devre dışı",
+      "usage": "{total} GB'ın {used} GB'ı kullanıldı",
+      "expiresOn": "Bitiş: {date}",
+      "renew": "Yenile",
+      "addon": "Veri / süre ekle",
+      "copyLink": "Abonelik bağlantısını kopyala",
+      "renewing": "{email} yenileniyor: aşağıdan bir paket seçin.",
+      "adding": "{email} hesabına ekleniyor: eklenecek veriyi ve günü seçin.",
+      "addonAccount": "Hesabıma ekle",
+      "pickService": "Bir hizmet seçin",
+      "categoryOther": "Diğer",
+      "custom": "Kendi paketini oluştur",
+      "customGb": "Veri (GB)",
+      "customDays": "gün",
+      "customBounds": "Veri {minGb}-{maxGb} GB, süre {minDays}-{maxDays} gün.",
+      "customTotal": "Toplam",
+      "continue": "Devam",
+      "sessionExpired": "Bu Telegram oturumunun süresi doldu. Mağazayı kapatıp bottan yeniden açın."
+    },
+    "cfg": {
+      "botTitle": "Telegram mağaza botu",
+      "miniApp": "Mini App düğmesi",
+      "miniAppHint": "Bot menüsüne “Mağaza uygulamasını aç” düğmesi ekler. Alıcılar web mağazasını Telegram içinde açar ve otomatik giriş yapar. Herkese açık mağazanın açık ve temel URL'nin https olması gerekir.",
+      "receiptChat": "Dekont grubu veya kanal kimliği",
+      "receiptChatHint": "İsteğe bağlı, örn. -1001234567890. Kart dekontları Onayla ve Reddet düğmeleriyle oraya da gelir; yalnızca bot ayarlarında listelenen yöneticiler karar verebilir. Önce botu o sohbete ekleyin. 0 verirseniz dekontlar yalnızca yöneticilerin özel sohbetine gider.",
+      "forceJoin": "Zorunlu kanallar",
+      "forceJoinHint": "Alıcılar mağazayı kullanmadan önce üye olmalıdır. Satır başına bir tane: @kanal veya sayısal sohbet kimliği, istenirse ardından | katılım bağlantısı (özel kanallar için gerekir). Üyeliği denetleyebilmesi için botu her kanalda yönetici yapın.",
+      "links": "Menü bağlantıları",
+      "linksHint": "Bot menüsündeki ek düğmeler, satır başına bir tane: etiket | https://… (en fazla 6).",
+      "customTitle": "Kendi paketini oluştur (hesaplayıcı)",
+      "customEnabled": "Özel veri ve gün sat",
+      "customHint": "Alıcı kota ve süreyi seçer; fiyat = kota × GB fiyatı + gün × günlük fiyat. Ayrıca mevcut bir hesabı kullanımını sıfırlamadan artıran ek paketleri de satar.",
+      "customTemplate": "İstemci şablonu",
+      "customCurrency": "Para birimi",
+      "pricePerGb": "GB başına fiyat",
+      "pricePerDay": "Günlük fiyat",
+      "minGb": "En az GB",
+      "maxGb": "En çok GB",
+      "minDays": "En az gün",
+      "maxDays": "En çok gün"
+    },
+    "plan": {
+      "category": "Kategori",
+      "categoryHint": "Aynı kategorideki paketler botta ve mağazada gruplanır. Gruplamamak için boş bırakın."
+    }
   },
   "shop": {
     "title": "Mağaza",

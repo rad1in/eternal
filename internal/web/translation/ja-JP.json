@@ -3060,7 +3060,8 @@
         "referrer": "紹介者",
         "kinds": {
           "new": "新規",
-          "renew": "更新"
+          "renew": "更新",
+          "addon": "追加"
         },
         "statuses": {
           "pending": "支払い待ち",
@@ -3457,7 +3458,56 @@
       "IRT": "トマン",
       "IRR": "リアル"
     },
-    "commandDesc": "ショップを開く"
+    "commandDesc": "ショップを開く",
+    "app": {
+      "signedIn": "Telegramで {name} としてログイン中",
+      "services": "あなたのサービス",
+      "noServices": "まだサービスがありません。",
+      "disabled": "無効",
+      "usage": "{total} GB 中 {used} GB 使用",
+      "expiresOn": "期限：{date}",
+      "renew": "更新",
+      "addon": "データ／期間を追加",
+      "copyLink": "サブスクリプションリンクをコピー",
+      "renewing": "{email} を更新：下からプランを選んでください。",
+      "adding": "{email} に追加：追加するデータと日数を選んでください。",
+      "addonAccount": "自分のアカウントに追加",
+      "pickService": "サービスを選択",
+      "categoryOther": "その他",
+      "custom": "自分でプランを作る",
+      "customGb": "データ量（GB）",
+      "customDays": "日",
+      "customBounds": "データ {minGb}〜{maxGb} GB、期間 {minDays}〜{maxDays} 日。",
+      "customTotal": "合計",
+      "continue": "続ける",
+      "sessionExpired": "このTelegramセッションは期限切れです。ショップを閉じて、ボットからもう一度開いてください。"
+    },
+    "cfg": {
+      "botTitle": "Telegramショップボット",
+      "miniApp": "Mini Appボタン",
+      "miniAppHint": "ボットメニューに「ショップアプリを開く」ボタンを追加します。購入者はTelegram内でウェブショップを開き、自動でログインされます。公開ショップを有効にし、基本URLをhttpsにする必要があります。",
+      "receiptChat": "領収書用グループ／チャンネルのID",
+      "receiptChatHint": "任意。例：-1001234567890。カード振込の領収書が承認・却下ボタン付きでここにも届きます。判断できるのはボット設定に登録された管理者だけです。先にボットをそのチャットへ追加してください。0なら管理者の個人チャットにのみ送られます。",
+      "forceJoin": "参加必須のチャンネル",
+      "forceJoinHint": "ショップを使うには購入者がこれらに参加している必要があります。1行に1つ：@チャンネル または数値のチャットID。必要なら続けて | 参加リンク（非公開チャンネルでは必須）。メンバーを確認できるよう、ボットを各チャンネルの管理者にしてください。",
+      "links": "メニューのリンク",
+      "linksHint": "ボットメニューの追加ボタン。1行に1つ：ラベル | https://…（最大6件）。",
+      "customTitle": "カスタムプラン（計算機）",
+      "customEnabled": "データ量と日数を選んで販売",
+      "customHint": "購入者がデータ量と期間を選びます。価格＝データ量×GB単価＋日数×日額。使用量をリセットせずに既存アカウントへ追加する販売にも使われます。",
+      "customTemplate": "クライアントテンプレート",
+      "customCurrency": "通貨",
+      "pricePerGb": "GBあたりの価格",
+      "pricePerDay": "1日あたりの価格",
+      "minGb": "最小GB",
+      "maxGb": "最大GB",
+      "minDays": "最小日数",
+      "maxDays": "最大日数"
+    },
+    "plan": {
+      "category": "カテゴリ",
+      "categoryHint": "同じカテゴリのプランはボットとショップでまとめて表示されます。空欄ならグループなし。"
+    }
   },
   "shop": {
     "title": "ショップ",

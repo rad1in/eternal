@@ -3060,7 +3060,8 @@
         "referrer": "Indicado por",
         "kinds": {
           "new": "Novo",
-          "renew": "Renovação"
+          "renew": "Renovação",
+          "addon": "Adicional"
         },
         "statuses": {
           "pending": "Aguardando pagamento",
@@ -3457,7 +3458,56 @@
       "IRT": "tomans",
       "IRR": "riais"
     },
-    "commandDesc": "Abrir a loja"
+    "commandDesc": "Abrir a loja",
+    "app": {
+      "signedIn": "Login feito com o Telegram como {name}",
+      "services": "Seus serviços",
+      "noServices": "Você ainda não tem serviços.",
+      "disabled": "Desativado",
+      "usage": "{used} GB de {total} GB usados",
+      "expiresOn": "Expira em {date}",
+      "renew": "Renovar",
+      "addon": "Adicionar dados / tempo",
+      "copyLink": "Copiar link de assinatura",
+      "renewing": "Renovando {email}: escolha um plano abaixo.",
+      "adding": "Adicionando a {email}: escolha os dados e os dias a somar.",
+      "addonAccount": "Adicionar à minha conta",
+      "pickService": "Escolha um serviço",
+      "categoryOther": "Outros",
+      "custom": "Monte seu plano",
+      "customGb": "Dados (GB)",
+      "customDays": "dias",
+      "customBounds": "Dados {minGb}-{maxGb} GB, tempo {minDays}-{maxDays} dias.",
+      "customTotal": "Total",
+      "continue": "Continuar",
+      "sessionExpired": "A sessão do Telegram expirou. Feche a loja e abra de novo pelo bot."
+    },
+    "cfg": {
+      "botTitle": "Bot da loja no Telegram",
+      "miniApp": "Botão do Mini App",
+      "miniAppHint": "Adiciona ao menu do bot um botão “Abrir o app da loja”. Os compradores abrem a loja web dentro do Telegram e entram automaticamente. Exige a loja pública ativada e uma URL base https.",
+      "receiptChat": "Id do grupo ou canal de comprovantes",
+      "receiptChatHint": "Opcional, como -1001234567890. Os comprovantes de cartão também chegam lá com botões Aprovar e Recusar; só decidem os admins listados nas configurações do bot. Adicione o bot a esse chat antes. Use 0 para enviar só aos chats privados dos admins.",
+      "forceJoin": "Canais obrigatórios",
+      "forceJoinHint": "Os compradores precisam ser membros antes de usar a loja. Um por linha: @canal ou id numérico do chat, opcionalmente seguido de | link de entrada (necessário em canais privados). Torne o bot admin de cada canal para que ele verifique a participação.",
+      "links": "Links do menu",
+      "linksHint": "Botões extras no menu do bot, um por linha: rótulo | https://… (até 6).",
+      "customTitle": "Plano personalizado (calculadora)",
+      "customEnabled": "Vender dados e dias personalizados",
+      "customHint": "O comprador escolhe cota e duração; preço = cota × preço por GB + dias × preço por dia. Também vende adicionais que ampliam uma conta existente sem zerar o consumo.",
+      "customTemplate": "Modelo de cliente",
+      "customCurrency": "Moeda",
+      "pricePerGb": "Preço por GB",
+      "pricePerDay": "Preço por dia",
+      "minGb": "GB mínimos",
+      "maxGb": "GB máximos",
+      "minDays": "Dias mínimos",
+      "maxDays": "Dias máximos"
+    },
+    "plan": {
+      "category": "Categoria",
+      "categoryHint": "Planos da mesma categoria são agrupados no bot e na loja. Deixe vazio para não agrupar."
+    }
   },
   "shop": {
     "title": "Loja",

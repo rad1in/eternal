@@ -3060,7 +3060,8 @@
         "referrer": "Direferensikan oleh",
         "kinds": {
           "new": "Baru",
-          "renew": "Perpanjangan"
+          "renew": "Perpanjangan",
+          "addon": "Tambahan"
         },
         "statuses": {
           "pending": "Menunggu pembayaran",
@@ -3457,7 +3458,56 @@
       "IRT": "Toman",
       "IRR": "Rial"
     },
-    "commandDesc": "Buka toko"
+    "commandDesc": "Buka toko",
+    "app": {
+      "signedIn": "Masuk dengan Telegram sebagai {name}",
+      "services": "Layanan Anda",
+      "noServices": "Anda belum punya layanan.",
+      "disabled": "Dinonaktifkan",
+      "usage": "{used} GB dari {total} GB terpakai",
+      "expiresOn": "Berakhir {date}",
+      "renew": "Perpanjang",
+      "addon": "Tambah data / waktu",
+      "copyLink": "Salin tautan langganan",
+      "renewing": "Memperpanjang {email}: pilih paket di bawah.",
+      "adding": "Menambah ke {email}: pilih data dan hari yang ditambahkan.",
+      "addonAccount": "Tambah ke akun saya",
+      "pickService": "Pilih layanan",
+      "categoryOther": "Lainnya",
+      "custom": "Buat paket sendiri",
+      "customGb": "Data (GB)",
+      "customDays": "hari",
+      "customBounds": "Data {minGb}-{maxGb} GB, waktu {minDays}-{maxDays} hari.",
+      "customTotal": "Total",
+      "continue": "Lanjutkan",
+      "sessionExpired": "Sesi Telegram ini telah berakhir. Tutup toko lalu buka lagi dari bot."
+    },
+    "cfg": {
+      "botTitle": "Bot toko Telegram",
+      "miniApp": "Tombol Mini App",
+      "miniAppHint": "Menambahkan tombol “Buka aplikasi toko” ke menu bot. Pembeli membuka toko web di dalam Telegram dan masuk otomatis. Perlu toko publik aktif dan URL dasar https.",
+      "receiptChat": "Id grup atau kanal bukti bayar",
+      "receiptChatHint": "Opsional, misalnya -1001234567890. Bukti bayar kartu juga dikirim ke sana dengan tombol Setujui dan Tolak; hanya admin yang tercantum di pengaturan bot yang bisa memutuskan. Tambahkan bot ke chat itu terlebih dahulu. Isi 0 agar bukti hanya dikirim ke chat pribadi admin.",
+      "forceJoin": "Kanal wajib",
+      "forceJoinHint": "Pembeli harus menjadi anggota sebelum memakai toko. Satu per baris: @kanal atau id chat angka, bisa diikuti | tautan gabung (perlu untuk kanal privat). Jadikan bot admin di setiap kanal agar dapat memeriksa keanggotaan.",
+      "links": "Tautan menu",
+      "linksHint": "Tombol tambahan di menu bot, satu per baris: label | https://… (maksimal 6).",
+      "customTitle": "Paket buatan sendiri (kalkulator)",
+      "customEnabled": "Jual data dan hari kustom",
+      "customHint": "Pembeli memilih kuota dan durasi; harga = kuota × harga per GB + hari × harga per hari. Juga menjual tambahan yang menambah akun yang ada tanpa mengatur ulang pemakaiannya.",
+      "customTemplate": "Templat klien",
+      "customCurrency": "Mata uang",
+      "pricePerGb": "Harga per GB",
+      "pricePerDay": "Harga per hari",
+      "minGb": "GB minimum",
+      "maxGb": "GB maksimum",
+      "minDays": "Hari minimum",
+      "maxDays": "Hari maksimum"
+    },
+    "plan": {
+      "category": "Kategori",
+      "categoryHint": "Paket dengan kategori yang sama dikelompokkan di bot dan toko. Kosongkan jika tidak ingin dikelompokkan."
+    }
   },
   "shop": {
     "title": "Toko",

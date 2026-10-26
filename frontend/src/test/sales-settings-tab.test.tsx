@@ -13,9 +13,24 @@ const view = {
   zarinpal: { enabled: true, merchantId: '', sandbox: false },
   idpay: { enabled: false, apiKey: '', sandbox: false },
   crypto: { enabled: false, apiKey: '', ipnSecret: '', sandbox: false },
+  stripe: { enabled: false, secretKey: '', webhookSecret: '' },
+  paypal: { enabled: false, clientId: '', clientSecret: '', sandbox: false },
   walletEnabled: false,
   telegramShop: false,
   referral: { enabled: false, bonusPercent: 10 },
+  bot: { forceJoin: [], links: [], receiptChatId: 0, miniApp: false },
+  custom: {
+    enabled: false,
+    templateId: 0,
+    currency: 'IRT',
+    pricePerGb: 0,
+    pricePerDay: 0,
+    minGb: 1,
+    maxGb: 100,
+    minDays: 7,
+    maxDays: 365,
+    limitIp: 0,
+  },
   hasZarinpalMerchantId: true,
   hasIdpayApiKey: false,
   hasCryptoApiKey: false,
@@ -70,6 +85,28 @@ describe('SalesSettingsTab secrets', () => {
     fireEvent.click(screen.getByText('Save'));
     await waitFor(() => expect(savedBodies()).toHaveLength(1));
     expect((savedBodies()[0] as { telegramShop: boolean }).telegramShop).toBe(true);
+  });
+
+  it('saves the channel and menu link lines as lists, and the Mini App switch', async () => {
+    await renderLoaded();
+    fireEvent.change(screen.getByPlaceholderText('@mychannel'), {
+      target: { value: '@mychannel | https://t.me/mychannel\n-100123456 | https://t.me/+abc' },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/Tutorials \|/), {
+      target: { value: 'Tutorials | https://t.me/tutorials' },
+    });
+    fireEvent.click(screen.getByLabelText('Mini App button'));
+    fireEvent.click(screen.getByText('Save'));
+    await waitFor(() => expect(savedBodies()).toHaveLength(1));
+    const body = savedBodies()[0] as {
+      bot: { forceJoin: unknown[]; links: unknown[]; miniApp: boolean };
+    };
+    expect(body.bot.forceJoin).toEqual([
+      { chat: '@mychannel', link: 'https://t.me/mychannel' },
+      { chat: '-100123456', link: 'https://t.me/+abc' },
+    ]);
+    expect(body.bot.links).toEqual([{ label: 'Tutorials', url: 'https://t.me/tutorials' }]);
+    expect(body.bot.miniApp).toBe(true);
   });
 
   it('shows the link customers open to buy, built from the public base URL', async () => {

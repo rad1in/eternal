@@ -3060,7 +3060,8 @@
         "referrer": "Người giới thiệu",
         "kinds": {
           "new": "Mới",
-          "renew": "Gia hạn"
+          "renew": "Gia hạn",
+          "addon": "Gói thêm"
         },
         "statuses": {
           "pending": "Chờ thanh toán",
@@ -3457,7 +3458,56 @@
       "IRT": "Toman",
       "IRR": "Rial"
     },
-    "commandDesc": "Mở cửa hàng"
+    "commandDesc": "Mở cửa hàng",
+    "app": {
+      "signedIn": "Đã đăng nhập bằng Telegram với tên {name}",
+      "services": "Dịch vụ của bạn",
+      "noServices": "Bạn chưa có dịch vụ nào.",
+      "disabled": "Đã tắt",
+      "usage": "Đã dùng {used} GB trên {total} GB",
+      "expiresOn": "Hết hạn {date}",
+      "renew": "Gia hạn",
+      "addon": "Thêm dung lượng / thời gian",
+      "copyLink": "Sao chép liên kết đăng ký",
+      "renewing": "Đang gia hạn {email}: hãy chọn gói bên dưới.",
+      "adding": "Thêm vào {email}: hãy chọn dung lượng và số ngày cần thêm.",
+      "addonAccount": "Thêm vào tài khoản của tôi",
+      "pickService": "Chọn một dịch vụ",
+      "categoryOther": "Khác",
+      "custom": "Tự tạo gói",
+      "customGb": "Dung lượng (GB)",
+      "customDays": "ngày",
+      "customBounds": "Dung lượng {minGb}-{maxGb} GB, thời gian {minDays}-{maxDays} ngày.",
+      "customTotal": "Tổng",
+      "continue": "Tiếp tục",
+      "sessionExpired": "Phiên Telegram đã hết hạn. Hãy đóng cửa hàng và mở lại từ bot."
+    },
+    "cfg": {
+      "botTitle": "Bot cửa hàng Telegram",
+      "miniApp": "Nút Mini App",
+      "miniAppHint": "Thêm nút “Mở ứng dụng cửa hàng” vào menu bot. Người mua mở cửa hàng web ngay trong Telegram và được đăng nhập tự động. Cần bật cửa hàng công khai và URL gốc dùng https.",
+      "receiptChat": "ID nhóm hoặc kênh nhận biên lai",
+      "receiptChatHint": "Tùy chọn, ví dụ -1001234567890. Biên lai thẻ cũng được gửi tới đó kèm nút Duyệt và Từ chối; chỉ quản trị viên có trong cài đặt bot mới quyết định được. Hãy thêm bot vào cuộc trò chuyện đó trước. Nhập 0 để chỉ gửi vào chat riêng của quản trị viên.",
+      "forceJoin": "Kênh bắt buộc",
+      "forceJoinHint": "Người mua phải là thành viên trước khi dùng cửa hàng. Mỗi dòng một kênh: @kênh hoặc ID chat dạng số, có thể thêm | liên kết tham gia (cần cho kênh riêng tư). Hãy đặt bot làm quản trị viên của từng kênh để nó kiểm tra được tư cách thành viên.",
+      "links": "Liên kết trong menu",
+      "linksHint": "Các nút bổ sung trên menu bot, mỗi dòng một nút: nhãn | https://… (tối đa 6).",
+      "customTitle": "Gói tự tạo (máy tính giá)",
+      "customEnabled": "Bán dung lượng và số ngày tùy chọn",
+      "customHint": "Người mua chọn dung lượng và thời hạn; giá = dung lượng × giá mỗi GB + số ngày × giá mỗi ngày. Cũng bán gói thêm để cộng vào tài khoản hiện có mà không đặt lại mức đã dùng.",
+      "customTemplate": "Mẫu khách hàng",
+      "customCurrency": "Tiền tệ",
+      "pricePerGb": "Giá mỗi GB",
+      "pricePerDay": "Giá mỗi ngày",
+      "minGb": "GB tối thiểu",
+      "maxGb": "GB tối đa",
+      "minDays": "Số ngày tối thiểu",
+      "maxDays": "Số ngày tối đa"
+    },
+    "plan": {
+      "category": "Danh mục",
+      "categoryHint": "Các gói cùng danh mục được gom nhóm trong bot và cửa hàng. Để trống nếu không muốn gom nhóm."
+    }
   },
   "shop": {
     "title": "Cửa hàng",
