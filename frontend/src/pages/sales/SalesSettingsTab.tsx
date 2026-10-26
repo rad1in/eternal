@@ -1,16 +1,25 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, Form, Input, InputNumber, Switch, Typography } from 'antd';
+import { Button, Checkbox, Form, Input, InputNumber, Select, Switch, Typography } from 'antd';
 import { FormProvider, useWatch } from 'react-hook-form';
 
+import { useClientTemplates } from '@/api/queries/useClientTemplates';
 import { useSalesConfig } from '@/api/queries/useSales';
 import { FormField, useZodForm } from '@/components/form/rhf';
+import { CURRENCIES, currencyDecimals } from '@/lib/money';
+import { configToForm, formToConfig } from '@/lib/salesConfigForm';
 import { salesConfigSchema, type SalesConfigValues } from '@/schemas/sales';
 
 const EMPTY: SalesConfigValues = {
   publicEnabled: false,
   publicBaseUrl: '',
-  card: { enabled: false, cardNumber: '', holderName: '', bankName: '', instructions: '' },
+  card: {
+    enabled: false,
+    cardNumber: '',
+    holderName: '',
+    bankName: '',
+    instructions: '',
+  },
   zarinpal: { enabled: false, merchantId: '', sandbox: false },
   idpay: { enabled: false, apiKey: '', sandbox: false },
   crypto: { enabled: false, apiKey: '', ipnSecret: '', sandbox: false },
@@ -19,6 +28,19 @@ const EMPTY: SalesConfigValues = {
   walletEnabled: false,
   telegramShop: false,
   referral: { enabled: false, bonusPercent: 10 },
+  bot: { miniApp: false, receiptChatId: 0, forceJoinText: '', linksText: '' },
+  custom: {
+    enabled: false,
+    templateId: 0,
+    currency: 'IRT',
+    pricePerGb: 0,
+    pricePerDay: 0,
+    minGb: 1,
+    maxGb: 100,
+    minDays: 7,
+    maxDays: 365,
+    limitIp: 0,
+  },
   clearSecrets: [],
 };
 
@@ -38,13 +60,23 @@ const SECRET_PAYPAL = 'paypal.clientSecret';
 export default function SalesSettingsTab() {
   const { t } = useTranslation();
   const { config, save, saving } = useSalesConfig();
-  const methods = useZodForm<SalesConfigValues>(salesConfigSchema, { defaultValues: EMPTY });
+  const methods = useZodForm<SalesConfigValues>(salesConfigSchema, {
+    defaultValues: EMPTY,
+  });
   const clearSecrets = useWatch({ control: methods.control, name: 'clearSecrets' }) ?? [];
+  const customCurrency = useWatch({
+    control: methods.control,
+    name: 'custom.currency',
+  });
+  const { templates } = useClientTemplates(true);
+  const templateOptions = templates.flatMap((tpl) =>
+    tpl.id == null ? [] : [{ value: tpl.id, label: tpl.name }],
+  );
 
   const publicBaseUrl = useWatch({ control: methods.control, name: 'publicBaseUrl' }) ?? '';
 
   useEffect(() => {
-    if (config) methods.reset({ ...config, clearSecrets: [] });
+    if (config) methods.reset(configToForm(config));
   }, [config, methods]);
 
   const toggleClear = (name: string, on: boolean) =>
@@ -98,6 +130,88 @@ export default function SalesSettingsTab() {
         >
           <Switch />
         </FormField>
+
+        <h4>{t('shopbot.cfg.botTitle')}</h4>
+        <FormField
+          label={t('shopbot.cfg.miniApp')}
+          name="bot.miniApp"
+          valueProp="checked"
+          extra={t('shopbot.cfg.miniAppHint')}
+        >
+          <Switch />
+        </FormField>
+        <FormField
+          label={t('shopbot.cfg.receiptChat')}
+          name="bot.receiptChatId"
+          extra={t('shopbot.cfg.receiptChatHint')}
+        >
+          <InputNumber precision={0} style={{ width: '100%' }} />
+        </FormField>
+        <FormField
+          label={t('shopbot.cfg.forceJoin')}
+          name="bot.forceJoinText"
+          extra={t('shopbot.cfg.forceJoinHint')}
+        >
+          <Input.TextArea dir="ltr" rows={3} placeholder="@mychannel" />
+        </FormField>
+        <FormField
+          label={t('shopbot.cfg.links')}
+          name="bot.linksText"
+          extra={t('shopbot.cfg.linksHint')}
+        >
+          <Input.TextArea dir="auto" rows={3} placeholder="Tutorials | https://t.me/mychannel" />
+        </FormField>
+
+        <h4>{t('shopbot.cfg.customTitle')}</h4>
+        <FormField
+          label={t('shopbot.cfg.customEnabled')}
+          name="custom.enabled"
+          valueProp="checked"
+          extra={t('shopbot.cfg.customHint')}
+        >
+          <Switch />
+        </FormField>
+        <FormField label={t('shopbot.cfg.customTemplate')} name="custom.templateId">
+          <Select options={templateOptions} />
+        </FormField>
+        <div className="sales-row">
+          <FormField label={t('shopbot.cfg.customCurrency')} name="custom.currency">
+            <Select options={CURRENCIES.map((c) => ({ value: c, label: c }))} />
+          </FormField>
+          <FormField label={t('shopbot.cfg.pricePerGb')} name="custom.pricePerGb">
+            <InputNumber
+              min={0}
+              precision={currencyDecimals(customCurrency)}
+              style={{ width: '100%' }}
+            />
+          </FormField>
+          <FormField label={t('shopbot.cfg.pricePerDay')} name="custom.pricePerDay">
+            <InputNumber
+              min={0}
+              precision={currencyDecimals(customCurrency)}
+              style={{ width: '100%' }}
+            />
+          </FormField>
+        </div>
+        <div className="sales-row">
+          <FormField label={t('shopbot.cfg.minGb')} name="custom.minGb">
+            <InputNumber min={1} precision={0} style={{ width: '100%' }} />
+          </FormField>
+          <FormField label={t('shopbot.cfg.maxGb')} name="custom.maxGb">
+            <InputNumber min={1} precision={0} style={{ width: '100%' }} />
+          </FormField>
+          <FormField label={t('pages.clients.limitIp')} name="custom.limitIp">
+            <InputNumber min={0} precision={0} style={{ width: '100%' }} />
+          </FormField>
+        </div>
+        <div className="sales-row">
+          <FormField label={t('shopbot.cfg.minDays')} name="custom.minDays">
+            <InputNumber min={1} precision={0} style={{ width: '100%' }} />
+          </FormField>
+          <FormField label={t('shopbot.cfg.maxDays')} name="custom.maxDays">
+            <InputNumber min={1} precision={0} style={{ width: '100%' }} />
+          </FormField>
+        </div>
 
         <h4>{t('pages.sales.config.walletTitle')}</h4>
         <FormField
@@ -298,7 +412,7 @@ export default function SalesSettingsTab() {
         <Button
           type="primary"
           loading={saving}
-          onClick={methods.handleSubmit((values) => save(values))}
+          onClick={methods.handleSubmit((values) => save(formToConfig(values)))}
         >
           {t('save')}
         </Button>

@@ -1858,6 +1858,8 @@
       "eventNodeCapReached": "Limite mensal de tráfego atingido",
       "eventPortBlocked": "A porta parou de responder",
       "eventPortRestored": "A porta voltou a responder",
+      "eventTunnelDown": "O túnel perdeu a conexão",
+      "eventTunnelUp": "O túnel reconectou",
       "eventCPUHigh": "CPU alta (%)",
       "requestFailed": "Falha na requisição",
       "smtpEncryption": "Criptografia",
@@ -2138,6 +2140,7 @@
       "backupNowDesc": "Salve primeiro: usa a pasta e o bucket salvos.",
       "eventGroupClients": "Clientes",
       "eventGroupPort": "Portas",
+      "eventGroupTunnel": "Túneis",
       "portProbe": "Sondagem de portas",
       "portProbeDesc": "Verifica de fora, uma vez por minuto, cada porta TCP pública das entradas e avisa quando uma deixa de responder.",
       "portProbeHost": "Endereço do servidor",
@@ -3060,7 +3063,8 @@
         "referrer": "Indicado por",
         "kinds": {
           "new": "Novo",
-          "renew": "Renovação"
+          "renew": "Renovação",
+          "addon": "Adicional"
         },
         "statuses": {
           "pending": "Aguardando pagamento",
@@ -3273,6 +3277,241 @@
       "errPath": "Use apenas letras, dígitos e . _ ~ -"
     }
   },
+  "shopbot": {
+    "disabled": "A loja não está disponível no momento.",
+    "banned": "Sua conta não pode usar a loja. Se acha que é um engano, fale com o operador.",
+    "slowDown": "Toques demais. Aguarde um instante.",
+    "expired": "Sua seleção expirou. Abra o menu para recomeçar.",
+    "unlimited": "Ilimitado",
+    "noExpiry": "Sem validade",
+    "menu": {
+      "welcome": "👋 Olá, {{ .Name }}!\nO que você quer fazer?"
+    },
+    "join": {
+      "required": "Para usar a loja, entre primeiro no nosso canal e toque em “Já entrei”.",
+      "open": "Entrar em {{ .Channel }}",
+      "channel": "o canal",
+      "done": "✅ Já entrei"
+    },
+    "btn": {
+      "buy": "🛒 Comprar",
+      "services": "📦 Meus serviços",
+      "wallet": "👛 Carteira",
+      "invite": "🎁 Convidar amigos",
+      "trial": "🧪 Teste grátis",
+      "support": "🆘 Suporte",
+      "orders": "🧾 Meus pedidos",
+      "language": "🌐 Idioma",
+      "miniapp": "🚀 Abrir o app da loja",
+      "admin": "🛠 Admin",
+      "menu": "🏠 Menu",
+      "back": "⬅️ Voltar",
+      "cancel": "✖️ Cancelar",
+      "skip": "Pular",
+      "refresh": "🔄 Atualizar",
+      "custom": "✨ Monte seu plano",
+      "newAccount": "🆕 Conta nova",
+      "renew": "🔄 Renovar {{ .Email }}",
+      "code": "🏷 Código de desconto",
+      "receipt": "📤 Enviar comprovante",
+      "pay": "💳 Pagar agora",
+      "link": "🔗 Link",
+      "qr": "📷 Código QR",
+      "renewThis": "🔄 Renovar",
+      "addon": "➕ Adicionar dados / tempo",
+      "newTicket": "✍️ Novo ticket",
+      "reply": "↩️ Responder",
+      "openTicket": "💬 Abrir ticket",
+      "openOrder": "🧾 Abrir pedido",
+      "approve": "✅ Aprovar",
+      "reject": "❌ Recusar",
+      "today": "📊 Hoje",
+      "waiting": "🧾 Comprovantes pendentes",
+      "ban": "🚫 Bloquear usuário",
+      "unban": "✅ Desbloquear usuário"
+    },
+    "plans": {
+      "title": "🛒 Escolha um plano:",
+      "none": "Não há planos à venda no momento.",
+      "misc": "Outros",
+      "detail": "<b>{{ .Name }}</b>\n{{ .Description }}📊 Dados: {{ .Quota }}\n⏳ Duração: {{ .Duration }}\n📱 Dispositivos: {{ .Devices }}\n💰 Preço: {{ .Price }}\n\nPara qual conta?"
+    },
+    "kind": {
+      "new": "Conta nova",
+      "renew": "Renovação",
+      "addon": "Adicional"
+    },
+    "confirm": "🧾 <b>{{ .Item }}</b>\n{{ .Kind }} · <code>{{ .Email }}</code>\n💰 <b>{{ .Amount }}</b>{{ .Discount }}\n\nEscolha como pagar:",
+    "discountLine": "\n🏷 Preço de tabela {{ .List }} · código {{ .Code }}",
+    "gw": {
+      "card": "💳 Transferência para cartão",
+      "wallet": "👛 Carteira",
+      "zarinpal": "Zarinpal",
+      "idpay": "IDPay",
+      "crypto": "🪙 Cripto",
+      "stripe": "Stripe",
+      "paypal": "PayPal"
+    },
+    "askCode": "Envie seu código de desconto em uma mensagem.",
+    "custom": {
+      "item": "Plano personalizado: {{ .Parts }}",
+      "addonItem": "Adicional: {{ .Parts }}",
+      "askGB": "De quantos dados você precisa? Escolha um tamanho ou envie um número de GB ({{ .Min }}-{{ .Max }}).\nPreço: {{ .Price }} por GB.",
+      "askDays": "Por quantos dias? Escolha uma duração ou envie um número ({{ .Min }}-{{ .Max }}).\nPreço: {{ .Price }} por dia.",
+      "badGB": "Envie um número de GB entre {{ .Min }} e {{ .Max }}.",
+      "badDays": "Envie um número de dias entre {{ .Min }} e {{ .Max }}.",
+      "notNumber": "Envie um número inteiro."
+    },
+    "addon": {
+      "off": "Adicionar dados ou tempo não está disponível no momento."
+    },
+    "order": {
+      "head": "🧾 Pedido #{{ .Id }} - {{ .Item }}\n{{ .Kind }} · {{ .Amount }}\nStatus: {{ .Status }}",
+      "card": "\n\n💳 Transfira exatamente {{ .Amount }} para este cartão:\n<code>{{ .Card }}</code>\n{{ .Holder }} {{ .Bank }}\n{{ .Instructions }}\n\nDepois toque em “Enviar comprovante” e envie uma foto do recibo ou o número de rastreio.",
+      "reason": "\n❗ {{ .Reason }}"
+    },
+    "orders": {
+      "title": "🧾 Seus últimos pedidos:",
+      "none": "Você ainda não tem pedidos."
+    },
+    "askReceipt": "Envie uma foto do comprovante de pagamento ou o número de rastreio da transferência.",
+    "receiptSent": "✅ Comprovante enviado. Vamos confirmar em breve.",
+    "delivered": {
+      "new": "✅ Pago e ativado. Seu serviço está pronto:",
+      "renew": "✅ Pago e renovado. Seu serviço:",
+      "addon": "✅ Pago. Os dados e o tempo foram adicionados:"
+    },
+    "svc": {
+      "none": "Você ainda não tem serviços.",
+      "list": "📦 Seus serviços:",
+      "card": "📦 <b>{{ .Email }}</b>\n{{ .State }}\n📊 {{ .Usage }}\n⏳ {{ .Expiry }}",
+      "state": {
+        "active": "🟢 Ativo",
+        "disabled": "⛔ Desativado",
+        "depleted": "📉 Dados esgotados",
+        "expired": "⌛ Expirado"
+      },
+      "daysLeft": "faltam {{ .Days }} dias",
+      "startsOnUse": "{{ .Days }} dias a partir da primeira conexão",
+      "link": "🔗 Link de assinatura:\n<code>{{ .URL }}</code>",
+      "jsonLink": "\n\nLink JSON:\n<code>{{ .URL }}</code>",
+      "noLink": "O link de assinatura não está disponível. Fale com o suporte.",
+      "qrCaption": "📷 Código QR de {{ .Email }}"
+    },
+    "wallet": {
+      "title": "👛 Saldo da carteira por serviço:",
+      "empty": "sem saldo",
+      "hint": "\n\nO saldo pode pagar renovações e adicionais.",
+      "none": "A carteira fica disponível quando você tiver um serviço."
+    },
+    "ref": {
+      "off": "O programa de indicação está desligado no momento.",
+      "needService": "Compre um serviço primeiro e você recebe seu próprio link de convite.",
+      "info": "🎁 <b>Convide amigos</b>\nQuando um amigo comprar o primeiro serviço pelo seu link, {{ .Percent }}% do preço vai para a sua carteira.\n\nSeu código: <code>{{ .Code }}</code>\nSeu link:\n{{ .Link }}"
+    },
+    "support": {
+      "noService": "Os tickets são para clientes com um serviço. Use os links do menu para falar conosco.",
+      "pick": "Sobre qual serviço?",
+      "title": "🆘 Suporte para <code>{{ .Email }}</code>",
+      "ticket": "💬 <b>Ticket #{{ .Id }}</b> - {{ .Subject }}\nStatus: {{ .Status }}",
+      "you": "Você",
+      "staff": "Suporte",
+      "askNew": "Descreva o problema em uma mensagem. A primeira linha vira o assunto.",
+      "askReply": "Envie sua resposta em uma mensagem.",
+      "sent": "✅ Ticket #{{ .Id }} aberto. Responderemos aqui.",
+      "replied": "✅ Resposta enviada."
+    },
+    "lang": {
+      "choose": "🌐 Escolha seu idioma:"
+    },
+    "notify": {
+      "fulfilled": "✅ Pagamento do pedido #{{ .Id }} ({{ .Item }}) confirmado.",
+      "rejected": "❌ O pedido #{{ .Id }} não foi aceito.",
+      "expired": "⌛ O pedido #{{ .Id }} expirou porque o pagamento não chegou.",
+      "reminder": "⏰ O pedido #{{ .Id }} ({{ .Item }}, {{ .Amount }}) ainda aguarda pagamento.",
+      "ticket": "💬 O suporte respondeu ao ticket #{{ .Id }} ({{ .Subject }}):\n\n{{ .Excerpt }}"
+    },
+    "reject": {
+      "none": "Recusar sem motivo",
+      "notFound": "Pagamento não encontrado",
+      "amount": "O valor não confere",
+      "duplicate": "Este comprovante já foi usado"
+    },
+    "admin": {
+      "title": "🛠 Administração da loja",
+      "web": "loja web",
+      "receipt": "🧾 <b>Comprovante do pedido #{{ .Id }}</b>\nComprador: {{ .Buyer }}\nConta: <code>{{ .Account }}</code>\n{{ .Item }} · {{ .Kind }}\nValor: <b>{{ .Amount }}</b>\nReferência: {{ .Ref }}\nObservação: {{ .Note }}",
+      "approvedBy": "✅ Aprovado por {{ .Name }}",
+      "rejectedBy": "❌ Recusado por {{ .Name }}",
+      "alreadyHandled": "O pedido #{{ .Id }} já foi tratado.",
+      "failed": "Não foi possível processar o pedido #{{ .Id }}. Veja o log do painel.",
+      "stats": "📊 <b>Hoje</b>\n{{ .Paid }}\n\nPedidos não pagos: {{ .Pending }}\nComprovantes pendentes: {{ .Review }}",
+      "salesLine": "{{ .Orders }} pedido(s) pago(s): {{ .Amount }}",
+      "noSales": "Ainda não há pedidos pagos hoje.",
+      "noneWaiting": "Nenhum comprovante pendente.",
+      "waitingTitle": "🧾 Comprovantes aguardando aprovação:",
+      "askBan": "Envie o id numérico do Telegram a bloquear.",
+      "askUnban": "Envie o id numérico do Telegram a desbloquear.",
+      "badID": "Isso não é um id do Telegram.",
+      "cannotBanAdmin": "Não é possível bloquear um administrador.",
+      "banned": "🚫 {{ .ID }} foi bloqueado na loja.",
+      "unbanned": "✅ {{ .ID }} pode voltar a usar a loja."
+    },
+    "currency": {
+      "IRT": "tomans",
+      "IRR": "riais"
+    },
+    "commandDesc": "Abrir a loja",
+    "app": {
+      "signedIn": "Login feito com o Telegram como {name}",
+      "services": "Seus serviços",
+      "noServices": "Você ainda não tem serviços.",
+      "disabled": "Desativado",
+      "usage": "{used} GB de {total} GB usados",
+      "expiresOn": "Expira em {date}",
+      "renew": "Renovar",
+      "addon": "Adicionar dados / tempo",
+      "copyLink": "Copiar link de assinatura",
+      "renewing": "Renovando {email}: escolha um plano abaixo.",
+      "adding": "Adicionando a {email}: escolha os dados e os dias a somar.",
+      "addonAccount": "Adicionar à minha conta",
+      "pickService": "Escolha um serviço",
+      "categoryOther": "Outros",
+      "custom": "Monte seu plano",
+      "customGb": "Dados (GB)",
+      "customDays": "dias",
+      "customBounds": "Dados {minGb}-{maxGb} GB, tempo {minDays}-{maxDays} dias.",
+      "customTotal": "Total",
+      "continue": "Continuar",
+      "sessionExpired": "A sessão do Telegram expirou. Feche a loja e abra de novo pelo bot."
+    },
+    "cfg": {
+      "botTitle": "Bot da loja no Telegram",
+      "miniApp": "Botão do Mini App",
+      "miniAppHint": "Adiciona ao menu do bot um botão “Abrir o app da loja”. Os compradores abrem a loja web dentro do Telegram e entram automaticamente. Exige a loja pública ativada e uma URL base https.",
+      "receiptChat": "Id do grupo ou canal de comprovantes",
+      "receiptChatHint": "Opcional, como -1001234567890. Os comprovantes de cartão também chegam lá com botões Aprovar e Recusar; só decidem os admins listados nas configurações do bot. Adicione o bot a esse chat antes. Use 0 para enviar só aos chats privados dos admins.",
+      "forceJoin": "Canais obrigatórios",
+      "forceJoinHint": "Os compradores precisam ser membros antes de usar a loja. Um por linha: @canal ou id numérico do chat, opcionalmente seguido de | link de entrada (necessário em canais privados). Torne o bot admin de cada canal para que ele verifique a participação.",
+      "links": "Links do menu",
+      "linksHint": "Botões extras no menu do bot, um por linha: rótulo | https://… (até 6).",
+      "customTitle": "Plano personalizado (calculadora)",
+      "customEnabled": "Vender dados e dias personalizados",
+      "customHint": "O comprador escolhe cota e duração; preço = cota × preço por GB + dias × preço por dia. Também vende adicionais que ampliam uma conta existente sem zerar o consumo.",
+      "customTemplate": "Modelo de cliente",
+      "customCurrency": "Moeda",
+      "pricePerGb": "Preço por GB",
+      "pricePerDay": "Preço por dia",
+      "minGb": "GB mínimos",
+      "maxGb": "GB máximos",
+      "minDays": "Dias mínimos",
+      "maxDays": "Dias máximos"
+    },
+    "plan": {
+      "category": "Categoria",
+      "categoryHint": "Planos da mesma categoria são agrupados no bot e na loja. Deixe vazio para não agrupar."
+    }
+  },
   "shop": {
     "title": "Loja",
     "noPlans": "Nenhum plano à venda no momento",
@@ -3354,7 +3593,10 @@
       "ticket_limit": "Você tem tickets abertos demais. Aguarde uma resposta ou feche um.",
       "ticket_closed": "Este ticket está fechado.",
       "rate_limited": "Muitas solicitações. Aguarde um pouco e tente de novo.",
-      "network": "Algo deu errado. Tente novamente."
+      "network": "Algo deu errado. Tente novamente.",
+      "custom_invalid": "Essa quantidade de dados ou de tempo está fora do intervalo permitido.",
+      "addon_unsupported": "Esta conta não aceita esse adicional: uma cota ou duração ilimitada não pode ser ampliada.",
+      "banned": "Sua conta não pode usar a loja."
     }
   },
   "setup": {
@@ -3453,6 +3695,130 @@
       "internal_error": "Algo deu errado no servidor. Tente novamente.",
       "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
     }
+  },
+  "tunnel": {
+    "title": "Túneis",
+    "add": "Adicionar túnel",
+    "empty": "Ainda não há túneis",
+    "emptyHint": "Um túnel encaminha portas, criptografadas e com um clique, entre um servidor fora do filtro (Kharej) e outro dentro dele (Irã).",
+    "name": "Nome",
+    "route": "Rota",
+    "carrier": "Portadora",
+    "carrierAuto": "Auto (testar todas as portadoras e manter a melhor)",
+    "carrierHint": "Auto tenta cada tipo de conexão a partir do lado do Irã e mantém a mais rápida que funcionar.",
+    "auto": "Auto",
+    "reverse": "Reverso",
+    "reverseHint": "O lado Kharej conecta ao Irã, em vez do contrário. Use quando o Irã não alcança o Kharej.",
+    "speed": "Velocidade (download / upload)",
+    "speedTest": "Teste de velocidade",
+    "speedResult": "Velocidade",
+    "latency": "Latência",
+    "rate": "Taxa",
+    "connections": "Conexões",
+    "uptime": "Tempo ativo",
+    "portsTitle": "Portas",
+    "details": "Detalhes",
+    "restart": "Reiniciar",
+    "restarted": "Túnel reiniciado",
+    "saved": "Salvo",
+    "deleted": "Túnel excluído",
+    "deleteConfirm": "Excluir o túnel \"{name}\"? Os dois lados são parados e removidos.",
+    "reprobe": "Testar portadoras de novo",
+    "reprobed": "Portadoras testadas de novo",
+    "probeResults": "Teste de portadoras",
+    "advanced": "Avançado",
+    "path": "Caminho URL",
+    "listenPort": "Porta da portadora",
+    "listenPortHint": "0 escolhe uma porta livre automaticamente.",
+    "maxSpeed": "Limite de velocidade (MB/s, 0 = padrão)",
+    "next": "Avançar",
+    "back": "Voltar",
+    "addressPlaceholder": "Detectado automaticamente",
+    "addressHint": "O endereço público que o outro lado usa para alcançar este servidor. Altere só se a detecção estiver errada ou se quiser um domínio.",
+    "pickNode": "Escolha um nó",
+    "noNodes": "Ainda não há nós. Adicione um na página Nós.",
+    "noBinary": "O programa wattun não está instalado neste painel. Atualize o painel para a versão mais recente.",
+    "role": {
+      "kharej": "Lado Kharej",
+      "kharejHint": "O servidor fora do filtro, onde seus serviços rodam.",
+      "iran": "Lado Irã",
+      "iranHint": "O servidor de dentro, onde seus usuários se conectam."
+    },
+    "host": {
+      "local": "Este painel",
+      "node": "Um nó",
+      "external": "Servidor sem painel",
+      "externalHint": "Você recebe um comando de uma linha para rodar nesse servidor."
+    },
+    "state": {
+      "title": "Estado",
+      "up": "Conectado",
+      "down": "Fora do ar",
+      "starting": "Iniciando",
+      "error": "Erro",
+      "stopped": "Parado",
+      "unknown": "Desconhecido"
+    },
+    "step": {
+      "ends": "Servidores",
+      "ports": "Portas",
+      "connection": "Conexão",
+      "review": "Revisão"
+    },
+    "ports": {
+      "intro": "Os usuários se conectam à porta de escuta no lado do Irã e chegam à porta de destino no servidor Kharej.",
+      "listen": "Porta de escuta",
+      "target": "Porta de destino",
+      "rate": "Limite (MB/s)",
+      "rateHint": "Limite de velocidade desta porta, 0 = ilimitado",
+      "quota": "Cota (GB)",
+      "quotaHint": "Tráfego permitido antes de cortar esta porta, 0 = ilimitado",
+      "add": "Adicionar porta",
+      "edit": "Editar portas",
+      "hotReload": "Mudanças nas portas são aplicadas sem derrubar o túnel."
+    },
+    "kit": {
+      "title": "Kit anticensura",
+      "hint": "Opcional. Estas opções fazem a conexão parecer tráfego permitido. Aplicam-se ao lado que inicia a conexão e exigem um servidor Linux com root.",
+      "fakeSni": "SNI falso (nome de um site permitido)",
+      "fakeMode": "Modo de falsificação",
+      "poolRotate": "Renovar conexões a cada",
+      "fingerprint": "Impressão digital TLS",
+      "smallHello": "Hello TLS pequeno"
+    },
+    "externalKharej": {
+      "steps": "Execute este comando no servidor Kharej e cole abaixo o token que ele imprime.",
+      "token": "Token do servidor Kharej"
+    },
+    "created": {
+      "title": "Túnel \"{name}\" criado",
+      "externalIran": "Execute este comando no servidor do Irã para concluir. Ele contém a chave do túnel; compartilhe de forma privada."
+    },
+    "connect": {
+      "warning": "Este comando contém a chave do túnel. Quem o tiver pode usar o túnel.",
+      "command": "Comando para o outro servidor",
+      "show": "Mostrar token",
+      "hide": "Ocultar token",
+      "copyToken": "Copiar token",
+      "none": "Este túnel não tem token para mostrar."
+    },
+    "tab": {
+      "overview": "Visão geral",
+      "logs": "Registro",
+      "connect": "Conectar um servidor"
+    },
+    "errName": "Use de 1 a 63 letras, dígitos, espaços, pontos, hífens ou sublinhados.",
+    "errNode": "Escolha um nó.",
+    "errSameHost": "Os dois lados devem estar em servidores diferentes.",
+    "errBothExternal": "Pelo menos um lado deve rodar neste painel ou em um nó.",
+    "errToken": "Cole o token que começa com wat1:",
+    "errPorts": "Adicione pelo menos uma porta.",
+    "errPortRange": "As portas vão de 1 a 65535.",
+    "errDupPort": "Esta porta de escuta está repetida.",
+    "errReverseAuto": "O modo reverso precisa de uma portadora específica, não Auto.",
+    "errReversePort": "Informe a porta da portadora em que o servidor do Irã vai escutar.",
+    "errHost": "Informe um nome de host como www.example.com.",
+    "errRotate": "Use uma duração como 30m ou 4h."
   },
   "tgbot": {
     "keyboardClosed": "❌ Teclado fechado!",
@@ -3588,6 +3954,8 @@
       "eventNodeCapStopped": "Suas entradas foram desativadas.",
       "eventPortBlocked": "A porta {{ .Port }} de {{ .Name }} parou de responder",
       "eventPortRestored": "A porta {{ .Port }} de {{ .Name }} voltou a responder",
+      "eventTunnelDown": "O túnel {{ .Name }} perdeu a conexão",
+      "eventTunnelUp": "O túnel {{ .Name }} reconectou",
       "eventLoginFallback": "Falha de login a partir de {{ .Source }}",
       "memoryThreshold": "Uso de memória {{ .Percent }}% excede o limite de {{ .Threshold }}%",
       "usagePercent": "{{ .Percent }}% ({{ .Used }} / {{ .Total }})",
@@ -3670,40 +4038,6 @@
       "chooseClient": "Escolha um cliente para Inbound {{ .Inbound }}",
       "chooseInbound": "Escolha um Inbound",
       "qrCodeForClient": "QR Code para o cliente {{ .Email }}:"
-    },
-    "shop": {
-      "disabled": "A loja não está disponível agora.",
-      "menu": "🛒 Loja\r\nO que você quer fazer?",
-      "plansTitle": "🛒 Escolha um plano:",
-      "noPlans": "Nenhum plano à venda agora.",
-      "planDetail": "<b>{{ .Name }}</b>\r\n{{ .Description }}\r\nDados: {{ .Quota }}\r\nDuração: {{ .Duration }}\r\nDispositivos: {{ .Devices }}\r\nPreço: {{ .Price }}\r\n\r\nPara quem?",
-      "noExpiry": "Sem expiração",
-      "confirm": "<b>{{ .Plan }}</b> para <code>{{ .Email }}</code>\r\nTotal: {{ .Amount }}\r\nEscolha como pagar:",
-      "discountLine": "\r\nPreço de tabela {{ .List }}, código {{ .Code }}",
-      "askCode": "Envie seu código de desconto em uma mensagem.",
-      "askReceipt": "Envie o número de rastreio da transferência em uma mensagem.",
-      "receiptSent": "✅ Comprovante enviado. Será analisado em breve.",
-      "expired": "Sua seleção expirou. Envie /shop para recomeçar.",
-      "ordersTitle": "📦 Seus últimos pedidos:",
-      "noOrders": "Você ainda não tem pedidos.",
-      "order": "📦 Pedido #{{ .Id }} - {{ .Plan }}\r\nValor: {{ .Amount }}\r\nStatus: {{ .Status }}",
-      "cardInfo": "\r\n\r\nTransfira exatamente {{ .Amount }} para este cartão:\r\n<code>{{ .Card }}</code>\r\n{{ .Holder }} {{ .Bank }}\r\n{{ .Instructions }}",
-      "payLink": "\r\n\r\nConclua o pagamento: {{ .URL }}",
-      "delivered": "✅ Pago e ativado. Sua assinatura:",
-      "buttons": {
-        "plans": "🛒 Planos",
-        "orders": "📦 Meus pedidos",
-        "newAccount": "🆕 Conta nova",
-        "renew": "🔄 Renovar {{ .Email }}",
-        "code": "🏷 Código de desconto",
-        "card": "💳 Cartão a cartão",
-        "wallet": "👛 Carteira",
-        "zarinpal": "Zarinpal",
-        "idpay": "IDPay",
-        "crypto": "Cripto",
-        "receipt": "🧾 Enviar comprovante",
-        "refresh": "🔄 Atualizar"
-      }
     }
   },
   "discord": {
@@ -3748,6 +4082,8 @@
       "nodeCapReached": "Nó atingiu o limite de tráfego",
       "portBlocked": "Porta bloqueada",
       "portRestored": "Porta restabelecida",
+      "tunnelDown": "Túnel fora do ar",
+      "tunnelUp": "Túnel conectado",
       "xrayCrash": "O núcleo Xray travou",
       "cpuHigh": "Limite de CPU excedido",
       "memoryHigh": "Limite de memória excedido",

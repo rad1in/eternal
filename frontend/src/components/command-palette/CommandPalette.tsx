@@ -20,6 +20,7 @@ import {
   CrownOutlined,
   ShoppingCartOutlined,
   DashboardOutlined,
+  DeploymentUnitOutlined,
   DatabaseOutlined,
   DiscordOutlined,
   ExportOutlined,
@@ -447,6 +448,12 @@ export default function CommandPalette() {
       ...(isHostedPanel
         ? []
         : [
+            {
+              path: '/tunnels',
+              title: t('tunnel.title'),
+              keywords: ['tunnel', 'tunnels', 'wattunnel', 'iran', 'kharej', 'port forwarding'],
+              icon: <DeploymentUnitOutlined />,
+            },
             {
               path: '/sales',
               title: t('menu.sales'),

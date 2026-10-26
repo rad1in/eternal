@@ -9,9 +9,9 @@ description: 'The customer-facing purchase API. It needs no panel session: a
   receipt_invalid, currency_unsupported, gateway_failed, bad_signature,
   amount_mismatch, discount_invalid, discount_used, referral_invalid,
   wallet_insufficient, proof_invalid, ticket_invalid, ticket_not_found,
-  ticket_limit, ticket_closed, rate_limited); rate_limited also arrives with
-  HTTP 429 and internal_error with 500. Writes are limited to 30 per 10 minutes
-  per address.'
+  ticket_limit, ticket_closed, rate_limited, custom_invalid, addon_unsupported,
+  banned); rate_limited also arrives with HTTP 429 and internal_error with 500.
+  Writes are limited to 30 per 10 minutes per address.'
 full: true
 _openapi:
   preload:
@@ -71,6 +71,21 @@ _openapi:
       title: Add a message to a ticket and leave it open for the admins
         (ticket.replied event). A closed ticket answers ticket_closed.
       url: '#add-a-message-to-a-ticket-and-leave-it-open-for-the-admins-ticketreplied-event-a-closed-ticket-answers-ticket_closed'
+    - depth: 2
+      title: Sign a Telegram Mini App visitor in. initData is the launch string
+        Telegram hands the page; it is verified server side (HMAC-SHA256 keyed
+        by the bot token, at most 24 hours old) and nothing it claims is trusted
+        before that. Needs the Mini App switched on in the sales configuration.
+        The reply carries a session token (12 hours) to send as the
+        X-Shop-Session header on later calls, the Telegram account, and the
+        services bound to it. A bad or stale launch answers proof_invalid, a
+        barred account banned.
+      url: '#sign-a-telegram-mini-app-visitor-in-initdata-is-the-launch-string-telegram-hands-the-page-it-is-verified-server-side-hmac-sha256-keyed-by-the-bot-token-at-most-24-hours-old-and-nothing-it-claims-is-trusted-before-that-needs-the-mini-app-switched-on-in-the-sales-configuration-the-reply-carries-a-session-token-12-hours-to-send-as-the-x-shop-session-header-on-later-calls-the-telegram-account-and-the-services-bound-to-it-a-bad-or-stale-launch-answers-proof_invalid-a-barred-account-banned'
+    - depth: 2
+      title: Refresh the signed-in buyer's services and their usage. Needs the
+        X-Shop-Session header; a missing, forged or expired one answers 401
+        proof_invalid.
+      url: '#refresh-the-signed-in-buyers-services-and-their-usage-needs-the-x-shop-session-header-a-missing-forged-or-expired-one-answers-401-proof_invalid'
     - depth: 2
       title: 'Where Zarinpal (Status and Authority in the query), IDPay (a form POST,
         see the POST entry), Stripe Checkout and PayPal (success URL, or
@@ -161,6 +176,19 @@ _openapi:
       - content: Add a message to a ticket and leave it open for the admins
           (ticket.replied event). A closed ticket answers ticket_closed.
         id: add-a-message-to-a-ticket-and-leave-it-open-for-the-admins-ticketreplied-event-a-closed-ticket-answers-ticket_closed
+      - content: Sign a Telegram Mini App visitor in. initData is the launch string
+          Telegram hands the page; it is verified server side (HMAC-SHA256 keyed
+          by the bot token, at most 24 hours old) and nothing it claims is
+          trusted before that. Needs the Mini App switched on in the sales
+          configuration. The reply carries a session token (12 hours) to send as
+          the X-Shop-Session header on later calls, the Telegram account, and
+          the services bound to it. A bad or stale launch answers proof_invalid,
+          a barred account banned.
+        id: sign-a-telegram-mini-app-visitor-in-initdata-is-the-launch-string-telegram-hands-the-page-it-is-verified-server-side-hmac-sha256-keyed-by-the-bot-token-at-most-24-hours-old-and-nothing-it-claims-is-trusted-before-that-needs-the-mini-app-switched-on-in-the-sales-configuration-the-reply-carries-a-session-token-12-hours-to-send-as-the-x-shop-session-header-on-later-calls-the-telegram-account-and-the-services-bound-to-it-a-bad-or-stale-launch-answers-proof_invalid-a-barred-account-banned
+      - content: Refresh the signed-in buyer's services and their usage. Needs the
+          X-Shop-Session header; a missing, forged or expired one answers 401
+          proof_invalid.
+        id: refresh-the-signed-in-buyers-services-and-their-usage-needs-the-x-shop-session-header-a-missing-forged-or-expired-one-answers-401-proof_invalid
       - content: 'Where Zarinpal (Status and Authority in the query), IDPay (a form
           POST, see the POST entry), Stripe Checkout and PayPal (success URL, or
           cancel=1 when the customer backs out) send the customer back. For
@@ -213,7 +241,7 @@ export default function Layout(props) {
   return (
     <>
       {props.children}
-      <Comp document="./public/openapi.json" webhooks={[]} operations={[{"path":"/shop/api/plans","method":"get"},{"path":"/shop/api/quote","method":"post"},{"path":"/shop/api/wallet","method":"get"},{"path":"/shop/api/orders","method":"post"},{"path":"/shop/api/orders/{token}","method":"get"},{"path":"/shop/api/orders/{token}/receipt","method":"post"},{"path":"/shop/api/tickets","method":"get"},{"path":"/shop/api/tickets","method":"post"},{"path":"/shop/api/tickets/{id}","method":"get"},{"path":"/shop/api/tickets/{id}/reply","method":"post"},{"path":"/shop/api/callback/{gateway}","method":"get"},{"path":"/shop/api/callback/{gateway}","method":"post"},{"path":"/shop/api/ipn/nowpayments","method":"post"},{"path":"/shop/api/webhook/stripe","method":"post"}]} showTitle />
+      <Comp document="./public/openapi.json" webhooks={[]} operations={[{"path":"/shop/api/plans","method":"get"},{"path":"/shop/api/quote","method":"post"},{"path":"/shop/api/wallet","method":"get"},{"path":"/shop/api/orders","method":"post"},{"path":"/shop/api/orders/{token}","method":"get"},{"path":"/shop/api/orders/{token}/receipt","method":"post"},{"path":"/shop/api/tickets","method":"get"},{"path":"/shop/api/tickets","method":"post"},{"path":"/shop/api/tickets/{id}","method":"get"},{"path":"/shop/api/tickets/{id}/reply","method":"post"},{"path":"/shop/api/telegram/session","method":"post"},{"path":"/shop/api/telegram/me","method":"get"},{"path":"/shop/api/callback/{gateway}","method":"get"},{"path":"/shop/api/callback/{gateway}","method":"post"},{"path":"/shop/api/ipn/nowpayments","method":"post"},{"path":"/shop/api/webhook/stripe","method":"post"}]} showTitle />
     </>
   );
 }

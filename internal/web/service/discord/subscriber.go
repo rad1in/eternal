@@ -269,6 +269,17 @@ func (s *Subscriber) FormatEmbed(e eventbus.Event) (Embed, bool) {
 		}
 		return Embed{Title: title, Color: color, Timestamp: ts, Fields: fields, Footer: footer}, true
 
+	case eventbus.EventTunnelDown, eventbus.EventTunnelUp:
+		fields := []EmbedField{cleanField(tr("discord.fields.inbound"), e.Source, true)}
+		title, color := tr("discord.alerts.tunnelUp"), ColorGreen
+		if e.Type == eventbus.EventTunnelDown {
+			title, color = tr("discord.alerts.tunnelDown"), ColorRed
+			if data, ok := e.Data.(*eventbus.TunnelEventData); ok && data.Error != "" {
+				fields = append(fields, cleanField(tr("discord.fields.error"), data.Error, false))
+			}
+		}
+		return Embed{Title: title, Color: color, Timestamp: ts, Fields: fields, Footer: footer}, true
+
 	case eventbus.EventXrayCrash:
 		var fields []EmbedField
 		if e.Data != nil {

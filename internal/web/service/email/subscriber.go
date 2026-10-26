@@ -171,6 +171,19 @@ func (s *Subscriber) formatMessage(e eventbus.Event) (subject, body string) {
 		}
 		body = wrap(html.EscapeString(title), content)
 
+	case eventbus.EventTunnelDown, eventbus.EventTunnelUp:
+		key, status := "tgbot.messages.eventTunnelUp", `<span style="color:green">`+i18n("email.statusUp")+`</span>`
+		if e.Type == eventbus.EventTunnelDown {
+			key, status = "tgbot.messages.eventTunnelDown", `<span style="color:red">`+i18n("email.statusDown")+`</span>`
+		}
+		title := i18n(key, "Name=="+e.Source)
+		subject = host + " " + title
+		content := kv(i18n("email.labelStatus"), status)
+		if data, ok := e.Data.(*eventbus.TunnelEventData); ok && data.Error != "" {
+			content += kv(i18n("email.labelError"), html.EscapeString(data.Error))
+		}
+		body = wrap(html.EscapeString(title), content)
+
 	case eventbus.EventCPUHigh:
 		if data, ok := e.Data.(*eventbus.SystemMetricData); ok {
 			smtpCpu, err := s.settingService.GetSmtpCpu()

@@ -44,16 +44,17 @@ and emitting `node.up` / `node.down` events (see the
 **Nodes → Install command** generates a command to run as root on a fresh server:
 
 ```bash
-XUI_NONINTERACTIVE=1 XUI_JOIN_URL='https://panel.example.com:2053/abc/join/node' \
-  XUI_JOIN_TOKEN='…' XUI_NODE_NAME='de-fra-1' bash <(curl -Ls …/join-node.sh)
+curl -fsSL https://panel.example.com:2053/abc/install-node.sh | bash -s -- \
+  --panel https://panel.example.com:2053/abc --token '…' --name de-fra-1
 ```
 
-`join-node.sh` runs the normal non-interactive installer, reads the result it
-writes (`/etc/eternal/install-result.env`: panel address, base path and API token),
-and posts them with the token to `{basePath}/join/node` on the master. The master
-checks that it can reach the new panel and then adds it as an enabled node that
-syncs all inbounds, with `verify` TLS (or `skip`/`pin` if the script is given
-`XUI_NODE_TLS_VERIFY`).
+The master serves `install-node.sh` itself, with its own version baked in as the
+default release the node installs. The script runs the normal non-interactive
+installer, reads the result it writes (`/etc/eternal/install-result.env`: panel
+address, base path and API token), and posts them with the token to
+`{basePath}/join/node` on the master. The master checks that it can reach the new
+panel and then adds it as an enabled node that syncs all inbounds, so it appears in
+the node list within a minute.
 
 The token is single-use, valid for one hour, and stored on the master only as a
 hash. A join that fails (for example the master cannot reach the new panel yet)
@@ -61,10 +62,27 @@ keeps the token, and the script retries for about a minute. The endpoint takes
 no session, is rate limited per client IP, and refuses private or loopback node
 addresses, `mtls` and outbound bridges: set those on the node afterwards.
 
+Options go after the token:
+
+| Option | Effect |
+| --- | --- |
+| `--name NAME` | the node's name (default: the server's hostname) |
+| `--port PORT` | the node panel's port (default: random) |
+| `--version TAG` | the Eternal release to install (default: the master's version; the latest release if that one is not published) |
+| `--installer-url URL` | use this `install.sh` instead of the one on GitHub |
+| `--node-tls verify\|skip\|pin` | how the master verifies the node's certificate (default `verify`) |
+| `--insecure` | do not check the master's TLS certificate |
+| `--pin sha256//KEY` | accept only the master's TLS key (the panel adds it when its certificate is self-signed) |
+| `--detect` | print what is on the server and change nothing |
+| `--uninstall --yes` | remove Eternal, its database and Xray from the server |
+
+A server that already runs Eternal is not reinstalled: the script only registers it,
+using the result file of the earlier install.
+
 <Callout type="info">
-  The command downloads `join-node.sh` from the address in the panel's source
-  (`JoinScriptURL`). If you run a fork, change that constant to your repository's
-  raw URL, and set `XUI_INSTALLER_URL` if you also host your own `install.sh`.
+  The installer and the release archives are downloaded from GitHub
+  (`rad1in/eternal`). On a server that cannot reach GitHub, host `install.sh`
+  yourself and pass `--installer-url`, or add the node by hand.
 </Callout>
 
 ### Mutual TLS (mTLS) between master and node

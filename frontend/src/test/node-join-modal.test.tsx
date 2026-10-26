@@ -14,7 +14,8 @@ describe('NodeJoinModal', () => {
       success: true,
       msg: '',
       obj: {
-        command: "XUI_JOIN_TOKEN='abc' bash <(curl -Ls https://example.test/join-node.sh)",
+        command:
+          'curl -fsSL https://example.test/abc/install-node.sh | bash -s -- --panel https://example.test/abc --token abc',
         joinUrl: 'https://panel.example.com/abc/join/node',
         expiresAt: 1760003600000,
       },
@@ -24,7 +25,7 @@ describe('NodeJoinModal', () => {
     fireEvent.change(screen.getByPlaceholderText(/Node name/), { target: { value: 'de-fra-1' } });
     fireEvent.click(screen.getByRole('button', { name: 'Generate command' }));
 
-    expect(await screen.findByDisplayValue(/XUI_JOIN_TOKEN='abc'/)).toBeTruthy();
+    expect(await screen.findByDisplayValue(/--token abc/)).toBeTruthy();
     expect(post.mock.calls[0][0]).toBe('/panel/api/nodes/joinCommand');
     expect(post.mock.calls[0][1]).toEqual({ name: 'de-fra-1' });
   });

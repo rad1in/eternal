@@ -1858,6 +1858,8 @@
       "eventNodeCapReached": "达到每月流量上限",
       "eventPortBlocked": "端口停止响应",
       "eventPortRestored": "端口恢复响应",
+      "eventTunnelDown": "隧道断开连接",
+      "eventTunnelUp": "隧道已重新连接",
       "eventCPUHigh": "CPU 占用过高（%）",
       "requestFailed": "请求失败",
       "smtpEncryption": "加密",
@@ -2138,6 +2140,7 @@
       "backupNowDesc": "请先保存：使用已保存的文件夹和存储桶。",
       "eventGroupClients": "客户端",
       "eventGroupPort": "端口",
+      "eventGroupTunnel": "隧道",
       "portProbe": "端口探测",
       "portProbeDesc": "每分钟从外部检查所有公开的 TCP 入站端口,某个端口停止响应时发出告警。",
       "portProbeHost": "服务器地址",
@@ -3060,7 +3063,8 @@
         "referrer": "推荐人",
         "kinds": {
           "new": "新购",
-          "renew": "续费"
+          "renew": "续费",
+          "addon": "加购"
         },
         "statuses": {
           "pending": "待支付",
@@ -3273,6 +3277,241 @@
       "errPath": "只能使用字母、数字和 . _ ~ -"
     }
   },
+  "shopbot": {
+    "disabled": "商店暂时不可用。",
+    "banned": "您的账号无法使用商店。如认为有误，请联系运营者。",
+    "slowDown": "点击过于频繁，请稍候。",
+    "expired": "您的选择已过期，请打开菜单重新开始。",
+    "unlimited": "不限量",
+    "noExpiry": "无到期时间",
+    "menu": {
+      "welcome": "👋 您好，{{ .Name }}！\n请问需要什么服务？"
+    },
+    "join": {
+      "required": "使用商店前请先加入我们的频道，然后点击“我已加入”。",
+      "open": "加入 {{ .Channel }}",
+      "channel": "频道",
+      "done": "✅ 我已加入"
+    },
+    "btn": {
+      "buy": "🛒 购买",
+      "services": "📦 我的服务",
+      "wallet": "👛 钱包",
+      "invite": "🎁 邀请好友",
+      "trial": "🧪 免费试用",
+      "support": "🆘 客服",
+      "orders": "🧾 我的订单",
+      "language": "🌐 语言",
+      "miniapp": "🚀 打开商店应用",
+      "admin": "🛠 管理",
+      "menu": "🏠 菜单",
+      "back": "⬅️ 返回",
+      "cancel": "✖️ 取消",
+      "skip": "跳过",
+      "refresh": "🔄 刷新",
+      "custom": "✨ 自定义套餐",
+      "newAccount": "🆕 新账号",
+      "renew": "🔄 续费 {{ .Email }}",
+      "code": "🏷 优惠码",
+      "receipt": "📤 发送凭证",
+      "pay": "💳 去支付",
+      "link": "🔗 链接",
+      "qr": "📷 二维码",
+      "renewThis": "🔄 续费",
+      "addon": "➕ 加流量 / 加时长",
+      "newTicket": "✍️ 新工单",
+      "reply": "↩️ 回复",
+      "openTicket": "💬 查看工单",
+      "openOrder": "🧾 查看订单",
+      "approve": "✅ 通过",
+      "reject": "❌ 拒绝",
+      "today": "📊 今日",
+      "waiting": "🧾 待审核凭证",
+      "ban": "🚫 封禁用户",
+      "unban": "✅ 解封用户"
+    },
+    "plans": {
+      "title": "🛒 请选择套餐：",
+      "none": "目前没有在售套餐。",
+      "misc": "其他",
+      "detail": "<b>{{ .Name }}</b>\n{{ .Description }}📊 流量：{{ .Quota }}\n⏳ 时长：{{ .Duration }}\n📱 设备数：{{ .Devices }}\n💰 价格：{{ .Price }}\n\n用于哪个账号？"
+    },
+    "kind": {
+      "new": "新账号",
+      "renew": "续费",
+      "addon": "加购"
+    },
+    "confirm": "🧾 <b>{{ .Item }}</b>\n{{ .Kind }} · <code>{{ .Email }}</code>\n💰 <b>{{ .Amount }}</b>{{ .Discount }}\n\n请选择支付方式：",
+    "discountLine": "\n🏷 原价 {{ .List }} · 优惠码 {{ .Code }}",
+    "gw": {
+      "card": "💳 银行卡转账",
+      "wallet": "👛 钱包",
+      "zarinpal": "Zarinpal",
+      "idpay": "IDPay",
+      "crypto": "🪙 加密货币",
+      "stripe": "Stripe",
+      "paypal": "PayPal"
+    },
+    "askCode": "请把优惠码作为消息发送给我。",
+    "custom": {
+      "item": "自定义套餐：{{ .Parts }}",
+      "addonItem": "加购：{{ .Parts }}",
+      "askGB": "需要多少流量？请选择或发送 GB 数（{{ .Min }}-{{ .Max }}）。\n单价：每 GB {{ .Price }}。",
+      "askDays": "需要多少天？请选择或发送天数（{{ .Min }}-{{ .Max }}）。\n单价：每天 {{ .Price }}。",
+      "badGB": "请发送 {{ .Min }} 到 {{ .Max }} 之间的 GB 数。",
+      "badDays": "请发送 {{ .Min }} 到 {{ .Max }} 之间的天数。",
+      "notNumber": "请发送一个整数。"
+    },
+    "addon": {
+      "off": "目前无法加购流量或时长。"
+    },
+    "order": {
+      "head": "🧾 订单 #{{ .Id }} - {{ .Item }}\n{{ .Kind }} · {{ .Amount }}\n状态：{{ .Status }}",
+      "card": "\n\n💳 请向以下银行卡准确转账 {{ .Amount }}：\n<code>{{ .Card }}</code>\n{{ .Holder }} {{ .Bank }}\n{{ .Instructions }}\n\n然后点击“发送凭证”，发送转账截图或交易流水号。",
+      "reason": "\n❗ {{ .Reason }}"
+    },
+    "orders": {
+      "title": "🧾 您最近的订单：",
+      "none": "您还没有订单。"
+    },
+    "askReceipt": "请发送付款凭证截图，或转账的交易流水号。",
+    "receiptSent": "✅ 凭证已发送，我们会尽快确认。",
+    "delivered": {
+      "new": "✅ 已付款并开通。您的服务已就绪：",
+      "renew": "✅ 已付款并续费。您的服务：",
+      "addon": "✅ 已付款，流量和时长已加上："
+    },
+    "svc": {
+      "none": "您还没有任何服务。",
+      "list": "📦 您的服务：",
+      "card": "📦 <b>{{ .Email }}</b>\n{{ .State }}\n📊 {{ .Usage }}\n⏳ {{ .Expiry }}",
+      "state": {
+        "active": "🟢 正常",
+        "disabled": "⛔ 已停用",
+        "depleted": "📉 流量已用完",
+        "expired": "⌛ 已到期"
+      },
+      "daysLeft": "剩余 {{ .Days }} 天",
+      "startsOnUse": "首次连接后 {{ .Days }} 天",
+      "link": "🔗 订阅链接：\n<code>{{ .URL }}</code>",
+      "jsonLink": "\n\nJSON 链接：\n<code>{{ .URL }}</code>",
+      "noLink": "暂无订阅链接，请联系客服。",
+      "qrCaption": "📷 {{ .Email }} 的二维码"
+    },
+    "wallet": {
+      "title": "👛 各服务的钱包余额：",
+      "empty": "无余额",
+      "hint": "\n\n余额可用于支付续费和加购。",
+      "none": "拥有服务后即可使用钱包。"
+    },
+    "ref": {
+      "off": "推荐计划目前未开启。",
+      "needService": "请先购买服务，即可获得您的专属邀请链接。",
+      "info": "🎁 <b>邀请好友</b>\n好友通过您的链接首次购买服务后，价格的 {{ .Percent }}% 会进入您的钱包。\n\n您的邀请码：<code>{{ .Code }}</code>\n您的链接：\n{{ .Link }}"
+    },
+    "support": {
+      "noService": "工单仅限已有服务的客户使用。请通过菜单中的链接联系我们。",
+      "pick": "问题与哪个服务有关？",
+      "title": "🆘 <code>{{ .Email }}</code> 的客服",
+      "ticket": "💬 <b>工单 #{{ .Id }}</b> - {{ .Subject }}\n状态：{{ .Status }}",
+      "you": "您",
+      "staff": "客服",
+      "askNew": "请用一条消息描述问题，第一行将作为工单主题。",
+      "askReply": "请把回复作为消息发送。",
+      "sent": "✅ 工单 #{{ .Id }} 已创建，我们会在这里回复您。",
+      "replied": "✅ 回复已发送。"
+    },
+    "lang": {
+      "choose": "🌐 请选择语言："
+    },
+    "notify": {
+      "fulfilled": "✅ 订单 #{{ .Id }}（{{ .Item }}）的付款已确认。",
+      "rejected": "❌ 订单 #{{ .Id }} 未被接受。",
+      "expired": "⌛ 订单 #{{ .Id }} 因未收到付款已过期。",
+      "reminder": "⏰ 订单 #{{ .Id }}（{{ .Item }}，{{ .Amount }}）仍在等待付款。",
+      "ticket": "💬 客服已回复工单 #{{ .Id }}（{{ .Subject }}）：\n\n{{ .Excerpt }}"
+    },
+    "reject": {
+      "none": "不填原因直接拒绝",
+      "notFound": "未找到这笔付款",
+      "amount": "金额不符",
+      "duplicate": "该凭证已被使用过"
+    },
+    "admin": {
+      "title": "🛠 商店管理",
+      "web": "网页商店",
+      "receipt": "🧾 <b>订单 #{{ .Id }} 的付款凭证</b>\n买家：{{ .Buyer }}\n账号：<code>{{ .Account }}</code>\n{{ .Item }} · {{ .Kind }}\n金额：<b>{{ .Amount }}</b>\n流水号：{{ .Ref }}\n备注：{{ .Note }}",
+      "approvedBy": "✅ 已由 {{ .Name }} 通过",
+      "rejectedBy": "❌ 已由 {{ .Name }} 拒绝",
+      "alreadyHandled": "订单 #{{ .Id }} 已处理过。",
+      "failed": "无法处理订单 #{{ .Id }}，请查看面板日志。",
+      "stats": "📊 <b>今日</b>\n{{ .Paid }}\n\n未付款订单：{{ .Pending }}\n待审核凭证：{{ .Review }}",
+      "salesLine": "已付款 {{ .Orders }} 单：{{ .Amount }}",
+      "noSales": "今天还没有已付款订单。",
+      "noneWaiting": "没有待审核的凭证。",
+      "waitingTitle": "🧾 等待审核的凭证：",
+      "askBan": "请发送要封禁的 Telegram 数字 ID。",
+      "askUnban": "请发送要解封的 Telegram 数字 ID。",
+      "badID": "这不是有效的 Telegram ID。",
+      "cannotBanAdmin": "无法封禁管理员。",
+      "banned": "🚫 {{ .ID }} 已被禁止使用商店。",
+      "unbanned": "✅ {{ .ID }} 可以重新使用商店。"
+    },
+    "currency": {
+      "IRT": "土曼",
+      "IRR": "里亚尔"
+    },
+    "commandDesc": "打开商店",
+    "app": {
+      "signedIn": "已通过 Telegram 登录：{name}",
+      "services": "您的服务",
+      "noServices": "您还没有任何服务。",
+      "disabled": "已停用",
+      "usage": "已用 {used} GB / 共 {total} GB",
+      "expiresOn": "到期：{date}",
+      "renew": "续费",
+      "addon": "加流量 / 加时长",
+      "copyLink": "复制订阅链接",
+      "renewing": "正在为 {email} 续费：请在下方选择套餐。",
+      "adding": "正在为 {email} 加购：请选择要增加的流量和天数。",
+      "addonAccount": "加购到我的账号",
+      "pickService": "选择一个服务",
+      "categoryOther": "其他",
+      "custom": "自定义套餐",
+      "customGb": "流量（GB）",
+      "customDays": "天",
+      "customBounds": "流量 {minGb}-{maxGb} GB，时长 {minDays}-{maxDays} 天。",
+      "customTotal": "合计",
+      "continue": "继续",
+      "sessionExpired": "此 Telegram 会话已过期。请关闭商店，再从机器人重新打开。"
+    },
+    "cfg": {
+      "botTitle": "Telegram 商店机器人",
+      "miniApp": "Mini App 按钮",
+      "miniAppHint": "在机器人菜单中加入“打开商店应用”按钮。买家在 Telegram 内打开网页商店并自动登录。需要开启公开商店，且基础网址使用 https。",
+      "receiptChat": "凭证群组或频道 ID",
+      "receiptChatHint": "可选，例如 -1001234567890。银行卡转账凭证也会发到那里，并带有“通过”和“拒绝”按钮；只有机器人设置中列出的管理员才能操作。请先把机器人加入该聊天。填 0 则只发给管理员的私聊。",
+      "forceJoin": "必须加入的频道",
+      "forceJoinHint": "买家需先加入这些频道才能使用商店。每行一个：@频道 或数字聊天 ID，可在其后加 | 加入链接（私有频道需要）。请将机器人设为各频道的管理员，以便检查成员身份。",
+      "links": "菜单链接",
+      "linksHint": "机器人菜单上的额外按钮，每行一个：名称 | https://…（最多 6 个）。",
+      "customTitle": "自定义套餐（计算器）",
+      "customEnabled": "出售自定义流量和天数",
+      "customHint": "买家自选流量和时长；价格 = 流量 × 每 GB 单价 + 天数 × 每天单价。同时可出售加购，在不清零已用流量的情况下为现有账号增加额度。",
+      "customTemplate": "客户端模板",
+      "customCurrency": "币种",
+      "pricePerGb": "每 GB 单价",
+      "pricePerDay": "每天单价",
+      "minGb": "最少 GB",
+      "maxGb": "最多 GB",
+      "minDays": "最少天数",
+      "maxDays": "最多天数"
+    },
+    "plan": {
+      "category": "分类",
+      "categoryHint": "分类相同的套餐会在机器人和商店中归为一组。留空则不分组。"
+    }
+  },
   "shop": {
     "title": "商店",
     "noPlans": "当前没有在售套餐",
@@ -3354,7 +3593,10 @@
       "ticket_limit": "未关闭的工单过多。请等待回复或关闭其中一个。",
       "ticket_closed": "此工单已关闭。",
       "rate_limited": "请求过多，请稍候再试。",
-      "network": "出错了，请重试。"
+      "network": "出错了，请重试。",
+      "custom_invalid": "流量或时长超出允许范围。",
+      "addon_unsupported": "此账号无法加购：不限量的流量或不限期的时长无法再增加。",
+      "banned": "您的账号无法使用商店。"
     }
   },
   "setup": {
@@ -3453,6 +3695,130 @@
       "internal_error": "服务器出现问题，请重试。",
       "network": "无法连接到服务器。请检查网络后重试。"
     }
+  },
+  "tunnel": {
+    "title": "隧道",
+    "add": "添加隧道",
+    "empty": "还没有隧道",
+    "emptyHint": "隧道在过滤之外的服务器（Kharej）与过滤之内的服务器（伊朗）之间转发端口，加密且一键完成。",
+    "name": "名称",
+    "route": "路径",
+    "carrier": "承载方式",
+    "carrierAuto": "自动（测试所有承载方式，保留最佳）",
+    "carrierHint": "自动模式会从伊朗端尝试每种连接类型，并保留可用的最快一种。",
+    "auto": "自动",
+    "reverse": "反向",
+    "reverseHint": "由 Kharej 端主动连接伊朗端，而不是反过来。伊朗无法连到 Kharej 时使用。",
+    "speed": "速度（下载 / 上传）",
+    "speedTest": "测速",
+    "speedResult": "速度",
+    "latency": "延迟",
+    "rate": "速率",
+    "connections": "连接数",
+    "uptime": "运行时间",
+    "portsTitle": "端口",
+    "details": "详情",
+    "restart": "重启",
+    "restarted": "隧道已重启",
+    "saved": "已保存",
+    "deleted": "隧道已删除",
+    "deleteConfirm": "删除隧道“{name}”？两端都会停止并移除。",
+    "reprobe": "重新测试承载方式",
+    "reprobed": "已重新测试承载方式",
+    "probeResults": "承载方式测试",
+    "advanced": "高级",
+    "path": "URL 路径",
+    "listenPort": "承载端口",
+    "listenPortHint": "0 表示自动选择空闲端口。",
+    "maxSpeed": "速度上限（MB/s，0 = 默认）",
+    "next": "下一步",
+    "back": "上一步",
+    "addressPlaceholder": "自动检测",
+    "addressHint": "对端用来访问此服务器的公网地址。仅在检测有误或想使用域名时修改。",
+    "pickNode": "选择节点",
+    "noNodes": "还没有节点。请在“节点”页面添加。",
+    "noBinary": "此面板未安装 wattun 程序。请将面板更新到最新版本。",
+    "role": {
+      "kharej": "Kharej 端",
+      "kharejHint": "位于过滤之外、运行你的服务的服务器。",
+      "iran": "伊朗端",
+      "iranHint": "位于境内、供用户连接的服务器。"
+    },
+    "host": {
+      "local": "此面板",
+      "node": "一个节点",
+      "external": "没有面板的服务器",
+      "externalHint": "你会得到一条在该服务器上运行的单行命令。"
+    },
+    "state": {
+      "title": "状态",
+      "up": "已连接",
+      "down": "已断开",
+      "starting": "启动中",
+      "error": "错误",
+      "stopped": "已停止",
+      "unknown": "未知"
+    },
+    "step": {
+      "ends": "服务器",
+      "ports": "端口",
+      "connection": "连接",
+      "review": "确认"
+    },
+    "ports": {
+      "intro": "用户连接伊朗端的监听端口，到达 Kharej 服务器上的目标端口。",
+      "listen": "监听端口",
+      "target": "目标端口",
+      "rate": "限速（MB/s）",
+      "rateHint": "此端口的速度限制，0 = 不限",
+      "quota": "配额（GB）",
+      "quotaHint": "此端口被切断前允许的流量，0 = 不限",
+      "add": "添加端口",
+      "edit": "编辑端口",
+      "hotReload": "端口变更会在不断开隧道的情况下生效。"
+    },
+    "kit": {
+      "title": "抗审查工具包",
+      "hint": "可选。这些设置让连接看起来像被允许的流量。它们作用于主动发起连接的一端，需要以 root 运行的 Linux 服务器。",
+      "fakeSni": "伪造 SNI（一个被允许的网站名）",
+      "fakeMode": "伪造模式",
+      "poolRotate": "连接轮换间隔",
+      "fingerprint": "TLS 指纹",
+      "smallHello": "精简 TLS Hello"
+    },
+    "externalKharej": {
+      "steps": "在 Kharej 服务器上运行此命令，然后把它输出的令牌粘贴到下方。",
+      "token": "来自 Kharej 服务器的令牌"
+    },
+    "created": {
+      "title": "隧道“{name}”已创建",
+      "externalIran": "在伊朗服务器上运行此命令以完成配置。其中包含隧道密钥，请私下分享。"
+    },
+    "connect": {
+      "warning": "此命令包含隧道密钥，任何拿到它的人都可以使用该隧道。",
+      "command": "用于另一台服务器的命令",
+      "show": "显示令牌",
+      "hide": "隐藏令牌",
+      "copyToken": "复制令牌",
+      "none": "此隧道没有可显示的令牌。"
+    },
+    "tab": {
+      "overview": "概览",
+      "logs": "日志",
+      "connect": "连接服务器"
+    },
+    "errName": "请使用 1-63 个字母、数字、空格、点、短横线或下划线。",
+    "errNode": "请选择节点。",
+    "errSameHost": "两端必须在不同的服务器上。",
+    "errBothExternal": "至少有一端要运行在此面板或某个节点上。",
+    "errToken": "请粘贴以 wat1: 开头的令牌",
+    "errPorts": "请至少添加一个端口。",
+    "errPortRange": "端口范围为 1-65535。",
+    "errDupPort": "该监听端口被重复使用。",
+    "errReverseAuto": "反向模式需要指定的承载方式，不能是自动。",
+    "errReversePort": "请输入伊朗服务器将监听的承载端口。",
+    "errHost": "请输入主机名，例如 www.example.com。",
+    "errRotate": "请使用 30m 或 4h 这样的时长。"
   },
   "tgbot": {
     "keyboardClosed": "❌ 自定义键盘已关闭！",
@@ -3588,6 +3954,8 @@
       "eventNodeCapStopped": "其入站已被禁用。",
       "eventPortBlocked": "{{ .Name }} 的端口 {{ .Port }} 不再响应",
       "eventPortRestored": "{{ .Name }} 的端口 {{ .Port }} 已恢复响应",
+      "eventTunnelDown": "隧道 {{ .Name }} 已断开",
+      "eventTunnelUp": "隧道 {{ .Name }} 已重新连接",
       "eventLoginFallback": "来自 {{ .Source }} 的登录失败",
       "memoryThreshold": "内存使用率 {{ .Percent }}% 超过阈值 {{ .Threshold }}%",
       "usagePercent": "{{ .Percent }}% ({{ .Used }} / {{ .Total }})",
@@ -3670,40 +4038,6 @@
       "chooseClient": "为入站 {{ .Inbound }} 选择一个客户",
       "chooseInbound": "选择一个入站",
       "qrCodeForClient": "客户端 {{ .Email }} 的二维码："
-    },
-    "shop": {
-      "disabled": "商店暂时不可用。",
-      "menu": "🛒 商店\r\n你想做什么？",
-      "plansTitle": "🛒 请选择套餐:",
-      "noPlans": "目前没有在售套餐。",
-      "planDetail": "<b>{{ .Name }}</b>\r\n{{ .Description }}\r\n流量: {{ .Quota }}\r\n时长: {{ .Duration }}\r\n设备数: {{ .Devices }}\r\n价格: {{ .Price }}\r\n\r\n为哪个账号购买？",
-      "noExpiry": "永不过期",
-      "confirm": "<b>{{ .Plan }}</b> - <code>{{ .Email }}</code>\r\n合计: {{ .Amount }}\r\n请选择支付方式:",
-      "discountLine": "\r\n原价 {{ .List }}，优惠码 {{ .Code }}",
-      "askCode": "请以消息发送你的优惠码。",
-      "askReceipt": "请以消息发送转账的跟踪编号。",
-      "receiptSent": "✅ 凭证已发送，将很快审核。",
-      "expired": "你的选择已过期。发送 /shop 重新开始。",
-      "ordersTitle": "📦 你最近的订单:",
-      "noOrders": "你还没有订单。",
-      "order": "📦 订单 #{{ .Id }} - {{ .Plan }}\r\n金额: {{ .Amount }}\r\n状态: {{ .Status }}",
-      "cardInfo": "\r\n\r\n请向此卡转账准确金额 {{ .Amount }}:\r\n<code>{{ .Card }}</code>\r\n{{ .Holder }} {{ .Bank }}\r\n{{ .Instructions }}",
-      "payLink": "\r\n\r\n完成支付: {{ .URL }}",
-      "delivered": "✅ 已支付并开通。你的订阅:",
-      "buttons": {
-        "plans": "🛒 套餐",
-        "orders": "📦 我的订单",
-        "newAccount": "🆕 新账号",
-        "renew": "🔄 续费 {{ .Email }}",
-        "code": "🏷 优惠码",
-        "card": "💳 卡对卡转账",
-        "wallet": "👛 钱包",
-        "zarinpal": "Zarinpal",
-        "idpay": "IDPay",
-        "crypto": "加密货币",
-        "receipt": "🧾 发送凭证",
-        "refresh": "🔄 刷新"
-      }
     }
   },
   "discord": {
@@ -3748,6 +4082,8 @@
       "nodeCapReached": "节点达到流量上限",
       "portBlocked": "端口被阻断",
       "portRestored": "端口已恢复",
+      "tunnelDown": "隧道断开",
+      "tunnelUp": "隧道恢复",
       "xrayCrash": "Xray 核心崩溃",
       "cpuHigh": "CPU 超出阈值",
       "memoryHigh": "内存超出阈值",

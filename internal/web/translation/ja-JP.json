@@ -1858,6 +1858,8 @@
       "eventNodeCapReached": "月間トラフィック上限に到達",
       "eventPortBlocked": "ポートが応答しなくなった",
       "eventPortRestored": "ポートが再び応答",
+      "eventTunnelDown": "トンネルの接続が切れた",
+      "eventTunnelUp": "トンネルが再接続した",
       "eventCPUHigh": "CPU高負荷（%）",
       "requestFailed": "リクエストに失敗しました",
       "smtpEncryption": "暗号化",
@@ -2138,6 +2140,7 @@
       "backupNowDesc": "先に保存してください。保存済みのフォルダーとバケットを使います。",
       "eventGroupClients": "クライアント",
       "eventGroupPort": "ポート",
+      "eventGroupTunnel": "トンネル",
       "portProbe": "ポート監視",
       "portProbeDesc": "公開されている TCP インバウンドのポートを毎分外部から確認し、応答しなくなると通知します。",
       "portProbeHost": "サーバーのアドレス",
@@ -3060,7 +3063,8 @@
         "referrer": "紹介者",
         "kinds": {
           "new": "新規",
-          "renew": "更新"
+          "renew": "更新",
+          "addon": "追加"
         },
         "statuses": {
           "pending": "支払い待ち",
@@ -3273,6 +3277,241 @@
       "errPath": "英字、数字、. _ ~ - のみ使用できます"
     }
   },
+  "shopbot": {
+    "disabled": "現在ショップはご利用いただけません。",
+    "banned": "このアカウントはショップを利用できません。誤りの場合は運営者にご連絡ください。",
+    "slowDown": "タップが多すぎます。少しお待ちください。",
+    "expired": "選択の有効期限が切れました。メニューからやり直してください。",
+    "unlimited": "無制限",
+    "noExpiry": "期限なし",
+    "menu": {
+      "welcome": "👋 こんにちは、{{ .Name }}さん！\n何をしますか？"
+    },
+    "join": {
+      "required": "ショップを利用するには、まずチャンネルに参加して「参加しました」をタップしてください。",
+      "open": "{{ .Channel }}に参加",
+      "channel": "チャンネル",
+      "done": "✅ 参加しました"
+    },
+    "btn": {
+      "buy": "🛒 購入",
+      "services": "📦 マイサービス",
+      "wallet": "👛 ウォレット",
+      "invite": "🎁 友達を招待",
+      "trial": "🧪 無料トライアル",
+      "support": "🆘 サポート",
+      "orders": "🧾 注文履歴",
+      "language": "🌐 言語",
+      "miniapp": "🚀 ショップアプリを開く",
+      "admin": "🛠 管理",
+      "menu": "🏠 メニュー",
+      "back": "⬅️ 戻る",
+      "cancel": "✖️ キャンセル",
+      "skip": "スキップ",
+      "refresh": "🔄 更新",
+      "custom": "✨ 自分でプランを作る",
+      "newAccount": "🆕 新規アカウント",
+      "renew": "🔄 {{ .Email }} を更新",
+      "code": "🏷 割引コード",
+      "receipt": "📤 領収書を送る",
+      "pay": "💳 支払う",
+      "link": "🔗 リンク",
+      "qr": "📷 QRコード",
+      "renewThis": "🔄 更新",
+      "addon": "➕ データ／期間を追加",
+      "newTicket": "✍️ 新しいチケット",
+      "reply": "↩️ 返信",
+      "openTicket": "💬 チケットを開く",
+      "openOrder": "🧾 注文を開く",
+      "approve": "✅ 承認",
+      "reject": "❌ 却下",
+      "today": "📊 今日",
+      "waiting": "🧾 確認待ちの領収書",
+      "ban": "🚫 ユーザーをブロック",
+      "unban": "✅ ブロック解除"
+    },
+    "plans": {
+      "title": "🛒 プランを選んでください：",
+      "none": "現在販売中のプランはありません。",
+      "misc": "その他",
+      "detail": "<b>{{ .Name }}</b>\n{{ .Description }}📊 データ量：{{ .Quota }}\n⏳ 期間：{{ .Duration }}\n📱 端末数：{{ .Devices }}\n💰 価格：{{ .Price }}\n\nどのアカウント向けですか？"
+    },
+    "kind": {
+      "new": "新規アカウント",
+      "renew": "更新",
+      "addon": "追加"
+    },
+    "confirm": "🧾 <b>{{ .Item }}</b>\n{{ .Kind }} · <code>{{ .Email }}</code>\n💰 <b>{{ .Amount }}</b>{{ .Discount }}\n\n支払い方法を選んでください：",
+    "discountLine": "\n🏷 通常価格 {{ .List }} · コード {{ .Code }}",
+    "gw": {
+      "card": "💳 カード振込",
+      "wallet": "👛 ウォレット",
+      "zarinpal": "Zarinpal",
+      "idpay": "IDPay",
+      "crypto": "🪙 暗号資産",
+      "stripe": "Stripe",
+      "paypal": "PayPal"
+    },
+    "askCode": "割引コードをメッセージで送ってください。",
+    "custom": {
+      "item": "カスタムプラン：{{ .Parts }}",
+      "addonItem": "追加：{{ .Parts }}",
+      "askGB": "必要なデータ量は？ サイズを選ぶか、GB数を送ってください（{{ .Min }}〜{{ .Max }}）。\n料金：1GBあたり {{ .Price }}。",
+      "askDays": "何日間ですか？ 期間を選ぶか、日数を送ってください（{{ .Min }}〜{{ .Max }}）。\n料金：1日あたり {{ .Price }}。",
+      "badGB": "{{ .Min }}〜{{ .Max }} のGB数を送ってください。",
+      "badDays": "{{ .Min }}〜{{ .Max }} の日数を送ってください。",
+      "notNumber": "整数を送ってください。"
+    },
+    "addon": {
+      "off": "現在、データや期間の追加はできません。"
+    },
+    "order": {
+      "head": "🧾 注文 #{{ .Id }} - {{ .Item }}\n{{ .Kind }} · {{ .Amount }}\n状態：{{ .Status }}",
+      "card": "\n\n💳 このカードにちょうど {{ .Amount }} を振り込んでください：\n<code>{{ .Card }}</code>\n{{ .Holder }} {{ .Bank }}\n{{ .Instructions }}\n\nその後「領収書を送る」をタップし、領収書の写真か取引番号を送ってください。",
+      "reason": "\n❗ {{ .Reason }}"
+    },
+    "orders": {
+      "title": "🧾 最近の注文：",
+      "none": "まだ注文はありません。"
+    },
+    "askReceipt": "支払いの領収書の写真、または振込の取引番号を送ってください。",
+    "receiptSent": "✅ 領収書を送信しました。まもなく確認します。",
+    "delivered": {
+      "new": "✅ お支払い済み・有効化しました。サービスの準備ができました：",
+      "renew": "✅ お支払い済み・更新しました。サービス：",
+      "addon": "✅ お支払い済み。データと期間を追加しました："
+    },
+    "svc": {
+      "none": "まだサービスがありません。",
+      "list": "📦 あなたのサービス：",
+      "card": "📦 <b>{{ .Email }}</b>\n{{ .State }}\n📊 {{ .Usage }}\n⏳ {{ .Expiry }}",
+      "state": {
+        "active": "🟢 有効",
+        "disabled": "⛔ 無効",
+        "depleted": "📉 データ使い切り",
+        "expired": "⌛ 期限切れ"
+      },
+      "daysLeft": "残り{{ .Days }}日",
+      "startsOnUse": "初回接続から{{ .Days }}日",
+      "link": "🔗 サブスクリプションリンク：\n<code>{{ .URL }}</code>",
+      "jsonLink": "\n\nJSONリンク：\n<code>{{ .URL }}</code>",
+      "noLink": "サブスクリプションリンクを利用できません。サポートにご連絡ください。",
+      "qrCaption": "📷 {{ .Email }} のQRコード"
+    },
+    "wallet": {
+      "title": "👛 サービスごとのウォレット残高：",
+      "empty": "残高なし",
+      "hint": "\n\n残高は更新や追加の支払いに使えます。",
+      "none": "サービスをお持ちになるとウォレットを使えます。"
+    },
+    "ref": {
+      "off": "紹介プログラムは現在オフです。",
+      "needService": "まずサービスを購入すると、専用の招待リンクが発行されます。",
+      "info": "🎁 <b>友達を招待</b>\n友達があなたのリンクから初めてサービスを購入すると、価格の{{ .Percent }}%がウォレットに入ります。\n\nあなたのコード：<code>{{ .Code }}</code>\nあなたのリンク：\n{{ .Link }}"
+    },
+    "support": {
+      "noService": "チケットはサービスをお持ちのお客様向けです。メニューのリンクからご連絡ください。",
+      "pick": "どのサービスについてですか？",
+      "title": "🆘 <code>{{ .Email }}</code> のサポート",
+      "ticket": "💬 <b>チケット #{{ .Id }}</b> - {{ .Subject }}\n状態：{{ .Status }}",
+      "you": "あなた",
+      "staff": "サポート",
+      "askNew": "問題を1通のメッセージで説明してください。1行目が件名になります。",
+      "askReply": "返信をメッセージで送ってください。",
+      "sent": "✅ チケット #{{ .Id }} を作成しました。こちらでお返事します。",
+      "replied": "✅ 返信しました。"
+    },
+    "lang": {
+      "choose": "🌐 言語を選んでください："
+    },
+    "notify": {
+      "fulfilled": "✅ 注文 #{{ .Id }}（{{ .Item }}）の支払いを確認しました。",
+      "rejected": "❌ 注文 #{{ .Id }} は承認されませんでした。",
+      "expired": "⌛ 入金がなかったため、注文 #{{ .Id }} は期限切れになりました。",
+      "reminder": "⏰ 注文 #{{ .Id }}（{{ .Item }}、{{ .Amount }}）はまだお支払い待ちです。",
+      "ticket": "💬 サポートがチケット #{{ .Id }}（{{ .Subject }}）に返信しました：\n\n{{ .Excerpt }}"
+    },
+    "reject": {
+      "none": "理由なしで却下",
+      "notFound": "入金が見つかりません",
+      "amount": "金額が一致しません",
+      "duplicate": "この領収書は使用済みです"
+    },
+    "admin": {
+      "title": "🛠 ショップ管理",
+      "web": "ウェブショップ",
+      "receipt": "🧾 <b>注文 #{{ .Id }} の領収書</b>\n購入者：{{ .Buyer }}\nアカウント：<code>{{ .Account }}</code>\n{{ .Item }} · {{ .Kind }}\n金額：<b>{{ .Amount }}</b>\n取引番号：{{ .Ref }}\nメモ：{{ .Note }}",
+      "approvedBy": "✅ {{ .Name }} が承認しました",
+      "rejectedBy": "❌ {{ .Name }} が却下しました",
+      "alreadyHandled": "注文 #{{ .Id }} は処理済みです。",
+      "failed": "注文 #{{ .Id }} を処理できませんでした。パネルのログを確認してください。",
+      "stats": "📊 <b>今日</b>\n{{ .Paid }}\n\n未払いの注文：{{ .Pending }}\n確認待ちの領収書：{{ .Review }}",
+      "salesLine": "支払い済み{{ .Orders }}件：{{ .Amount }}",
+      "noSales": "今日はまだ支払い済みの注文がありません。",
+      "noneWaiting": "確認待ちの領収書はありません。",
+      "waitingTitle": "🧾 承認待ちの領収書：",
+      "askBan": "ブロックするTelegramの数値IDを送ってください。",
+      "askUnban": "ブロック解除するTelegramの数値IDを送ってください。",
+      "badID": "Telegram IDではありません。",
+      "cannotBanAdmin": "管理者はブロックできません。",
+      "banned": "🚫 {{ .ID }} をショップからブロックしました。",
+      "unbanned": "✅ {{ .ID }} は再びショップを利用できます。"
+    },
+    "currency": {
+      "IRT": "トマン",
+      "IRR": "リアル"
+    },
+    "commandDesc": "ショップを開く",
+    "app": {
+      "signedIn": "Telegramで {name} としてログイン中",
+      "services": "あなたのサービス",
+      "noServices": "まだサービスがありません。",
+      "disabled": "無効",
+      "usage": "{total} GB 中 {used} GB 使用",
+      "expiresOn": "期限：{date}",
+      "renew": "更新",
+      "addon": "データ／期間を追加",
+      "copyLink": "サブスクリプションリンクをコピー",
+      "renewing": "{email} を更新：下からプランを選んでください。",
+      "adding": "{email} に追加：追加するデータと日数を選んでください。",
+      "addonAccount": "自分のアカウントに追加",
+      "pickService": "サービスを選択",
+      "categoryOther": "その他",
+      "custom": "自分でプランを作る",
+      "customGb": "データ量（GB）",
+      "customDays": "日",
+      "customBounds": "データ {minGb}〜{maxGb} GB、期間 {minDays}〜{maxDays} 日。",
+      "customTotal": "合計",
+      "continue": "続ける",
+      "sessionExpired": "このTelegramセッションは期限切れです。ショップを閉じて、ボットからもう一度開いてください。"
+    },
+    "cfg": {
+      "botTitle": "Telegramショップボット",
+      "miniApp": "Mini Appボタン",
+      "miniAppHint": "ボットメニューに「ショップアプリを開く」ボタンを追加します。購入者はTelegram内でウェブショップを開き、自動でログインされます。公開ショップを有効にし、基本URLをhttpsにする必要があります。",
+      "receiptChat": "領収書用グループ／チャンネルのID",
+      "receiptChatHint": "任意。例：-1001234567890。カード振込の領収書が承認・却下ボタン付きでここにも届きます。判断できるのはボット設定に登録された管理者だけです。先にボットをそのチャットへ追加してください。0なら管理者の個人チャットにのみ送られます。",
+      "forceJoin": "参加必須のチャンネル",
+      "forceJoinHint": "ショップを使うには購入者がこれらに参加している必要があります。1行に1つ：@チャンネル または数値のチャットID。必要なら続けて | 参加リンク（非公開チャンネルでは必須）。メンバーを確認できるよう、ボットを各チャンネルの管理者にしてください。",
+      "links": "メニューのリンク",
+      "linksHint": "ボットメニューの追加ボタン。1行に1つ：ラベル | https://…（最大6件）。",
+      "customTitle": "カスタムプラン（計算機）",
+      "customEnabled": "データ量と日数を選んで販売",
+      "customHint": "購入者がデータ量と期間を選びます。価格＝データ量×GB単価＋日数×日額。使用量をリセットせずに既存アカウントへ追加する販売にも使われます。",
+      "customTemplate": "クライアントテンプレート",
+      "customCurrency": "通貨",
+      "pricePerGb": "GBあたりの価格",
+      "pricePerDay": "1日あたりの価格",
+      "minGb": "最小GB",
+      "maxGb": "最大GB",
+      "minDays": "最小日数",
+      "maxDays": "最大日数"
+    },
+    "plan": {
+      "category": "カテゴリ",
+      "categoryHint": "同じカテゴリのプランはボットとショップでまとめて表示されます。空欄ならグループなし。"
+    }
+  },
   "shop": {
     "title": "ショップ",
     "noPlans": "現在販売中のプランはありません",
@@ -3354,7 +3593,10 @@
       "ticket_limit": "未解決のチケットが多すぎます。返信を待つか、どれかを閉じてください。",
       "ticket_closed": "このチケットはクローズされています。",
       "rate_limited": "リクエストが多すぎます。しばらくしてからお試しください。",
-      "network": "問題が発生しました。もう一度お試しください。"
+      "network": "問題が発生しました。もう一度お試しください。",
+      "custom_invalid": "データ量または期間が許可された範囲外です。",
+      "addon_unsupported": "このアカウントにはその追加はできません。無制限の容量や無期限の期間は延長できません。",
+      "banned": "このアカウントはショップを利用できません。"
     }
   },
   "setup": {
@@ -3453,6 +3695,130 @@
       "internal_error": "サーバーで問題が発生しました。もう一度お試しください。",
       "network": "サーバーに接続できません。接続を確認してもう一度お試しください。"
     }
+  },
+  "tunnel": {
+    "title": "トンネル",
+    "add": "トンネルを追加",
+    "empty": "トンネルはまだありません",
+    "emptyHint": "トンネルは、フィルタの外のサーバー（Kharej）と内側のサーバー（イラン）の間で、ポートを暗号化してワンクリックで転送します。",
+    "name": "名前",
+    "route": "経路",
+    "carrier": "キャリア",
+    "carrierAuto": "自動（すべてのキャリアを試し、最良を採用）",
+    "carrierHint": "自動はイラン側からすべての接続方式を試し、動作する中で最速のものを残します。",
+    "auto": "自動",
+    "reverse": "リバース",
+    "reverseHint": "Kharej 側からイランへ接続します（通常とは逆）。イランから Kharej に届かないときに使います。",
+    "speed": "速度（下り / 上り）",
+    "speedTest": "速度テスト",
+    "speedResult": "速度",
+    "latency": "レイテンシ",
+    "rate": "レート",
+    "connections": "接続数",
+    "uptime": "稼働時間",
+    "portsTitle": "ポート",
+    "details": "詳細",
+    "restart": "再起動",
+    "restarted": "トンネルを再起動しました",
+    "saved": "保存しました",
+    "deleted": "トンネルを削除しました",
+    "deleteConfirm": "トンネル「{name}」を削除しますか？両端が停止・削除されます。",
+    "reprobe": "キャリアを再テスト",
+    "reprobed": "キャリアを再テストしました",
+    "probeResults": "キャリアテスト",
+    "advanced": "詳細設定",
+    "path": "URL パス",
+    "listenPort": "キャリアポート",
+    "listenPortHint": "0 なら空きポートを自動で選びます。",
+    "maxSpeed": "速度上限（MB/s、0 = 既定）",
+    "next": "次へ",
+    "back": "戻る",
+    "addressPlaceholder": "自動検出",
+    "addressHint": "相手側がこのサーバーに到達するための公開アドレス。検出が誤っている場合やドメインを使いたい場合のみ変更してください。",
+    "pickNode": "ノードを選択",
+    "noNodes": "ノードがまだありません。ノードのページで追加してください。",
+    "noBinary": "このパネルには wattun がインストールされていません。パネルを最新版に更新してください。",
+    "role": {
+      "kharej": "Kharej 側",
+      "kharejHint": "フィルタの外にあり、サービスが動作するサーバー。",
+      "iran": "イラン側",
+      "iranHint": "内側にあり、ユーザーが接続するサーバー。"
+    },
+    "host": {
+      "local": "このパネル",
+      "node": "ノード",
+      "external": "パネルのないサーバー",
+      "externalHint": "そのサーバーで実行する 1 行のコマンドが表示されます。"
+    },
+    "state": {
+      "title": "状態",
+      "up": "接続中",
+      "down": "切断",
+      "starting": "起動中",
+      "error": "エラー",
+      "stopped": "停止",
+      "unknown": "不明"
+    },
+    "step": {
+      "ends": "サーバー",
+      "ports": "ポート",
+      "connection": "接続",
+      "review": "確認"
+    },
+    "ports": {
+      "intro": "ユーザーはイラン側の待ち受けポートに接続し、Kharej サーバー上のターゲットポートに到達します。",
+      "listen": "待ち受けポート",
+      "target": "ターゲットポート",
+      "rate": "制限（MB/s）",
+      "rateHint": "このポートの速度制限。0 = 無制限",
+      "quota": "クォータ（GB）",
+      "quotaHint": "このポートが遮断されるまでの許容トラフィック。0 = 無制限",
+      "add": "ポートを追加",
+      "edit": "ポートを編集",
+      "hotReload": "ポートの変更はトンネルを切らずに反映されます。"
+    },
+    "kit": {
+      "title": "検閲回避キット",
+      "hint": "任意。接続を許可されたトラフィックに見せかけます。接続を開始する側に適用され、root で動く Linux サーバーが必要です。",
+      "fakeSni": "偽の SNI（許可されたサイト名）",
+      "fakeMode": "偽装モード",
+      "poolRotate": "接続を入れ替える間隔",
+      "fingerprint": "TLS フィンガープリント",
+      "smallHello": "小さな TLS Hello"
+    },
+    "externalKharej": {
+      "steps": "このコマンドを Kharej サーバーで実行し、表示されたトークンを下に貼り付けてください。",
+      "token": "Kharej サーバーのトークン"
+    },
+    "created": {
+      "title": "トンネル「{name}」を作成しました",
+      "externalIran": "仕上げにこのコマンドをイランのサーバーで実行してください。トンネルの鍵が含まれるため、非公開で共有してください。"
+    },
+    "connect": {
+      "warning": "このコマンドにはトンネルの鍵が含まれます。持っている人は誰でもトンネルを使えます。",
+      "command": "もう一方のサーバー用コマンド",
+      "show": "トークンを表示",
+      "hide": "トークンを隠す",
+      "copyToken": "トークンをコピー",
+      "none": "このトンネルには表示できるトークンがありません。"
+    },
+    "tab": {
+      "overview": "概要",
+      "logs": "ログ",
+      "connect": "サーバーを接続"
+    },
+    "errName": "英数字、スペース、ドット、ハイフン、アンダースコアで 1〜63 文字にしてください。",
+    "errNode": "ノードを選択してください。",
+    "errSameHost": "両端は別のサーバーにしてください。",
+    "errBothExternal": "少なくとも一方の端はこのパネルまたはノードで動かしてください。",
+    "errToken": "wat1: で始まるトークンを貼り付けてください",
+    "errPorts": "ポートを 1 つ以上追加してください。",
+    "errPortRange": "ポートは 1〜65535 です。",
+    "errDupPort": "この待ち受けポートが重複しています。",
+    "errReverseAuto": "リバースには自動ではなく特定のキャリアが必要です。",
+    "errReversePort": "イランのサーバーが待ち受けるキャリアポートを入力してください。",
+    "errHost": "www.example.com のようなホスト名を入力してください。",
+    "errRotate": "30m や 4h のような時間を指定してください。"
   },
   "tgbot": {
     "keyboardClosed": "❌ キーボードを閉じました！",
@@ -3588,6 +3954,8 @@
       "eventNodeCapStopped": "このノードのインバウンドは無効化されました。",
       "eventPortBlocked": "{{ .Name }} のポート {{ .Port }} が応答しなくなりました",
       "eventPortRestored": "{{ .Name }} のポート {{ .Port }} が再び応答しています",
+      "eventTunnelDown": "トンネル {{ .Name }} の接続が切れました",
+      "eventTunnelUp": "トンネル {{ .Name }} が再接続しました",
       "eventLoginFallback": "{{ .Source }} からのログインに失敗しました",
       "memoryThreshold": "メモリ使用率 {{ .Percent }}% がしきい値 {{ .Threshold }}% を超えました",
       "usagePercent": "{{ .Percent }}% ({{ .Used }} / {{ .Total }})",
@@ -3670,40 +4038,6 @@
       "chooseClient": "インバウンド {{ .Inbound }} のクライアントを選択",
       "chooseInbound": "インバウンドを選択",
       "qrCodeForClient": "クライアント {{ .Email }} のQRコード:"
-    },
-    "shop": {
-      "disabled": "現在ショップはご利用いただけません。",
-      "menu": "🛒 ショップ\r\n何をしますか？",
-      "plansTitle": "🛒 プランを選択してください:",
-      "noPlans": "現在販売中のプランはありません。",
-      "planDetail": "<b>{{ .Name }}</b>\r\n{{ .Description }}\r\nデータ量: {{ .Quota }}\r\n期間: {{ .Duration }}\r\n端末数: {{ .Devices }}\r\n価格: {{ .Price }}\r\n\r\nどのアカウント用ですか？",
-      "noExpiry": "無期限",
-      "confirm": "<b>{{ .Plan }}</b> / <code>{{ .Email }}</code>\r\n合計: {{ .Amount }}\r\n支払い方法を選択してください:",
-      "discountLine": "\r\n定価 {{ .List }}、コード {{ .Code }}",
-      "askCode": "割引コードをメッセージで送ってください。",
-      "askReceipt": "送金の追跡番号をメッセージで送ってください。",
-      "receiptSent": "✅ 領収情報を送信しました。まもなく確認されます。",
-      "expired": "選択の有効期限が切れました。/shop を送ってやり直してください。",
-      "ordersTitle": "📦 最近の注文:",
-      "noOrders": "注文はまだありません。",
-      "order": "📦 注文 #{{ .Id }} - {{ .Plan }}\r\n金額: {{ .Amount }}\r\n状態: {{ .Status }}",
-      "cardInfo": "\r\n\r\nこのカードへ {{ .Amount }} ちょうどを送金してください:\r\n<code>{{ .Card }}</code>\r\n{{ .Holder }} {{ .Bank }}\r\n{{ .Instructions }}",
-      "payLink": "\r\n\r\n支払いを完了する: {{ .URL }}",
-      "delivered": "✅ 支払い済みで有効化されました。サブスクリプション:",
-      "buttons": {
-        "plans": "🛒 プラン",
-        "orders": "📦 注文履歴",
-        "newAccount": "🆕 新規アカウント",
-        "renew": "🔄 {{ .Email }} を更新",
-        "code": "🏷 割引コード",
-        "card": "💳 カード振込",
-        "wallet": "👛 ウォレット",
-        "zarinpal": "Zarinpal",
-        "idpay": "IDPay",
-        "crypto": "暗号資産",
-        "receipt": "🧾 領収情報を送る",
-        "refresh": "🔄 更新"
-      }
     }
   },
   "discord": {
@@ -3748,6 +4082,8 @@
       "nodeCapReached": "ノードがトラフィック上限に到達",
       "portBlocked": "ポートがブロックされました",
       "portRestored": "ポートが復旧しました",
+      "tunnelDown": "トンネル切断",
+      "tunnelUp": "トンネル復旧",
       "xrayCrash": "Xray コアがクラッシュしました",
       "cpuHigh": "CPU しきい値超過",
       "memoryHigh": "メモリしきい値超過",

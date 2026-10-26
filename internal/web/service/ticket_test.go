@@ -184,7 +184,7 @@ func TestTicketEventsReachTheNotifier(t *testing.T) {
 	if _, err := svc.CustomerReply(auth, d.Ticket.Id, "more"); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := svc.AdminReply(d.Ticket.Id, "no event for admin replies"); err != nil {
+	if _, err := svc.AdminReply(d.Ticket.Id, "the answer"); err != nil {
 		t.Fatal(err)
 	}
 
@@ -193,15 +193,15 @@ func TestTicketEventsReachTheNotifier(t *testing.T) {
 		mu.Lock()
 		n := len(got)
 		mu.Unlock()
-		if n >= 2 {
+		if n >= 3 {
 			break
 		}
 		time.Sleep(10 * time.Millisecond)
 	}
 	mu.Lock()
 	defer mu.Unlock()
-	if len(got) != 2 || got[0].Type != eventbus.EventTicketOpened || got[1].Type != eventbus.EventTicketReplied {
-		t.Fatalf("events = %+v, want opened then replied (and none for the admin's reply)", got)
+	if len(got) != 3 || got[0].Type != eventbus.EventTicketOpened || got[1].Type != eventbus.EventTicketReplied || got[2].Type != eventbus.EventTicketAnswered {
+		t.Fatalf("events = %+v, want opened, replied, then answered for the admin's reply", got)
 	}
 	if data := got[0].Data.(*eventbus.TicketEventData); data.Subject != "Help <b>" || data.Email != "alice" || data.TicketId != d.Ticket.Id {
 		t.Fatalf("event data = %+v", data)

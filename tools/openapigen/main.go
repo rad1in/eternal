@@ -55,6 +55,7 @@ func run(root, outDir string) error {
 				"InboundRotation",
 				"Passkey",
 				"PendingAction",
+				"TunnelEnd",
 			),
 			AliasAllow: setOf("Protocol"),
 			Overrides: map[string][]walkOverride{
@@ -124,6 +125,13 @@ func run(root, outDir string) error {
 				"StripeConfig",
 				"PayPalConfig",
 				"ReferralConfig",
+				"ForceJoinChat",
+				"BotLink",
+				"ShopBotConfig",
+				"CustomOfferConfig",
+				"ShopCustom",
+				"ShopSession",
+				"ShopService",
 				"WalletView",
 				"WalletBalance",
 				"SecurityConfig",
@@ -164,6 +172,13 @@ func run(root, outDir string) error {
 				"HwidSlotStatus",
 				"AuditLogPage",
 				"HostedView",
+				"TunnelView",
+				"TunnelEndView",
+				"TunnelCreateRequest",
+				"TunnelUpdateRequest",
+				"TunnelEndpoint",
+				"TunnelAccess",
+				"TunnelCapabilities",
 			),
 		},
 		{
@@ -177,6 +192,18 @@ func run(root, outDir string) error {
 		{
 			Path:        resolveRel(root, "internal/amneziawg"),
 			StructAllow: setOf("ServerSettings"),
+		},
+		{
+			Path:        resolveRel(root, "internal/tunnel"),
+			StructAllow: setOf("EndConfig", "EndStatus", "EndResult", "SpeedResult", "ClientSession", "PortStat"),
+		},
+		{
+			Path:        resolveRel(root, "internal/wattunnel/spec"),
+			StructAllow: setOf("PortMap", "EndOptions"),
+		},
+		{
+			Path:        resolveRel(root, "internal/wattunnel/probe"),
+			StructAllow: setOf("CarrierResult"),
 		},
 		{
 			Path:        resolveRel(root, "internal/tuic"),

@@ -2087,7 +2087,7 @@ export const sections: readonly Section[] = [
         method: 'POST',
         path: '/panel/api/nodes/joinCommand',
         summary:
-          'Issue a single-use join token (valid one hour, stored hashed) and the shell command that installs the panel on a new server and registers it here. The server calls POST {basePath}/join/node with the token, so the master must be reachable from it.',
+          'Issue a single-use join token (valid one hour, stored hashed) and the shell command that installs the panel on a new server and registers it here. The command fetches {basePath}/install-node.sh from this panel and the server then calls POST {basePath}/join/node with the token, so the master must be reachable from it.',
         body: '{\n  "name": "de-fra-1",\n  "masterUrl": "https://panel.example.com:2053/abc/"\n}',
         responseSchema: 'NodeJoinCommand',
       },
@@ -2413,6 +2413,194 @@ export const sections: readonly Section[] = [
         path: '/panel/api/setting/getDefaultJsonConfig',
         summary:
           'Return the built-in default Xray JSON config template that ships with this panel version.',
+      },
+    ],
+  },
+
+  {
+    id: 'tunnels',
+    title: 'Tunnels',
+    description:
+      'Encrypted Iran-Kharej port forwarding (WatTunnel) between this panel, its nodes and servers without a panel. One tunnel is two ends sharing a pairUuid; an end runs a managed wattun process. The pairing token carries the tunnel key, so token and join-command responses are owner-only. The /panel/api/tunnels/agent calls are what a master panel sends to the nodes that run its tunnel ends. All endpoints under /panel/api/tunnels.',
+    endpoints: [
+      {
+        method: 'GET',
+        path: '/panel/api/tunnels/list',
+        summary: 'List every tunnel with the last observed state of its ends.',
+        responseSchema: 'TunnelView',
+        responseSchemaArray: true,
+      },
+      {
+        method: 'GET',
+        path: '/panel/api/tunnels/options',
+        summary:
+          'What this panel can do for tunnels: whether the wattun binary is installed, the platform, the carriers that apply here and this server public IPv4.',
+        responseSchema: 'TunnelCapabilities',
+      },
+      {
+        method: 'GET',
+        path: '/panel/api/tunnels/get/:pair',
+        summary: 'One tunnel, with live counters polled from the hosts running its ends.',
+        params: [{ name: 'pair', in: 'path', type: 'string', desc: 'Tunnel pairUuid.' }],
+        responseSchema: 'TunnelView',
+      },
+      {
+        method: 'GET',
+        path: '/panel/api/tunnels/logs/:pair/:role',
+        summary: 'Tail of the daemon log of one end.',
+        params: [
+          { name: 'pair', in: 'path', type: 'string', desc: 'Tunnel pairUuid.' },
+          {
+            name: 'role',
+            in: 'path',
+            type: 'string',
+            desc: 'kharej or iran.',
+            enum: ['kharej', 'iran'],
+          },
+          {
+            name: 'lines',
+            in: 'query',
+            type: 'integer',
+            desc: 'Lines to return.',
+            optional: true,
+            defaultValue: 200,
+          },
+        ],
+        response: '{\n  "success": true,\n  "obj": ["wattun client up", "link is up"]\n}',
+      },
+      {
+        method: 'GET',
+        path: '/panel/api/tunnels/token/:pair',
+        summary:
+          'The pairing token and the one-line install command of a tunnel whose Kharej end this panel runs. Owner only: the token contains the tunnel key.',
+        params: [{ name: 'pair', in: 'path', type: 'string', desc: 'Tunnel pairUuid.' }],
+        responseSchema: 'TunnelAccess',
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/create',
+        summary:
+          'Create a tunnel: starts the Kharej end, hands its token to the Iran end (probing every carrier first when carrier is auto) and waits briefly for the link. An end with kind external runs on a server without a panel; the response then carries the install command (owner only).',
+        body: '{\n  "name": "de-ir",\n  "kharej": { "kind": "node", "nodeId": 2 },\n  "iran": { "kind": "local" },\n  "carrier": "auto",\n  "ports": [{ "listen": 443, "target": 443 }],\n  "options": { "fakeSni": "www.cloudflare.com", "fakeMode": "rst" }\n}',
+        response:
+          '{\n  "success": true,\n  "obj": {\n    "tunnel": { "pairUuid": "...", "name": "de-ir", "state": "up" },\n    "access": null\n  }\n}',
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/update/:pair',
+        summary:
+          'Change the name, enabled state, ports (with optional rate and quota) or tuning options. A ports-only change is hot-reloaded and keeps the tunnel connected. Omitted fields stay.',
+        params: [{ name: 'pair', in: 'path', type: 'string', desc: 'Tunnel pairUuid.' }],
+        body: '{\n  "enable": true,\n  "ports": [{ "listen": 443, "target": 443, "rateMBps": 5, "quotaGB": 100 }]\n}',
+        responseSchema: 'TunnelView',
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/del/:pair',
+        summary:
+          'Stop and delete a tunnel. With force, an end on a node that cannot be reached is skipped instead of failing the call.',
+        params: [{ name: 'pair', in: 'path', type: 'string', desc: 'Tunnel pairUuid.' }],
+        body: '{\n  "force": false\n}',
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/restart/:pair',
+        summary: 'Restart the daemon of every managed end.',
+        params: [{ name: 'pair', in: 'path', type: 'string', desc: 'Tunnel pairUuid.' }],
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/reprobe/:pair',
+        summary:
+          'Test every carrier again from the Iran end of an auto tunnel and switch to the fastest that connects.',
+        params: [{ name: 'pair', in: 'path', type: 'string', desc: 'Tunnel pairUuid.' }],
+        responseSchema: 'TunnelView',
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/speedtest/:pair',
+        summary: 'Move mb megabytes each way through the Iran end and report the speed.',
+        params: [
+          { name: 'pair', in: 'path', type: 'string', desc: 'Tunnel pairUuid.' },
+          {
+            name: 'mb',
+            in: 'query',
+            type: 'integer',
+            desc: 'Megabytes each way.',
+            optional: true,
+            defaultValue: 10,
+          },
+        ],
+        responseSchema: 'SpeedResult',
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/agent/apply',
+        summary:
+          'Node side of a master call: start or update one tunnel end on this host, choosing free ports and refusing clashes. The body is the end including its key.',
+        responseSchema: 'EndResult',
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/agent/remove/:uuid',
+        summary: 'Node side: stop and forget one tunnel end.',
+        params: [{ name: 'uuid', in: 'path', type: 'string', desc: 'End uuid.' }],
+      },
+      {
+        method: 'GET',
+        path: '/panel/api/tunnels/agent/status',
+        summary: 'Node side: observed status of every tunnel end running on this host.',
+        responseSchema: 'EndStatus',
+        responseSchemaArray: true,
+      },
+      {
+        method: 'GET',
+        path: '/panel/api/tunnels/agent/logs/:uuid',
+        summary: 'Node side: tail of one end daemon log.',
+        params: [
+          { name: 'uuid', in: 'path', type: 'string', desc: 'End uuid.' },
+          {
+            name: 'lines',
+            in: 'query',
+            type: 'integer',
+            desc: 'Lines to return.',
+            optional: true,
+            defaultValue: 200,
+          },
+        ],
+        response: '{\n  "success": true,\n  "obj": ["wattun client up"]\n}',
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/agent/restart/:uuid',
+        summary: 'Node side: restart one end daemon.',
+        params: [{ name: 'uuid', in: 'path', type: 'string', desc: 'End uuid.' }],
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/agent/probe',
+        summary:
+          'Node side: try every carrier of an auto token from this host and return the results, best first.',
+        body: '{\n  "token": "wat1:..."\n}',
+        responseSchema: 'CarrierResult',
+        responseSchemaArray: true,
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/tunnels/agent/speedtest/:uuid',
+        summary: 'Node side: run a speed test through one Iran end on this host.',
+        params: [
+          { name: 'uuid', in: 'path', type: 'string', desc: 'End uuid.' },
+          {
+            name: 'mb',
+            in: 'query',
+            type: 'integer',
+            desc: 'Megabytes each way.',
+            optional: true,
+            defaultValue: 10,
+          },
+        ],
+        responseSchema: 'SpeedResult',
       },
     ],
   },
@@ -2834,7 +3022,7 @@ export const sections: readonly Section[] = [
     id: 'shop',
     title: 'Public Shop',
     description:
-      'The customer-facing purchase API. It needs no panel session: a customer holds only the order token. It lives at /shop/api, outside the panel base path, and answers 404 (or the decoy site) until the shop is switched on in the sales configuration. Refusals come back as success false with a stable code in msg (plan_unavailable, invalid_email, invalid_kind, email_taken, email_unknown, gateway_unavailable, order_not_found, order_state, receipt_invalid, currency_unsupported, gateway_failed, bad_signature, amount_mismatch, discount_invalid, discount_used, referral_invalid, wallet_insufficient, proof_invalid, ticket_invalid, ticket_not_found, ticket_limit, ticket_closed, rate_limited); rate_limited also arrives with HTTP 429 and internal_error with 500. Writes are limited to 30 per 10 minutes per address.',
+      'The customer-facing purchase API. It needs no panel session: a customer holds only the order token. It lives at /shop/api, outside the panel base path, and answers 404 (or the decoy site) until the shop is switched on in the sales configuration. Refusals come back as success false with a stable code in msg (plan_unavailable, invalid_email, invalid_kind, email_taken, email_unknown, gateway_unavailable, order_not_found, order_state, receipt_invalid, currency_unsupported, gateway_failed, bad_signature, amount_mismatch, discount_invalid, discount_used, referral_invalid, wallet_insufficient, proof_invalid, ticket_invalid, ticket_not_found, ticket_limit, ticket_closed, rate_limited, custom_invalid, addon_unsupported, banned); rate_limited also arrives with HTTP 429 and internal_error with 500. Writes are limited to 30 per 10 minutes per address.',
     endpoints: [
       {
         method: 'GET',
@@ -2848,7 +3036,22 @@ export const sections: readonly Section[] = [
         summary:
           'Preview the price of a plan with a discount code, without reserving the code. A refused code answers success false with discount_invalid (unknown, disabled, expired, wrong plan or currency, or it would make the order free) or discount_used (use limit reached, or already used by this client).',
         params: [
-          { name: 'planId', in: 'body (json)', type: 'integer' },
+          {
+            name: 'planId',
+            in: 'body (json)',
+            type: 'integer',
+            desc: 'Plan to price; 0 prices the calculator offer.',
+          },
+          {
+            name: 'kind',
+            in: 'body (json)',
+            type: 'string',
+            optional: true,
+            enum: ['new', 'renew', 'addon'],
+            desc: 'Defaults to new. An add-on can only be priced with the calculator.',
+          },
+          { name: 'customGb', in: 'body (json)', type: 'integer', optional: true },
+          { name: 'customDays', in: 'body (json)', type: 'integer', optional: true },
           { name: 'discountCode', in: 'body (json)', type: 'string', optional: true },
           {
             name: 'email',
@@ -2877,14 +3080,32 @@ export const sections: readonly Section[] = [
         summary:
           'Start a purchase. kind new needs a free username (3 to 32 of a-z, 0-9, dot, underscore, dash; it is lower-cased) with no open order; renew needs the exact username of an existing client. The reply is the order as the customer sees it, including the card details while a transfer is expected.',
         params: [
-          { name: 'planId', in: 'body (json)', type: 'integer', desc: 'Plan to buy.' },
-          { name: 'kind', in: 'body (json)', type: 'string', enum: ['new', 'renew'] },
-          { name: 'email', in: 'body (json)', type: 'string', desc: 'Client username.' },
+          {
+            name: 'planId',
+            in: 'body (json)',
+            type: 'integer',
+            desc: 'Plan to buy; 0 buys the calculator offer sized by customGb and customDays (see the custom block of the plans reply).',
+          },
+          { name: 'customGb', in: 'body (json)', type: 'integer', optional: true },
+          { name: 'customDays', in: 'body (json)', type: 'integer', optional: true },
+          {
+            name: 'kind',
+            in: 'body (json)',
+            type: 'string',
+            enum: ['new', 'renew', 'addon'],
+            desc: 'An add-on adds quota and days to an existing client without resetting its usage; only the calculator sells it, and either customGb or customDays may be 0.',
+          },
+          {
+            name: 'email',
+            in: 'body (json)',
+            type: 'string',
+            desc: 'Client username. A Mini App session may leave it blank on a new purchase and gets tg<id>.',
+          },
           {
             name: 'gateway',
             in: 'body (json)',
             type: 'string',
-            desc: 'Payment method: card, zarinpal, idpay, crypto, stripe, paypal or wallet. A wallet payment is for renewals only, needs proof and is delivered at once.',
+            desc: "Payment method: card, zarinpal, idpay, crypto, stripe, paypal or wallet. A wallet payment is for renewals and add-ons only, needs proof (not needed in a Mini App session for the buyer's own clients) and is delivered at once.",
           },
           {
             name: 'discountCode',
@@ -3062,6 +3283,37 @@ export const sections: readonly Section[] = [
           { name: 'body', in: 'body (json)', type: 'string' },
         ],
         responseSchema: 'TicketDetail',
+      },
+      {
+        method: 'POST',
+        path: '/shop/api/telegram/session',
+        summary:
+          'Sign a Telegram Mini App visitor in. initData is the launch string Telegram hands the page; it is verified server side (HMAC-SHA256 keyed by the bot token, at most 24 hours old) and nothing it claims is trusted before that. Needs the Mini App switched on in the sales configuration. The reply carries a session token (12 hours) to send as the X-Shop-Session header on later calls, the Telegram account, and the services bound to it. A bad or stale launch answers proof_invalid, a barred account banned.',
+        params: [
+          {
+            name: 'initData',
+            in: 'body (json)',
+            type: 'string',
+            desc: 'Telegram WebApp initData.',
+          },
+        ],
+        responseSchema: 'ShopSession',
+      },
+      {
+        method: 'GET',
+        path: '/shop/api/telegram/me',
+        summary:
+          "Refresh the signed-in buyer's services and their usage. Needs the X-Shop-Session header; a missing, forged or expired one answers 401 proof_invalid.",
+        params: [
+          {
+            name: 'X-Shop-Session',
+            in: 'header',
+            type: 'string',
+            desc: 'Session token from the session call.',
+          },
+        ],
+        responseSchema: 'ShopService',
+        responseSchemaArray: true,
       },
       {
         method: 'GET',

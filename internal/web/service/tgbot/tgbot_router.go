@@ -234,12 +234,19 @@ func (t *Tgbot) answerCommand(message *telego.Message, chatId int64, isAdmin boo
 		msg += t.I18nBot("tgbot.commands.help")
 		msg += t.I18nBot("tgbot.commands.pleaseChoose")
 	case "start":
+		if len(commandArgs) > 0 && t.startWithReferral(chatId, message.From, commandArgs[0]) {
+			return
+		}
 		if len(commandArgs) > 0 {
 			if !isAdmin && !t.allowInviteAttempt(message.From) {
 				t.SendMsgToTgbot(chatId, t.I18nBot("tgbot.messages.inviteRateLimited"))
 				return
 			}
 			t.claimInvite(chatId, message.From.ID, commandArgs[0])
+		}
+		if !isAdmin && t.shopEnabled() {
+			t.handleShop(chatId, message.From)
+			return
 		}
 		// A stranger learns only its ChatID, which is what an admin needs to bind it.
 		if !isAdmin && t.levelOf(message.From.ID) == levelStranger {

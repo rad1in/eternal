@@ -44,6 +44,11 @@ const (
 	EventClientQuotaWarning  EventType = "client.quota_warning"
 	EventClientExpiryWarning EventType = "client.expiry_warning"
 
+	// A tunnel link lost its connection, then got it back; Source is the tunnel's name and
+	// Data a *TunnelEventData.
+	EventTunnelDown EventType = "tunnel.down"
+	EventTunnelUp   EventType = "tunnel.up"
+
 	// Weekly summary; Data is a *WeeklySummaryData.
 	EventWeeklyReport EventType = "report.weekly"
 
@@ -59,7 +64,38 @@ const (
 	// "ticket-<id>", Data a *TicketEventData.
 	EventTicketOpened  EventType = "ticket.opened"
 	EventTicketReplied EventType = "ticket.replied"
+	// EventTicketAnswered is an admin's reply; it is meant for the customer.
+	EventTicketAnswered EventType = "ticket.answered"
 )
+
+// Shop order events. They are addressed to the buyer (and, for a receipt, to
+// the admins who must review it), so they are not part of the admin-selectable
+// notification list.
+const (
+	EventOrderReceipt   EventType = "order.receipt"
+	EventOrderFulfilled EventType = "order.fulfilled"
+	EventOrderRejected  EventType = "order.rejected"
+	EventOrderExpired   EventType = "order.expired"
+	EventOrderReminder  EventType = "order.reminder"
+)
+
+// OrderEventData names the order a shop event is about. The bot re-reads the
+// order, so nothing sensitive travels on the bus.
+type OrderEventData struct {
+	OrderId int   `json:"orderId"`
+	TgId    int64 `json:"tgId"`
+}
+
+// TunnelEventData is the tunnel link an event is about. Error is the daemon's last complaint
+// on a down event; DownSeconds is how long the link was down on an up event.
+type TunnelEventData struct {
+	PairUuid    string `json:"pairUuid"`
+	Name        string `json:"name"`
+	Carrier     string `json:"carrier,omitempty"`
+	Node        string `json:"node,omitempty"`
+	Error       string `json:"error,omitempty"`
+	DownSeconds int64  `json:"downSeconds,omitempty"`
+}
 
 // TicketEventData is the ticket a support event is about. Excerpt is the start
 // of the message, plain text.

@@ -4,12 +4,16 @@ import {
   QuoteSchema,
   ShopCatalogSchema,
   ShopOrderViewSchema,
+  ShopServiceSchema,
+  ShopSessionSchema,
   ShopWalletSchema,
   TicketDetailSchema,
   TicketSchema,
   type Quote,
   type ShopCatalog,
   type ShopOrderView,
+  type ShopService,
+  type ShopSession,
   type ShopWallet,
   type Ticket,
   type TicketDetail,
@@ -23,6 +27,21 @@ const envelope = z.object({
   obj: z.unknown().optional(),
 });
 
+// The Mini App session token; once a visitor is signed in through Telegram,
+// every later call carries it so the server knows who is asking.
+let sessionToken = '';
+
+export function setShopSession(token: string): void {
+  sessionToken = token;
+}
+
+function requestHeaders(hasBody: boolean): Record<string, string> | undefined {
+  const headers: Record<string, string> = {};
+  if (hasBody) headers['Content-Type'] = 'application/json';
+  if (sessionToken) headers['X-Shop-Session'] = sessionToken;
+  return Object.keys(headers).length > 0 ? headers : undefined;
+}
+
 // The shop answers refusals as stable codes in msg; anything unreadable is
 // reported as a network code so the page can show one generic message.
 async function call<T>(
@@ -34,7 +53,7 @@ async function call<T>(
   try {
     const res = await fetch(`/shop/api${path}`, {
       method,
-      headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
+      headers: requestHeaders(body !== undefined),
       body: body === undefined ? undefined : JSON.stringify(body),
       cache: 'no-store',
     });
@@ -49,8 +68,11 @@ async function call<T>(
 }
 
 export interface OrderInput {
+  // 0 buys the calculator offer, sized by customGb and customDays.
   planId: number;
-  kind: 'new' | 'renew';
+  customGb?: number;
+  customDays?: number;
+  kind: 'new' | 'renew' | 'addon';
   email: string;
   gateway: string;
   contact?: string;
@@ -71,6 +93,9 @@ export const shopApi = {
   catalog: (): Promise<ShopResult<ShopCatalog>> => call('GET', '/plans', ShopCatalogSchema),
   quote: (body: {
     planId: number;
+    kind?: 'new' | 'renew' | 'addon';
+    customGb?: number;
+    customDays?: number;
     discountCode: string;
     email: string;
   }): Promise<ShopResult<Quote>> => call('POST', '/quote', QuoteSchema, body),
@@ -95,6 +120,10 @@ export const shopApi = {
     call('POST', '/tickets', TicketDetailSchema, { ...auth, subject, body }),
   replyTicket: (auth: TicketAuth, id: number, body: string): Promise<ShopResult<TicketDetail>> =>
     call('POST', `/tickets/${id}/reply`, TicketDetailSchema, { ...auth, body }),
+  telegramSession: (initData: string): Promise<ShopResult<ShopSession>> =>
+    call('POST', '/telegram/session', ShopSessionSchema, { initData }),
+  myServices: (): Promise<ShopResult<ShopService[]>> =>
+    call('GET', '/telegram/me', z.array(ShopServiceSchema)),
   wallet: (email: string, proof: string): Promise<ShopResult<ShopWallet>> =>
     call(
       'GET',
@@ -125,6 +154,9 @@ export const SHOP_ERROR_CODES = [
   'ticket_limit',
   'ticket_closed',
   'rate_limited',
+  'custom_invalid',
+  'addon_unsupported',
+  'banned',
   'network',
 ] as const;
 

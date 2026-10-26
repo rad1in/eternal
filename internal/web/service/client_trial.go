@@ -12,6 +12,13 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+// TrialUsed reports whether the Telegram user already received their trial.
+func (s *ClientService) TrialUsed(tgID int64) bool {
+	var n int64
+	database.GetDB().Model(&model.ClientTrial{}).Where("tg_id = ?", tgID).Count(&n)
+	return n > 0
+}
+
 // ErrTrialAlreadyUsed means this Telegram user already got their free trial.
 var ErrTrialAlreadyUsed = errors.New("free trial already used")
 

@@ -1,10 +1,17 @@
 package controller
 
 import (
+	"crypto/sha256"
+	"crypto/x509"
+	"encoding/base64"
+	"encoding/pem"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
+	"github.com/mhsanaei/3x-ui/v3/internal/config"
+	"github.com/mhsanaei/3x-ui/v3/internal/nodeinstall"
 	"github.com/mhsanaei/3x-ui/v3/internal/web/entity"
 	"github.com/mhsanaei/3x-ui/v3/internal/web/service"
 
@@ -24,11 +31,19 @@ type NodeJoinController struct {
 	limiter     *windowLimiter
 }
 
-// NewNodeJoinController mounts POST {basePath}/join/node on g.
+// NewNodeJoinController mounts POST {basePath}/join/node and the installer script
+// it is driven by, GET {basePath}/install-node.sh, on g.
 func NewNodeJoinController(g *gin.RouterGroup) *NodeJoinController {
 	a := &NodeJoinController{limiter: newWindowLimiter(joinLimit, joinWindow)}
 	g.POST("/join/node", a.join)
+	g.GET("/install-node.sh", a.installScript)
 	return a
+}
+
+// installScript serves the node installer; it holds nothing secret, the token is the credential.
+func (a *NodeJoinController) installScript(c *gin.Context) {
+	c.Header("Cache-Control", "no-store")
+	c.Data(http.StatusOK, "text/x-shellscript; charset=utf-8", nodeinstall.Script(config.GetBaseVersion()))
 }
 
 func (a *NodeJoinController) join(c *gin.Context) {
@@ -68,7 +83,7 @@ func (a *NodeController) joinCommand(c *gin.Context) {
 	if master == "" {
 		master = requestOrigin(c) + c.GetString("base_path")
 	}
-	cmd, err := a.joinService.IssueCommand(master, strings.TrimSpace(req.Name))
+	cmd, err := a.joinService.IssueCommand(master, strings.TrimSpace(req.Name), a.masterPin(c))
 	if err != nil {
 		jsonMsg(c, I18nWeb(c, "pages.nodes.toasts.add"), err)
 		return
@@ -83,4 +98,34 @@ func requestOrigin(c *gin.Context) string {
 		scheme = "https"
 	}
 	return scheme + "://" + c.Request.Host
+}
+
+// masterPin is the pin curl needs to trust this panel, or "" when its certificate
+// is not self-signed (a CA-signed or proxied panel needs none).
+func (a *NodeController) masterPin(c *gin.Context) string {
+	if c.Request.TLS == nil {
+		return ""
+	}
+	certFile, _ := a.settingService.GetCertFile()
+	return masterPin(certFile)
+}
+
+func masterPin(certFile string) string {
+	if certFile == "" {
+		return ""
+	}
+	raw, err := os.ReadFile(certFile)
+	if err != nil {
+		return ""
+	}
+	block, _ := pem.Decode(raw)
+	if block == nil {
+		return ""
+	}
+	leaf, err := x509.ParseCertificate(block.Bytes)
+	if err != nil || leaf.CheckSignatureFrom(leaf) != nil {
+		return ""
+	}
+	sum := sha256.Sum256(leaf.RawSubjectPublicKeyInfo)
+	return "sha256//" + base64.StdEncoding.EncodeToString(sum[:])
 }

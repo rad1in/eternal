@@ -1858,6 +1858,8 @@
       "eventNodeCapReached": "Aylık trafik sınırına ulaşıldı",
       "eventPortBlocked": "Port yanıt vermiyor",
       "eventPortRestored": "Port yeniden yanıt veriyor",
+      "eventTunnelDown": "Tünel bağlantıyı kaybetti",
+      "eventTunnelUp": "Tünel yeniden bağlandı",
       "eventCPUHigh": "Yüksek CPU (%)",
       "requestFailed": "İstek başarısız oldu",
       "smtpEncryption": "Şifreleme",
@@ -2138,6 +2140,7 @@
       "backupNowDesc": "Önce kaydedin: kayıtlı klasör ve kova kullanılır.",
       "eventGroupClients": "İstemciler",
       "eventGroupPort": "Portlar",
+      "eventGroupTunnel": "Tüneller",
       "portProbe": "Port yoklaması",
       "portProbeDesc": "Her giriş için herkese açık TCP portlarını dakikada bir dışarıdan denetler ve biri yanıt vermeyi bıraktığında uyarır.",
       "portProbeHost": "Sunucu adresi",
@@ -3060,7 +3063,8 @@
         "referrer": "Yönlendiren",
         "kinds": {
           "new": "Yeni",
-          "renew": "Yenileme"
+          "renew": "Yenileme",
+          "addon": "Ek paket"
         },
         "statuses": {
           "pending": "Ödeme bekliyor",
@@ -3273,6 +3277,241 @@
       "errPath": "Yalnızca harf, rakam ve . _ ~ - kullanın"
     }
   },
+  "shopbot": {
+    "disabled": "Mağaza şu anda kullanılamıyor.",
+    "banned": "Hesabınız mağazayı kullanamaz. Bir hata olduğunu düşünüyorsanız operatörle iletişime geçin.",
+    "slowDown": "Çok fazla dokunuş. Lütfen biraz bekleyin.",
+    "expired": "Seçiminizin süresi doldu. Yeniden başlamak için menüyü açın.",
+    "unlimited": "Sınırsız",
+    "noExpiry": "Süresiz",
+    "menu": {
+      "welcome": "👋 Merhaba {{ .Name }}!\nNe yapmak istersiniz?"
+    },
+    "join": {
+      "required": "Mağazayı kullanmak için önce kanalımıza katılın, sonra “Katıldım” düğmesine dokunun.",
+      "open": "{{ .Channel }} kanalına katıl",
+      "channel": "Kanal",
+      "done": "✅ Katıldım"
+    },
+    "btn": {
+      "buy": "🛒 Satın al",
+      "services": "📦 Hizmetlerim",
+      "wallet": "👛 Cüzdan",
+      "invite": "🎁 Arkadaşını davet et",
+      "trial": "🧪 Ücretsiz deneme",
+      "support": "🆘 Destek",
+      "orders": "🧾 Siparişlerim",
+      "language": "🌐 Dil",
+      "miniapp": "🚀 Mağaza uygulamasını aç",
+      "admin": "🛠 Yönetim",
+      "menu": "🏠 Menü",
+      "back": "⬅️ Geri",
+      "cancel": "✖️ İptal",
+      "skip": "Atla",
+      "refresh": "🔄 Yenile",
+      "custom": "✨ Kendi paketini oluştur",
+      "newAccount": "🆕 Yeni hesap",
+      "renew": "🔄 {{ .Email }} yenile",
+      "code": "🏷 İndirim kodu",
+      "receipt": "📤 Dekont gönder",
+      "pay": "💳 Şimdi öde",
+      "link": "🔗 Bağlantı",
+      "qr": "📷 QR kodu",
+      "renewThis": "🔄 Yenile",
+      "addon": "➕ Veri / süre ekle",
+      "newTicket": "✍️ Yeni destek talebi",
+      "reply": "↩️ Yanıtla",
+      "openTicket": "💬 Talebi aç",
+      "openOrder": "🧾 Siparişi aç",
+      "approve": "✅ Onayla",
+      "reject": "❌ Reddet",
+      "today": "📊 Bugün",
+      "waiting": "🧾 Bekleyen dekontlar",
+      "ban": "🚫 Kullanıcıyı engelle",
+      "unban": "✅ Engeli kaldır"
+    },
+    "plans": {
+      "title": "🛒 Bir paket seçin:",
+      "none": "Şu anda satışta paket yok.",
+      "misc": "Diğer",
+      "detail": "<b>{{ .Name }}</b>\n{{ .Description }}📊 Veri: {{ .Quota }}\n⏳ Süre: {{ .Duration }}\n📱 Cihaz: {{ .Devices }}\n💰 Fiyat: {{ .Price }}\n\nHangi hesap için?"
+    },
+    "kind": {
+      "new": "Yeni hesap",
+      "renew": "Yenileme",
+      "addon": "Ek paket"
+    },
+    "confirm": "🧾 <b>{{ .Item }}</b>\n{{ .Kind }} · <code>{{ .Email }}</code>\n💰 <b>{{ .Amount }}</b>{{ .Discount }}\n\nÖdeme yöntemini seçin:",
+    "discountLine": "\n🏷 Liste fiyatı {{ .List }} · kod {{ .Code }}",
+    "gw": {
+      "card": "💳 Karta havale",
+      "wallet": "👛 Cüzdan",
+      "zarinpal": "Zarinpal",
+      "idpay": "IDPay",
+      "crypto": "🪙 Kripto",
+      "stripe": "Stripe",
+      "paypal": "PayPal"
+    },
+    "askCode": "İndirim kodunuzu mesaj olarak gönderin.",
+    "custom": {
+      "item": "Özel paket: {{ .Parts }}",
+      "addonItem": "Ek paket: {{ .Parts }}",
+      "askGB": "Ne kadar veriye ihtiyacınız var? Bir boyut seçin veya GB sayısı gönderin ({{ .Min }}-{{ .Max }}).\nFiyat: GB başına {{ .Price }}.",
+      "askDays": "Kaç gün için? Bir süre seçin veya gün sayısı gönderin ({{ .Min }}-{{ .Max }}).\nFiyat: günlük {{ .Price }}.",
+      "badGB": "{{ .Min }} ile {{ .Max }} arasında bir GB sayısı gönderin.",
+      "badDays": "{{ .Min }} ile {{ .Max }} arasında bir gün sayısı gönderin.",
+      "notNumber": "Lütfen tam bir sayı gönderin."
+    },
+    "addon": {
+      "off": "Veri veya süre ekleme şu anda kullanılamıyor."
+    },
+    "order": {
+      "head": "🧾 Sipariş #{{ .Id }} - {{ .Item }}\n{{ .Kind }} · {{ .Amount }}\nDurum: {{ .Status }}",
+      "card": "\n\n💳 Bu karta tam olarak {{ .Amount }} havale edin:\n<code>{{ .Card }}</code>\n{{ .Holder }} {{ .Bank }}\n{{ .Instructions }}\n\nSonra “Dekont gönder”e dokunup dekontun fotoğrafını veya takip numarasını gönderin.",
+      "reason": "\n❗ {{ .Reason }}"
+    },
+    "orders": {
+      "title": "🧾 Son siparişleriniz:",
+      "none": "Henüz siparişiniz yok."
+    },
+    "askReceipt": "Ödeme dekontunun fotoğrafını veya havalenin takip numarasını gönderin.",
+    "receiptSent": "✅ Dekont gönderildi. Kısa süre içinde onaylanacak.",
+    "delivered": {
+      "new": "✅ Ödendi ve etkinleştirildi. Hizmetiniz hazır:",
+      "renew": "✅ Ödendi ve yenilendi. Hizmetiniz:",
+      "addon": "✅ Ödendi. Veri ve süre eklendi:"
+    },
+    "svc": {
+      "none": "Henüz hizmetiniz yok.",
+      "list": "📦 Hizmetleriniz:",
+      "card": "📦 <b>{{ .Email }}</b>\n{{ .State }}\n📊 {{ .Usage }}\n⏳ {{ .Expiry }}",
+      "state": {
+        "active": "🟢 Etkin",
+        "disabled": "⛔ Devre dışı",
+        "depleted": "📉 Veri bitti",
+        "expired": "⌛ Süresi doldu"
+      },
+      "daysLeft": "{{ .Days }} gün kaldı",
+      "startsOnUse": "ilk bağlantıdan itibaren {{ .Days }} gün",
+      "link": "🔗 Abonelik bağlantısı:\n<code>{{ .URL }}</code>",
+      "jsonLink": "\n\nJSON bağlantısı:\n<code>{{ .URL }}</code>",
+      "noLink": "Abonelik bağlantısı kullanılamıyor. Lütfen destekle iletişime geçin.",
+      "qrCaption": "📷 {{ .Email }} için QR kodu"
+    },
+    "wallet": {
+      "title": "👛 Hizmet başına cüzdan bakiyeniz:",
+      "empty": "bakiye yok",
+      "hint": "\n\nBakiye, yenileme ve ek paket ödemelerinde kullanılabilir.",
+      "none": "Cüzdan, bir hizmetiniz olunca kullanılabilir."
+    },
+    "ref": {
+      "off": "Tavsiye programı şu anda kapalı.",
+      "needService": "Önce bir hizmet satın alın, size özel davet bağlantınız oluşsun.",
+      "info": "🎁 <b>Arkadaşlarını davet et</b>\nBir arkadaşın bağlantınla ilk hizmetini satın alınca fiyatın %{{ .Percent }}'i cüzdanına eklenir.\n\nKodunuz: <code>{{ .Code }}</code>\nBağlantınız:\n{{ .Link }}"
+    },
+    "support": {
+      "noService": "Destek talepleri hizmeti olan müşteriler içindir. Menüdeki bağlantılardan bize ulaşın.",
+      "pick": "Hangi hizmetle ilgili?",
+      "title": "🆘 <code>{{ .Email }}</code> için destek",
+      "ticket": "💬 <b>Talep #{{ .Id }}</b> - {{ .Subject }}\nDurum: {{ .Status }}",
+      "you": "Siz",
+      "staff": "Destek",
+      "askNew": "Sorununuzu tek mesajda anlatın. İlk satır konu olur.",
+      "askReply": "Yanıtınızı mesaj olarak gönderin.",
+      "sent": "✅ Talep #{{ .Id }} açıldı. Yanıtı buradan ileteceğiz.",
+      "replied": "✅ Yanıt gönderildi."
+    },
+    "lang": {
+      "choose": "🌐 Dilinizi seçin:"
+    },
+    "notify": {
+      "fulfilled": "✅ #{{ .Id }} numaralı siparişin ({{ .Item }}) ödemesi onaylandı.",
+      "rejected": "❌ #{{ .Id }} numaralı sipariş kabul edilmedi.",
+      "expired": "⌛ Ödeme gelmediği için #{{ .Id }} numaralı siparişin süresi doldu.",
+      "reminder": "⏰ #{{ .Id }} numaralı sipariş ({{ .Item }}, {{ .Amount }}) hâlâ ödeme bekliyor.",
+      "ticket": "💬 Destek, #{{ .Id }} numaralı talebi ({{ .Subject }}) yanıtladı:\n\n{{ .Excerpt }}"
+    },
+    "reject": {
+      "none": "Sebep belirtmeden reddet",
+      "notFound": "Ödeme bulunamadı",
+      "amount": "Tutar uyuşmuyor",
+      "duplicate": "Bu dekont daha önce kullanılmış"
+    },
+    "admin": {
+      "title": "🛠 Mağaza yönetimi",
+      "web": "web mağazası",
+      "receipt": "🧾 <b>#{{ .Id }} numaralı sipariş dekontu</b>\nAlıcı: {{ .Buyer }}\nHesap: <code>{{ .Account }}</code>\n{{ .Item }} · {{ .Kind }}\nTutar: <b>{{ .Amount }}</b>\nReferans: {{ .Ref }}\nNot: {{ .Note }}",
+      "approvedBy": "✅ {{ .Name }} onayladı",
+      "rejectedBy": "❌ {{ .Name }} reddetti",
+      "alreadyHandled": "#{{ .Id }} numaralı sipariş zaten işlendi.",
+      "failed": "#{{ .Id }} numaralı sipariş işlenemedi. Panel günlüğüne bakın.",
+      "stats": "📊 <b>Bugün</b>\n{{ .Paid }}\n\nÖdenmemiş siparişler: {{ .Pending }}\nBekleyen dekontlar: {{ .Review }}",
+      "salesLine": "{{ .Orders }} ödenmiş sipariş: {{ .Amount }}",
+      "noSales": "Bugün henüz ödenmiş sipariş yok.",
+      "noneWaiting": "Bekleyen dekont yok.",
+      "waitingTitle": "🧾 Onay bekleyen dekontlar:",
+      "askBan": "Engellenecek Telegram sayısal kimliğini gönderin.",
+      "askUnban": "Engeli kaldırılacak Telegram sayısal kimliğini gönderin.",
+      "badID": "Bu bir Telegram kimliği değil.",
+      "cannotBanAdmin": "Bir yönetici engellenemez.",
+      "banned": "🚫 {{ .ID }} mağazadan engellendi.",
+      "unbanned": "✅ {{ .ID }} mağazayı yeniden kullanabilir."
+    },
+    "currency": {
+      "IRT": "Toman",
+      "IRR": "Riyal"
+    },
+    "commandDesc": "Mağazayı aç",
+    "app": {
+      "signedIn": "Telegram ile {name} olarak giriş yapıldı",
+      "services": "Hizmetleriniz",
+      "noServices": "Henüz hizmetiniz yok.",
+      "disabled": "Devre dışı",
+      "usage": "{total} GB'ın {used} GB'ı kullanıldı",
+      "expiresOn": "Bitiş: {date}",
+      "renew": "Yenile",
+      "addon": "Veri / süre ekle",
+      "copyLink": "Abonelik bağlantısını kopyala",
+      "renewing": "{email} yenileniyor: aşağıdan bir paket seçin.",
+      "adding": "{email} hesabına ekleniyor: eklenecek veriyi ve günü seçin.",
+      "addonAccount": "Hesabıma ekle",
+      "pickService": "Bir hizmet seçin",
+      "categoryOther": "Diğer",
+      "custom": "Kendi paketini oluştur",
+      "customGb": "Veri (GB)",
+      "customDays": "gün",
+      "customBounds": "Veri {minGb}-{maxGb} GB, süre {minDays}-{maxDays} gün.",
+      "customTotal": "Toplam",
+      "continue": "Devam",
+      "sessionExpired": "Bu Telegram oturumunun süresi doldu. Mağazayı kapatıp bottan yeniden açın."
+    },
+    "cfg": {
+      "botTitle": "Telegram mağaza botu",
+      "miniApp": "Mini App düğmesi",
+      "miniAppHint": "Bot menüsüne “Mağaza uygulamasını aç” düğmesi ekler. Alıcılar web mağazasını Telegram içinde açar ve otomatik giriş yapar. Herkese açık mağazanın açık ve temel URL'nin https olması gerekir.",
+      "receiptChat": "Dekont grubu veya kanal kimliği",
+      "receiptChatHint": "İsteğe bağlı, örn. -1001234567890. Kart dekontları Onayla ve Reddet düğmeleriyle oraya da gelir; yalnızca bot ayarlarında listelenen yöneticiler karar verebilir. Önce botu o sohbete ekleyin. 0 verirseniz dekontlar yalnızca yöneticilerin özel sohbetine gider.",
+      "forceJoin": "Zorunlu kanallar",
+      "forceJoinHint": "Alıcılar mağazayı kullanmadan önce üye olmalıdır. Satır başına bir tane: @kanal veya sayısal sohbet kimliği, istenirse ardından | katılım bağlantısı (özel kanallar için gerekir). Üyeliği denetleyebilmesi için botu her kanalda yönetici yapın.",
+      "links": "Menü bağlantıları",
+      "linksHint": "Bot menüsündeki ek düğmeler, satır başına bir tane: etiket | https://… (en fazla 6).",
+      "customTitle": "Kendi paketini oluştur (hesaplayıcı)",
+      "customEnabled": "Özel veri ve gün sat",
+      "customHint": "Alıcı kota ve süreyi seçer; fiyat = kota × GB fiyatı + gün × günlük fiyat. Ayrıca mevcut bir hesabı kullanımını sıfırlamadan artıran ek paketleri de satar.",
+      "customTemplate": "İstemci şablonu",
+      "customCurrency": "Para birimi",
+      "pricePerGb": "GB başına fiyat",
+      "pricePerDay": "Günlük fiyat",
+      "minGb": "En az GB",
+      "maxGb": "En çok GB",
+      "minDays": "En az gün",
+      "maxDays": "En çok gün"
+    },
+    "plan": {
+      "category": "Kategori",
+      "categoryHint": "Aynı kategorideki paketler botta ve mağazada gruplanır. Gruplamamak için boş bırakın."
+    }
+  },
   "shop": {
     "title": "Mağaza",
     "noPlans": "Şu anda satışta paket yok",
@@ -3354,7 +3593,10 @@
       "ticket_limit": "Çok fazla açık talebiniz var. Yanıt bekleyin veya birini kapatın.",
       "ticket_closed": "Bu talep kapalı.",
       "rate_limited": "Çok fazla istek. Lütfen biraz bekleyip tekrar deneyin.",
-      "network": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+      "network": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+      "custom_invalid": "Bu veri miktarı veya süre izin verilen aralığın dışında.",
+      "addon_unsupported": "Bu hesap söz konusu eki alamaz: sınırsız kota veya sınırsız süre uzatılamaz.",
+      "banned": "Hesabınız mağazayı kullanamaz."
     }
   },
   "setup": {
@@ -3453,6 +3695,130 @@
       "internal_error": "Sunucuda bir sorun oluştu. Tekrar deneyin.",
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin."
     }
+  },
+  "tunnel": {
+    "title": "Tüneller",
+    "add": "Tünel ekle",
+    "empty": "Henüz tünel yok",
+    "emptyHint": "Tünel, filtre dışındaki bir sunucu (Kharej) ile içindeki bir sunucu (İran) arasında portları şifreli olarak ve tek tıkla iletir.",
+    "name": "Ad",
+    "route": "Rota",
+    "carrier": "Taşıyıcı",
+    "carrierAuto": "Otomatik (tüm taşıyıcıları dene, en iyisini tut)",
+    "carrierHint": "Otomatik, İran ucundan her bağlantı türünü dener ve çalışan en hızlısını tutar.",
+    "auto": "Otomatik",
+    "reverse": "Ters",
+    "reverseHint": "Kharej ucu İran'a bağlanır, tersi değil. İran, Kharej'e ulaşamadığında kullanın.",
+    "speed": "Hız (indirme / yükleme)",
+    "speedTest": "Hız testi",
+    "speedResult": "Hız",
+    "latency": "Gecikme",
+    "rate": "Hız oranı",
+    "connections": "Bağlantılar",
+    "uptime": "Çalışma süresi",
+    "portsTitle": "Portlar",
+    "details": "Ayrıntılar",
+    "restart": "Yeniden başlat",
+    "restarted": "Tünel yeniden başlatıldı",
+    "saved": "Kaydedildi",
+    "deleted": "Tünel silindi",
+    "deleteConfirm": "\"{name}\" tüneli silinsin mi? İki uç da durdurulup kaldırılır.",
+    "reprobe": "Taşıyıcıları yeniden dene",
+    "reprobed": "Taşıyıcılar yeniden denendi",
+    "probeResults": "Taşıyıcı testi",
+    "advanced": "Gelişmiş",
+    "path": "URL yolu",
+    "listenPort": "Taşıyıcı portu",
+    "listenPortHint": "0 boş bir portu otomatik seçer.",
+    "maxSpeed": "Hız sınırı (MB/sn, 0 = varsayılan)",
+    "next": "İleri",
+    "back": "Geri",
+    "addressPlaceholder": "Otomatik algılanır",
+    "addressHint": "Diğer ucun bu sunucuya ulaşmak için kullandığı genel adres. Yalnızca algılama yanlışsa veya alan adı istiyorsanız değiştirin.",
+    "pickNode": "Bir düğüm seçin",
+    "noNodes": "Henüz düğüm yok. Düğümler sayfasından ekleyin.",
+    "noBinary": "wattun programı bu panelde kurulu değil. Paneli son sürüme güncelleyin.",
+    "role": {
+      "kharej": "Kharej ucu",
+      "kharejHint": "Filtrenin dışındaki, hizmetlerinizin çalıştığı sunucu.",
+      "iran": "İran ucu",
+      "iranHint": "Kullanıcılarınızın bağlandığı, içerideki sunucu."
+    },
+    "host": {
+      "local": "Bu panel",
+      "node": "Bir düğüm",
+      "external": "Panelsiz sunucu",
+      "externalHint": "O sunucuda çalıştırmak için tek satırlık bir komut alırsınız."
+    },
+    "state": {
+      "title": "Durum",
+      "up": "Bağlı",
+      "down": "Kapalı",
+      "starting": "Başlıyor",
+      "error": "Hata",
+      "stopped": "Durduruldu",
+      "unknown": "Bilinmiyor"
+    },
+    "step": {
+      "ends": "Sunucular",
+      "ports": "Portlar",
+      "connection": "Bağlantı",
+      "review": "Gözden geçir"
+    },
+    "ports": {
+      "intro": "Kullanıcılar İran ucundaki dinleme portuna bağlanır ve Kharej sunucusundaki hedef porta ulaşır.",
+      "listen": "Dinleme portu",
+      "target": "Hedef port",
+      "rate": "Sınır (MB/sn)",
+      "rateHint": "Bu port için hız sınırı, 0 = sınırsız",
+      "quota": "Kota (GB)",
+      "quotaHint": "Bu port kesilmeden önce izin verilen trafik, 0 = sınırsız",
+      "add": "Port ekle",
+      "edit": "Portları düzenle",
+      "hotReload": "Port değişiklikleri tüneli kesmeden uygulanır."
+    },
+    "kit": {
+      "title": "Sansür aşma seti",
+      "hint": "İsteğe bağlı. Bu ayarlar bağlantıyı izin verilen trafik gibi gösterir. Bağlantıyı başlatan uçta uygulanır ve root olarak çalışan bir Linux sunucusu gerektirir.",
+      "fakeSni": "Sahte SNI (izinli bir site adı)",
+      "fakeMode": "Sahte mod",
+      "poolRotate": "Bağlantıları şu sürede yenile",
+      "fingerprint": "TLS parmak izi",
+      "smallHello": "Küçük TLS hello"
+    },
+    "externalKharej": {
+      "steps": "Bu komutu Kharej sunucusunda çalıştırın, yazdırdığı belirteci aşağıya yapıştırın.",
+      "token": "Kharej sunucusundan belirteç"
+    },
+    "created": {
+      "title": "\"{name}\" tüneli oluşturuldu",
+      "externalIran": "Bitirmek için bu komutu İran sunucusunda çalıştırın. Tünel anahtarını içerir, yalnızca özel olarak paylaşın."
+    },
+    "connect": {
+      "warning": "Bu komut tünel anahtarını içerir. Ona sahip olan herkes tüneli kullanabilir.",
+      "command": "Diğer sunucu için komut",
+      "show": "Belirteci göster",
+      "hide": "Belirteci gizle",
+      "copyToken": "Belirteci kopyala",
+      "none": "Bu tünelin gösterilecek belirteci yok."
+    },
+    "tab": {
+      "overview": "Genel bakış",
+      "logs": "Günlük",
+      "connect": "Sunucu bağla"
+    },
+    "errName": "1-63 harf, rakam, boşluk, nokta, tire veya alt çizgi kullanın.",
+    "errNode": "Bir düğüm seçin.",
+    "errSameHost": "İki uç farklı sunucularda olmalı.",
+    "errBothExternal": "Uçlardan en az biri bu panelde veya bir düğümde çalışmalı.",
+    "errToken": "wat1: ile başlayan belirteci yapıştırın",
+    "errPorts": "En az bir port ekleyin.",
+    "errPortRange": "Portlar 1-65535 arasındadır.",
+    "errDupPort": "Bu dinleme portu iki kez kullanılmış.",
+    "errReverseAuto": "Ters mod için Otomatik değil, belirli bir taşıyıcı gerekir.",
+    "errReversePort": "İran sunucusunun dinleyeceği taşıyıcı portunu girin.",
+    "errHost": "www.example.com gibi bir ana makine adı girin.",
+    "errRotate": "30m veya 4h gibi bir süre kullanın."
   },
   "tgbot": {
     "keyboardClosed": "❌ Klavye kapatıldı!",
@@ -3588,6 +3954,8 @@
       "eventNodeCapStopped": "Gelen bağlantıları devre dışı bırakıldı.",
       "eventPortBlocked": "{{ .Name }} girişinin {{ .Port }} portu yanıt vermeyi bıraktı",
       "eventPortRestored": "{{ .Name }} girişinin {{ .Port }} portu yeniden yanıt veriyor",
+      "eventTunnelDown": "{{ .Name }} tüneli bağlantıyı kaybetti",
+      "eventTunnelUp": "{{ .Name }} tüneli yeniden bağlandı",
       "eventLoginFallback": "{{ .Source }} adresinden oturum açma başarısız",
       "memoryThreshold": "Bellek kullanımı {{ .Percent }}% eşiği {{ .Threshold }}% aşıyor",
       "usagePercent": "{{ .Percent }}% ({{ .Used }} / {{ .Total }})",
@@ -3670,40 +4038,6 @@
       "chooseClient": "Gelen Bağlantı {{ .Inbound }} için bir Kullanıcı Seçin",
       "chooseInbound": "Bir Gelen Bağlantı Seçin",
       "qrCodeForClient": "{{ .Email }} istemcisi için QR Kodu:"
-    },
-    "shop": {
-      "disabled": "Mağaza şu anda kullanılamıyor.",
-      "menu": "🛒 Mağaza\r\nNe yapmak istersiniz?",
-      "plansTitle": "🛒 Bir plan seçin:",
-      "noPlans": "Şu anda satışta plan yok.",
-      "planDetail": "<b>{{ .Name }}</b>\r\n{{ .Description }}\r\nVeri: {{ .Quota }}\r\nSüre: {{ .Duration }}\r\nCihaz: {{ .Devices }}\r\nFiyat: {{ .Price }}\r\n\r\nKimin için?",
-      "noExpiry": "Süresiz",
-      "confirm": "<b>{{ .Plan }}</b> - <code>{{ .Email }}</code>\r\nToplam: {{ .Amount }}\r\nÖdeme yöntemini seçin:",
-      "discountLine": "\r\nListe fiyatı {{ .List }}, kod {{ .Code }}",
-      "askCode": "İndirim kodunuzu mesaj olarak gönderin.",
-      "askReceipt": "Havalenizin takip numarasını mesaj olarak gönderin.",
-      "receiptSent": "✅ Dekont gönderildi. Kısa sürede incelenecek.",
-      "expired": "Seçiminizin süresi doldu. Yeniden başlamak için /shop gönderin.",
-      "ordersTitle": "📦 Son siparişleriniz:",
-      "noOrders": "Henüz siparişiniz yok.",
-      "order": "📦 Sipariş #{{ .Id }} - {{ .Plan }}\r\nTutar: {{ .Amount }}\r\nDurum: {{ .Status }}",
-      "cardInfo": "\r\n\r\nBu karta tam olarak {{ .Amount }} gönderin:\r\n<code>{{ .Card }}</code>\r\n{{ .Holder }} {{ .Bank }}\r\n{{ .Instructions }}",
-      "payLink": "\r\n\r\nÖdemeyi tamamlayın: {{ .URL }}",
-      "delivered": "✅ Ödendi ve etkinleştirildi. Aboneliğiniz:",
-      "buttons": {
-        "plans": "🛒 Planlar",
-        "orders": "📦 Siparişlerim",
-        "newAccount": "🆕 Yeni hesap",
-        "renew": "🔄 {{ .Email }} yenile",
-        "code": "🏷 İndirim kodu",
-        "card": "💳 Karttan karta",
-        "wallet": "👛 Cüzdan",
-        "zarinpal": "Zarinpal",
-        "idpay": "IDPay",
-        "crypto": "Kripto",
-        "receipt": "🧾 Dekont gönder",
-        "refresh": "🔄 Yenile"
-      }
     }
   },
   "discord": {
@@ -3748,6 +4082,8 @@
       "nodeCapReached": "Düğüm trafik sınırına ulaştı",
       "portBlocked": "Port engellendi",
       "portRestored": "Port düzeldi",
+      "tunnelDown": "Tünel kapalı",
+      "tunnelUp": "Tünel bağlı",
       "xrayCrash": "Xray Çekirdeği Çöktü",
       "cpuHigh": "CPU Eşiği Aşıldı",
       "memoryHigh": "Bellek Eşiği Aşıldı",

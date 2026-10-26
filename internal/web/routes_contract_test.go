@@ -52,6 +52,8 @@ var contractExtraRoutes = map[string]bool{
 	"GET /shop/api/tickets/:id":            true,
 	"POST /shop/api/tickets/:id/reply":     true,
 	"POST /shop/api/ipn/nowpayments":       true,
+	"POST /shop/api/telegram/session":      true,
+	"GET /shop/api/telegram/me":            true,
 }
 
 func inContractScope(method, path string) bool {

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import ShopPage from '@/pages/shop/ShopPage';
+import { setShopSession } from '@/lib/shopApi';
 import { ThemeProvider } from '@/hooks/useTheme';
 
 const plan = {
@@ -13,6 +14,7 @@ const plan = {
   totalGB: 50 * 1024 ** 3,
   durationDays: 30,
   limitIp: 2,
+  category: '',
 };
 
 function orderView(over: Record<string, unknown> = {}) {
@@ -49,13 +51,19 @@ interface Route {
 }
 
 function stubShop(routes: Route[]) {
-  const calls: { method: string; path: string; body: unknown }[] = [];
+  const calls: { method: string; path: string; body: unknown; headers?: Record<string, string> }[] =
+    [];
   vi.stubGlobal(
     'fetch',
     vi.fn(async (url: string, init?: RequestInit) => {
       const path = String(url).replace('/shop/api', '');
       const method = init?.method ?? 'GET';
-      calls.push({ method, path, body: init?.body ? JSON.parse(String(init.body)) : undefined });
+      calls.push({
+        method,
+        path,
+        body: init?.body ? JSON.parse(String(init.body)) : undefined,
+        headers: init?.headers as Record<string, string> | undefined,
+      });
       const hit = routes.find((r) => r.method === method && path.startsWith(r.path));
       return { json: async () => hit?.reply ?? { success: false, msg: 'network' } } as Response;
     }),
@@ -79,6 +87,7 @@ async function chooseMonthlyPlanAndTypeUsername(name: string) {
 }
 
 afterEach(() => {
+  setShopSession('');
   vi.unstubAllGlobals();
   window.history.replaceState(null, '', '/');
 });
@@ -162,5 +171,54 @@ describe('ShopPage', () => {
     ]);
     renderShop();
     await waitFor(() => expect(screen.getByText('https://sub.example.com/s/abc')).toBeTruthy());
+  });
+
+  it('signs a Telegram Mini App visitor in and buys without typing a username', async () => {
+    const initData = 'user=%7B%22id%22%3A777%7D&auth_date=1&hash=ab';
+    window.history.replaceState(null, '', `/#tgWebAppData=${encodeURIComponent(initData)}`);
+    const calls = stubShop([
+      {
+        method: 'POST',
+        path: '/telegram/session',
+        reply: {
+          success: true,
+          obj: {
+            token: 'sess-token',
+            tgId: 777,
+            name: 'Ali',
+            lang: 'fa',
+            services: [
+              {
+                id: 5,
+                email: 'tg777',
+                enable: true,
+                up: 1,
+                down: 1,
+                total: 10 * 1024 ** 3,
+                expiryTime: 0,
+                subscriptionUrl: '',
+              },
+            ],
+          },
+        },
+      },
+      {
+        method: 'GET',
+        path: '/plans',
+        reply: { success: true, obj: { plans: [plan], methods: ['card'] } },
+      },
+      { method: 'POST', path: '/orders', reply: { success: true, obj: orderView() } },
+    ]);
+    renderShop();
+
+    expect(await screen.findByText(/Signed in with Telegram as Ali/)).toBeTruthy();
+    expect(calls.find((c) => c.path === '/telegram/session')?.body).toEqual({ initData });
+    fireEvent.click(await screen.findByText('Monthly 50GB'));
+    fireEvent.click(await screen.findByRole('button', { name: 'Buy' }));
+
+    await screen.findByText('6037991812345678');
+    const order = calls.find((c) => c.method === 'POST' && c.path === '/orders');
+    expect(order?.body).toMatchObject({ planId: 1, kind: 'new', email: '' });
+    expect(order?.headers).toMatchObject({ 'X-Shop-Session': 'sess-token' });
   });
 });

@@ -34,6 +34,7 @@ const (
 type ShopController struct {
 	orderService   *service.OrderService
 	ticketService  service.TicketService
+	sessions       service.ShopSessionService
 	configService  service.SalesConfigService
 	inboundService service.InboundService
 	xrayService    service.XrayService
@@ -62,6 +63,8 @@ func newShopController(g *gin.RouterGroup, notFound gin.HandlerFunc, orders *ser
 	api.POST("/tickets", a.rateLimited, a.openTicket)
 	api.GET("/tickets/:id", a.rateLimited, a.getTicket)
 	api.POST("/tickets/:id/reply", a.rateLimited, a.replyTicket)
+	api.POST("/telegram/session", a.rateLimited, a.telegramSession)
+	api.GET("/telegram/me", a.rateLimited, a.telegramMe)
 	api.POST("/ipn/nowpayments", a.ipn)
 	api.POST("/webhook/stripe", a.stripeWebhook)
 	api.GET("/callback/:gateway", a.rateLimited, a.callback)
@@ -160,6 +163,11 @@ func (a *ShopController) createOrder(c *gin.Context) {
 	if !a.bind(c, &in) {
 		return
 	}
+	tgID, ok := a.sessionTg(c)
+	if !ok {
+		return
+	}
+	in.TgId = tgID
 	order, needRestart, err := a.orderService.Checkout(&a.inboundService, in)
 	if needRestart {
 		a.xrayService.SetToNeedRestart()
@@ -291,18 +299,79 @@ func (a *ShopController) quote(c *gin.Context) {
 }
 
 func (a *ShopController) wallet(c *gin.Context) {
+	tgID, ok := a.sessionTg(c)
+	if !ok {
+		return
+	}
+	if tgID != 0 {
+		view, err := a.orderService.TelegramWallet(tgID, c.Query("email"))
+		a.reply(c, view, err)
+		return
+	}
 	view, err := a.orderService.CustomerWallet(c.Query("email"), c.Query("proof"))
 	a.reply(c, view, err)
 }
 
+const shopSessionHeader = "X-Shop-Session"
+
+// sessionTg reads the Mini App session a request carries: 0 for an anonymous
+// visitor, the verified Telegram id for a live token. A token that is present
+// but dead is refused so the page knows to sign in again.
+func (a *ShopController) sessionTg(c *gin.Context) (int64, bool) {
+	token := c.GetHeader(shopSessionHeader)
+	if token == "" {
+		return 0, true
+	}
+	tgID, err := a.sessions.Verify(token)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, entity.Msg{Msg: service.ErrProofInvalid})
+		return 0, false
+	}
+	return tgID, true
+}
+
+type shopSessionBody struct {
+	InitData string `json:"initData"`
+}
+
+// telegramSession signs a Mini App visitor in from Telegram's signed launch
+// data; nothing the page claims about its identity is trusted.
+func (a *ShopController) telegramSession(c *gin.Context) {
+	var in shopSessionBody
+	if !a.bind(c, &in) {
+		return
+	}
+	session, err := a.sessions.Exchange(in.InitData, resolveHost(c))
+	a.reply(c, session, err)
+}
+
+// telegramMe refreshes the signed-in buyer's services (usage changes while
+// the Mini App stays open).
+func (a *ShopController) telegramMe(c *gin.Context) {
+	tgID, ok := a.sessionTg(c)
+	if !ok {
+		return
+	}
+	if tgID == 0 {
+		a.reply(c, nil, &service.SalesError{Code: service.ErrProofInvalid})
+		return
+	}
+	services, err := a.orderService.OwnedServices(tgID, resolveHost(c))
+	a.reply(c, services, err)
+}
+
 // ticketAuth reads the proof a customer sends with every ticket call: the
 // client's username and subscription id, or one of its order tokens.
-func ticketAuth(email, proof, orderToken string) service.TicketAuth {
-	return service.TicketAuth{Email: email, Proof: proof, OrderToken: orderToken}
+func ticketAuth(email, proof, orderToken string, tgID int64) service.TicketAuth {
+	return service.TicketAuth{Email: email, Proof: proof, OrderToken: orderToken, TgId: tgID}
 }
 
 func (a *ShopController) listTickets(c *gin.Context) {
-	list, err := a.ticketService.CustomerList(ticketAuth(c.Query("email"), c.Query("proof"), c.Query("order")))
+	tgID, ok := a.sessionTg(c)
+	if !ok {
+		return
+	}
+	list, err := a.ticketService.CustomerList(ticketAuth(c.Query("email"), c.Query("proof"), c.Query("order"), tgID))
 	a.reply(c, list, err)
 }
 
@@ -312,7 +381,11 @@ func (a *ShopController) getTicket(c *gin.Context) {
 		a.reply(c, nil, &service.SalesError{Code: service.ErrTicketNotFound})
 		return
 	}
-	detail, err := a.ticketService.CustomerGet(ticketAuth(c.Query("email"), c.Query("proof"), c.Query("order")), id)
+	tgID, ok := a.sessionTg(c)
+	if !ok {
+		return
+	}
+	detail, err := a.ticketService.CustomerGet(ticketAuth(c.Query("email"), c.Query("proof"), c.Query("order"), tgID), id)
 	a.reply(c, detail, err)
 }
 
@@ -329,7 +402,11 @@ func (a *ShopController) openTicket(c *gin.Context) {
 	if !a.bind(c, &in) {
 		return
 	}
-	detail, err := a.ticketService.Open(ticketAuth(in.Email, in.Proof, in.OrderToken), in.Subject, in.Body)
+	tgID, ok := a.sessionTg(c)
+	if !ok {
+		return
+	}
+	detail, err := a.ticketService.Open(ticketAuth(in.Email, in.Proof, in.OrderToken, tgID), in.Subject, in.Body)
 	a.reply(c, detail, err)
 }
 
@@ -343,7 +420,11 @@ func (a *ShopController) replyTicket(c *gin.Context) {
 	if !a.bind(c, &in) {
 		return
 	}
-	detail, err := a.ticketService.CustomerReply(ticketAuth(in.Email, in.Proof, in.OrderToken), id, in.Body)
+	tgID, ok := a.sessionTg(c)
+	if !ok {
+		return
+	}
+	detail, err := a.ticketService.CustomerReply(ticketAuth(in.Email, in.Proof, in.OrderToken, tgID), id, in.Body)
 	a.reply(c, detail, err)
 }
 

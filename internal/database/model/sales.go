@@ -11,10 +11,12 @@ const (
 	OrderStatusCanceled = "canceled"
 )
 
-// Order kinds: a purchase creates the client, a renewal extends an existing one.
+// Order kinds: a purchase creates the client, a renewal restarts an existing
+// one, an add-on tops up its quota and time without resetting usage.
 const (
 	OrderKindNew   = "new"
 	OrderKindRenew = "renew"
+	OrderKindAddon = "addon"
 )
 
 // Plan is a sellable package. Price is in the currency's minor unit (see
@@ -32,8 +34,10 @@ type Plan struct {
 	TemplateId   int    `json:"templateId" gorm:"column:template_id;not null" example:"1"`
 	Enabled      bool   `json:"enabled" gorm:"not null" example:"true"`
 	SortOrder    int    `json:"sortOrder" gorm:"column:sort_order;default:0" example:"0"`
-	CreatedAt    int64  `json:"createdAt" gorm:"autoCreateTime:milli"`
-	UpdatedAt    int64  `json:"updatedAt" gorm:"autoUpdateTime:milli"`
+	// Category groups plans in the bot and the shop; empty means ungrouped.
+	Category  string `json:"category" gorm:"default:''" example:"Monthly"`
+	CreatedAt int64  `json:"createdAt" gorm:"autoCreateTime:milli"`
+	UpdatedAt int64  `json:"updatedAt" gorm:"autoUpdateTime:milli"`
 }
 
 func (Plan) TableName() string { return "plans" }
@@ -70,6 +74,11 @@ type Order struct {
 	ReceiptRef    string `json:"receiptRef" gorm:"column:receipt_ref;default:''" example:"482913"`
 	ReceiptNote   string `json:"receiptNote" gorm:"column:receipt_note;default:''"`
 	RejectReason  string `json:"rejectReason" gorm:"column:reject_reason;default:''"`
+	// ReceiptFileId is the Telegram file id of a receipt photo; it is only
+	// meaningful to the bot that received it. RemindedAt is when the buyer was
+	// last nudged about an unpaid order.
+	ReceiptFileId string `json:"-" gorm:"column:receipt_file_id;default:''"`
+	RemindedAt    int64  `json:"-" gorm:"column:reminded_at;default:0"`
 	CreatedAt     int64  `json:"createdAt" gorm:"autoCreateTime:milli"`
 	UpdatedAt     int64  `json:"updatedAt" gorm:"autoUpdateTime:milli"`
 	PaidAt        int64  `json:"paidAt" gorm:"column:paid_at;default:0"`
@@ -140,3 +149,20 @@ type ReferralCode struct {
 }
 
 func (ReferralCode) TableName() string { return "referral_codes" }
+
+// BotUser is what the shop bot remembers about a Telegram account: the
+// language it chose, whether it is barred, and the referral code it arrived
+// with.
+type BotUser struct {
+	Id           int    `json:"id" gorm:"primaryKey;autoIncrement"`
+	TgID         int64  `json:"tgId" gorm:"column:tg_id;uniqueIndex;not null"`
+	Lang         string `json:"lang" gorm:"default:''"`
+	Banned       bool   `json:"banned" gorm:"default:false"`
+	FirstName    string `json:"firstName" gorm:"column:first_name;default:''"`
+	Username     string `json:"username" gorm:"default:''"`
+	ReferralCode string `json:"referralCode" gorm:"column:referral_code;default:''"`
+	CreatedAt    int64  `json:"createdAt" gorm:"autoCreateTime:milli"`
+	LastSeenAt   int64  `json:"lastSeenAt" gorm:"column:last_seen_at;default:0"`
+}
+
+func (BotUser) TableName() string { return "bot_users" }

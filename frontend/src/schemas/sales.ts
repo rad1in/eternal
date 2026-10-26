@@ -15,6 +15,7 @@ export const planFormSchema = z.object({
   templateId: z.number().int().positive('pages.sales.plans.errTemplate'),
   enabled: z.boolean(),
   sortOrder: z.number().int(),
+  category: z.string().trim().max(40),
 });
 export type PlanFormValues = z.infer<typeof planFormSchema>;
 
@@ -40,15 +41,27 @@ export const salesConfigSchema = z.object({
     bankName: z.string(),
     instructions: z.string(),
   }),
-  zarinpal: z.object({ enabled: z.boolean(), merchantId: z.string(), sandbox: z.boolean() }),
-  idpay: z.object({ enabled: z.boolean(), apiKey: z.string(), sandbox: z.boolean() }),
+  zarinpal: z.object({
+    enabled: z.boolean(),
+    merchantId: z.string(),
+    sandbox: z.boolean(),
+  }),
+  idpay: z.object({
+    enabled: z.boolean(),
+    apiKey: z.string(),
+    sandbox: z.boolean(),
+  }),
   crypto: z.object({
     enabled: z.boolean(),
     apiKey: z.string(),
     ipnSecret: z.string(),
     sandbox: z.boolean(),
   }),
-  stripe: z.object({ enabled: z.boolean(), secretKey: z.string(), webhookSecret: z.string() }),
+  stripe: z.object({
+    enabled: z.boolean(),
+    secretKey: z.string(),
+    webhookSecret: z.string(),
+  }),
   paypal: z.object({
     enabled: z.boolean(),
     clientId: z.string(),
@@ -64,6 +77,24 @@ export const salesConfigSchema = z.object({
       .int()
       .min(0, 'pages.sales.config.errBonus')
       .max(100, 'pages.sales.config.errBonus'),
+  }),
+  bot: z.object({
+    miniApp: z.boolean(),
+    receiptChatId: z.number().int(),
+    forceJoinText: z.string(),
+    linksText: z.string(),
+  }),
+  custom: z.object({
+    enabled: z.boolean(),
+    templateId: z.number().int().min(0),
+    currency: z.enum(CURRENCIES),
+    pricePerGb: z.number().min(0),
+    pricePerDay: z.number().min(0),
+    minGb: z.number().int().min(0),
+    maxGb: z.number().int().min(0),
+    minDays: z.number().int().min(0),
+    maxDays: z.number().int().min(0),
+    limitIp: z.number().int().min(0),
   }),
   clearSecrets: z.array(z.string()),
 });

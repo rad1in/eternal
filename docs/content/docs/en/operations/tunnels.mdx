@@ -1,0 +1,58 @@
+---
+title: Tunnels
+description: Encrypted Iran-Kharej port forwarding built into the panel, between the panel server, its nodes and servers without a panel.
+icon: Cable
+---
+
+A **tunnel** forwards ports between a server outside the filter (**Kharej**) and a server inside
+it (**Iran**). Users connect to a port on the Iran end and reach a service on the Kharej end.
+It is the [WatTunnel](https://github.com/JohnWatsoon/WatTunnel) engine (MIT), run by the panel as
+a managed `wattun` process, so there is no separate install, token copying or terminal menu.
+
+## Create a tunnel
+
+Open **Tunnels**, press **Add tunnel** and pick:
+
+1. **Servers.** Each end runs on *this panel*, on a *node*, or on a *server without a panel*.
+2. **Ports.** `listen` is the port users connect to on the Iran end, `target` the port on the
+   Kharej server (always `127.0.0.1` there). Add a speed limit or a traffic quota per port if you want.
+3. **Connection.** The default is **Auto**: the Iran end tries every carrier (`tcp`, `udp`, `tls`,
+   `ws`, `wss`, `h2`, `h2c`, `grpc`, `icmp`), measures each one and keeps the fastest that works.
+   Open **Advanced** for a fixed carrier, reverse mode (Kharej dials Iran) and the
+   anti-censorship kit (fake SNI, connection recycling, ECH, TLS fingerprint).
+
+The panel starts the Kharej end, passes its key to the Iran end, probes the carriers when Auto is
+on, and shows the link state. When both ends are the panel and its nodes nothing else is needed.
+
+## A server without a panel
+
+If one end is a plain server, the wizard gives you a one-line command:
+
+```bash
+curl -fsSL https://PANEL/install-tunnel.sh | bash -s -- --token wat1:... --map 443:443
+```
+
+It installs `wattun` (from the panel when the CPU matches, otherwise from the GitHub release),
+writes the config under `/etc/wattun`, starts a systemd service and waits for the link. If the
+*Kharej* end is the plain server, run `... --role kharej --addr YOUR_IP --ports 443` there and
+paste the `wat1:` token it prints into the wizard.
+
+The token contains the tunnel key. Only the owner account sees it, and it is never written to logs.
+
+## Operating
+
+- **Ports** can be edited live; the daemon reloads them without dropping the tunnel.
+- **Speed test**, **restart**, the daemon **log** and **Test carriers again** are on the tunnel's page.
+- The panel restarts a daemon that crashes, and one whose link stayed down for five minutes.
+- `tunnel.down` / `tunnel.up` are published on the event bus, so the Telegram, Discord, email
+  and push channels can alert on them.
+- A port already used by the panel, an inbound, another tunnel or another program is refused.
+
+## Requirements and limits
+
+- Linux with `wattun` in the panel's `bin` folder (shipped in the release and the Docker image).
+  `icmp` and the fake-SNI kit need root; on Windows they are unavailable.
+- Carrier ports must be reachable from the Iran end; the panel opens none in your firewall.
+- A hosted (reseller) panel cannot run tunnels.
+
+WatTunnel is Copyright (c) 2026 Amirreza, MIT licensed; see `third_party/wattunnel/LICENSE`.

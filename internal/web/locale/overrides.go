@@ -25,6 +25,16 @@ var BotMessageKeys = []string{
 	"tgbot.messages.ownQuotaWarning",
 	"tgbot.messages.ownExpiryWarning",
 	"tgbot.answers.askToAddUserId",
+	"shopbot.menu.welcome",
+	"shopbot.plans.title",
+	"shopbot.join.required",
+	"shopbot.ref.info",
+	"shopbot.support.noService",
+	"shopbot.askReceipt",
+	"shopbot.receiptSent",
+	"shopbot.delivered.new",
+	"shopbot.notify.reminder",
+	"shopbot.notify.expired",
 }
 
 const maxOverrideLen = 4000
@@ -114,8 +124,13 @@ func parseOverrides(raw string) (map[string]override, error) {
 // botOverrideFor renders the admin's text for key in the bot's language;
 // false means use the shipped message.
 func botOverrideFor(key string, data map[string]any) (string, bool) {
-	m := botOverrides.Load()
 	lang, _ := botLang.Load().(string)
+	return botOverrideForLang(lang, key, data)
+}
+
+// botOverrideForLang is botOverrideFor for an explicit language.
+func botOverrideForLang(lang, key string, data map[string]any) (string, bool) {
+	m := botOverrides.Load()
 	if m == nil || lang == "" {
 		return "", false
 	}

@@ -10,8 +10,11 @@ import (
 // order was bought under. Everything goes through ClientService so Xray and
 // remote nodes are updated by the normal runtime path.
 func (s *OrderService) deliver(inboundSvc *InboundService, order *model.Order) (bool, error) {
-	if order.Kind == model.OrderKindRenew {
+	switch order.Kind {
+	case model.OrderKindRenew:
 		return s.renew(inboundSvc, order)
+	case model.OrderKindAddon:
+		return s.addon(inboundSvc, order)
 	}
 	tpl, err := s.clients.GetClientTemplate(order.PlanTemplate)
 	if err != nil {
@@ -60,4 +63,35 @@ func renewedExpiry(current int64, days int, now int64) int64 {
 		base = current
 	}
 	return base + int64(days)*millisPerDay
+}
+
+// addon tops the client up in place: the quota and the days are added to what
+// it has and its usage is kept. A client that had lapsed or run out is
+// switched back on, as a renewal does.
+func (s *OrderService) addon(inboundSvc *InboundService, order *model.Order) (bool, error) {
+	rec, err := s.clients.GetRecordByEmail(nil, order.ClientEmail)
+	if err != nil {
+		return false, err
+	}
+	updated := rec.ToClient()
+	updated.Enable = true
+	if order.TotalGB > 0 && rec.TotalGB > 0 {
+		updated.TotalGB = rec.TotalGB + order.TotalGB
+	}
+	if order.DurationDays > 0 {
+		updated.ExpiryTime = addedExpiry(rec.ExpiryTime, order.DurationDays, time.Now().UnixMilli())
+	}
+	return s.clients.Update(inboundSvc, rec.Id, *updated, rec.LimitHwid)
+}
+
+// addedExpiry stacks days on the unused remainder. A negative expiry is "days
+// from first use", which grows in the negative direction; 0 never expires.
+func addedExpiry(current int64, days int, now int64) int64 {
+	switch {
+	case current == 0:
+		return 0
+	case current < 0:
+		return current - int64(days)*millisPerDay
+	}
+	return renewedExpiry(current, days, now)
 }

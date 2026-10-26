@@ -581,12 +581,25 @@ export const EXAMPLES: Record<string, unknown> = {
     "name": "panel.example.com_2026-10-17_030000.db.gz",
     "pruned": 1
   },
+  "BotLink": {
+    "label": "Tutorials",
+    "url": "https://t.me/mychannel"
+  },
   "CardPayConfig": {
     "bankName": "Melli",
     "cardNumber": "6037991812345678",
     "enabled": false,
     "holderName": "Ali Rezaei",
     "instructions": ""
+  },
+  "CarrierResult": {
+    "carrier": "tcp",
+    "downMBps": 31.5,
+    "ok": true,
+    "peer": "203.0.113.7:4443",
+    "rttMs": 42,
+    "upMBps": 28.2,
+    "why": ""
   },
   "CleanIPResult": {
     "id": 1,
@@ -772,6 +785,11 @@ export const EXAMPLES: Record<string, unknown> = {
   "ClientReverse": {
     "tag": ""
   },
+  "ClientSession": {
+    "ageMs": 61000,
+    "carrier": "tcp",
+    "ip": "198.51.100.20"
+  },
   "ClientSlim": {
     "comment": "Primary device",
     "createdAt": 1735000000000,
@@ -883,6 +901,18 @@ export const EXAMPLES: Record<string, unknown> = {
     "ipnSecret": "",
     "sandbox": false
   },
+  "CustomOfferConfig": {
+    "currency": "IRT",
+    "enabled": false,
+    "limitIp": 2,
+    "maxDays": 365,
+    "maxGb": 500,
+    "minDays": 7,
+    "minGb": 5,
+    "pricePerDay": 1000,
+    "pricePerGb": 2000,
+    "templateId": 1
+  },
   "DashboardLayout": {
     "widgets": [
       {
@@ -915,9 +945,199 @@ export const EXAMPLES: Record<string, unknown> = {
     "uses": 3,
     "value": 10
   },
+  "EndConfig": {
+    "address": "203.0.113.7",
+    "carrier": "tcp",
+    "enable": true,
+    "icmpType": "echo",
+    "key": "redacted",
+    "listenPorts": {
+      "tcp": 4443
+    },
+    "name": "de-ir",
+    "options": {
+      "bind": "0.0.0.0",
+      "conns": 0,
+      "ech": "auto",
+      "fakeMode": "rst",
+      "fakeSni": "www.cloudflare.com",
+      "fakeTtl": 0,
+      "fec": "off",
+      "fp": "chrome",
+      "governor": false,
+      "maxMBps": 0,
+      "poolRotate": "30m",
+      "poolRotateBytes": "4GB",
+      "sessions": 1,
+      "tlsSmallCh": false
+    },
+    "pairUuid": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+    "path": "/wat",
+    "peer": "203.0.113.7:4443",
+    "ports": [
+      {
+        "listen": 443,
+        "quotaGB": 0,
+        "rateMBps": 0,
+        "target": 443,
+        "udp": false
+      }
+    ],
+    "reverse": false,
+    "role": "kharej",
+    "sni": "",
+    "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11"
+  },
+  "EndOptions": {
+    "bind": "0.0.0.0",
+    "conns": 0,
+    "ech": "auto",
+    "fakeMode": "rst",
+    "fakeSni": "www.cloudflare.com",
+    "fakeTtl": 0,
+    "fec": "off",
+    "fp": "chrome",
+    "governor": false,
+    "maxMBps": 0,
+    "poolRotate": "30m",
+    "poolRotateBytes": "4GB",
+    "sessions": 1,
+    "tlsSmallCh": false
+  },
+  "EndResult": {
+    "end": {
+      "address": "203.0.113.7",
+      "carrier": "tcp",
+      "enable": true,
+      "icmpType": "echo",
+      "key": "redacted",
+      "listenPorts": {
+        "tcp": 4443
+      },
+      "name": "de-ir",
+      "options": {
+        "bind": "0.0.0.0",
+        "conns": 0,
+        "ech": "auto",
+        "fakeMode": "rst",
+        "fakeSni": "www.cloudflare.com",
+        "fakeTtl": 0,
+        "fec": "off",
+        "fp": "chrome",
+        "governor": false,
+        "maxMBps": 0,
+        "poolRotate": "30m",
+        "poolRotateBytes": "4GB",
+        "sessions": 1,
+        "tlsSmallCh": false
+      },
+      "pairUuid": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+      "path": "/wat",
+      "peer": "203.0.113.7:4443",
+      "ports": [
+        {
+          "listen": 443,
+          "quotaGB": 0,
+          "rateMBps": 0,
+          "target": 443,
+          "udp": false
+        }
+      ],
+      "reverse": false,
+      "role": "kharej",
+      "sni": "",
+      "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11"
+    },
+    "status": {
+      "alive": true,
+      "bytesIn": 123456,
+      "bytesOut": 654321,
+      "carrier": "tcp",
+      "clients": [
+        {
+          "ageMs": 61000,
+          "carrier": "tcp",
+          "ip": "198.51.100.20"
+        }
+      ],
+      "lastError": "",
+      "lastRxAgeMs": 900,
+      "pid": 4242,
+      "ports": [
+        {
+          "bytesDown": 4194304,
+          "bytesUp": 1048576,
+          "connsActive": 3,
+          "connsTotal": 120,
+          "port": 443,
+          "quotaExceeded": false,
+          "quotaLimit": 0,
+          "quotaUsed": 0,
+          "rateDown": 81920,
+          "rateUp": 20480
+        }
+      ],
+      "rateBps": 1000000,
+      "restarts": 0,
+      "running": true,
+      "sessions": 1,
+      "srttMs": 42.5,
+      "state": "up",
+      "streams": 3,
+      "tlsMode": "chrome+ech",
+      "uptimeSec": 3600,
+      "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11",
+      "version": "2.10.12"
+    }
+  },
+  "EndStatus": {
+    "alive": true,
+    "bytesIn": 123456,
+    "bytesOut": 654321,
+    "carrier": "tcp",
+    "clients": [
+      {
+        "ageMs": 61000,
+        "carrier": "tcp",
+        "ip": "198.51.100.20"
+      }
+    ],
+    "lastError": "",
+    "lastRxAgeMs": 900,
+    "pid": 4242,
+    "ports": [
+      {
+        "bytesDown": 4194304,
+        "bytesUp": 1048576,
+        "connsActive": 3,
+        "connsTotal": 120,
+        "port": 443,
+        "quotaExceeded": false,
+        "quotaLimit": 0,
+        "quotaUsed": 0,
+        "rateDown": 81920,
+        "rateUp": 20480
+      }
+    ],
+    "rateBps": 1000000,
+    "restarts": 0,
+    "running": true,
+    "sessions": 1,
+    "srttMs": 42.5,
+    "state": "up",
+    "streams": 3,
+    "tlsMode": "chrome+ech",
+    "uptimeSec": 3600,
+    "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11",
+    "version": "2.10.12"
+  },
   "FallbackParentInfo": {
     "masterId": 0,
     "path": ""
+  },
+  "ForceJoinChat": {
+    "chat": "@mychannel",
+    "link": "https://t.me/mychannel"
   },
   "GeoCategory": {
     "attributes": [
@@ -1376,7 +1596,7 @@ export const EXAMPLES: Record<string, unknown> = {
     "xrayVersion": "25.10.31"
   },
   "NodeJoinCommand": {
-    "command": "XUI_NONINTERACTIVE=1 XUI_JOIN_URL='https://panel.example.com:2053/abc/join/node' XUI_JOIN_TOKEN='...' bash \u003c(curl -Ls ...)",
+    "command": "curl -fsSL https://panel.example.com:2053/abc/install-node.sh | bash -s -- --panel https://panel.example.com:2053/abc --token ...",
     "expiresAt": 1760003600000,
     "joinUrl": "https://panel.example.com:2053/abc/join/node"
   },
@@ -1599,6 +1819,7 @@ export const EXAMPLES: Record<string, unknown> = {
     "target": "inbound #3"
   },
   "Plan": {
+    "category": "Monthly",
     "createdAt": 0,
     "currency": "IRT",
     "description": "Valid for 30 days",
@@ -1612,6 +1833,25 @@ export const EXAMPLES: Record<string, unknown> = {
     "templateId": 1,
     "totalGB": 53687091200,
     "updatedAt": 0
+  },
+  "PortMap": {
+    "listen": 443,
+    "quotaGB": 0,
+    "rateMBps": 0,
+    "target": 443,
+    "udp": false
+  },
+  "PortStat": {
+    "bytesDown": 4194304,
+    "bytesUp": 1048576,
+    "connsActive": 3,
+    "connsTotal": 120,
+    "port": 443,
+    "quotaExceeded": false,
+    "quotaLimit": 0,
+    "quotaUsed": 0,
+    "rateDown": 81920,
+    "rateUp": 20480
   },
   "ProbeResultUI": {
     "cpuPct": 12.5,
@@ -1677,6 +1917,22 @@ export const EXAMPLES: Record<string, unknown> = {
     "oldSni": "www.microsoft.com"
   },
   "SalesConfig": {
+    "bot": {
+      "forceJoin": [
+        {
+          "chat": "@mychannel",
+          "link": "https://t.me/mychannel"
+        }
+      ],
+      "links": [
+        {
+          "label": "Tutorials",
+          "url": "https://t.me/mychannel"
+        }
+      ],
+      "miniApp": false,
+      "receiptChatId": -1001234567890
+    },
     "card": {
       "bankName": "Melli",
       "cardNumber": "6037991812345678",
@@ -1692,6 +1948,18 @@ export const EXAMPLES: Record<string, unknown> = {
       "enabled": false,
       "ipnSecret": "",
       "sandbox": false
+    },
+    "custom": {
+      "currency": "IRT",
+      "enabled": false,
+      "limitIp": 2,
+      "maxDays": 365,
+      "maxGb": 500,
+      "minDays": 7,
+      "minGb": 5,
+      "pricePerDay": 1000,
+      "pricePerGb": 2000,
+      "templateId": 1
     },
     "idpay": {
       "apiKey": "",
@@ -1724,6 +1992,22 @@ export const EXAMPLES: Record<string, unknown> = {
     }
   },
   "SalesConfigView": {
+    "bot": {
+      "forceJoin": [
+        {
+          "chat": "@mychannel",
+          "link": "https://t.me/mychannel"
+        }
+      ],
+      "links": [
+        {
+          "label": "Tutorials",
+          "url": "https://t.me/mychannel"
+        }
+      ],
+      "miniApp": false,
+      "receiptChatId": -1001234567890
+    },
     "card": {
       "bankName": "Melli",
       "cardNumber": "6037991812345678",
@@ -1739,6 +2023,18 @@ export const EXAMPLES: Record<string, unknown> = {
       "enabled": false,
       "ipnSecret": "",
       "sandbox": false
+    },
+    "custom": {
+      "currency": "IRT",
+      "enabled": false,
+      "limitIp": 2,
+      "maxDays": 365,
+      "maxGb": 500,
+      "minDays": 7,
+      "minGb": 5,
+      "pricePerDay": 1000,
+      "pricePerGb": 2000,
+      "templateId": 1
     },
     "hasCryptoApiKey": false,
     "hasCryptoIpnSecret": false,
@@ -1870,12 +2166,30 @@ export const EXAMPLES: Record<string, unknown> = {
     "ipCount": 7,
     "lastSeen": 1760003600000
   },
+  "ShopBotConfig": {
+    "forceJoin": [
+      {
+        "chat": "@mychannel",
+        "link": "https://t.me/mychannel"
+      }
+    ],
+    "links": [
+      {
+        "label": "Tutorials",
+        "url": "https://t.me/mychannel"
+      }
+    ],
+    "miniApp": false,
+    "receiptChatId": -1001234567890
+  },
   "ShopCatalog": {
+    "custom": null,
     "methods": [
       ""
     ],
     "plans": [
       {
+        "category": "Monthly",
         "currency": "IRT",
         "description": "",
         "durationDays": 30,
@@ -1886,6 +2200,15 @@ export const EXAMPLES: Record<string, unknown> = {
         "totalGB": 53687091200
       }
     ]
+  },
+  "ShopCustom": {
+    "currency": "IRT",
+    "maxDays": 365,
+    "maxGb": 500,
+    "minDays": 7,
+    "minGb": 5,
+    "pricePerDay": 1000,
+    "pricePerGb": 2000
   },
   "ShopOrderView": {
     "amount": 250000,
@@ -1906,6 +2229,7 @@ export const EXAMPLES: Record<string, unknown> = {
     "token": "3f9c2a7e5b1d4c8a9e0f6b2d7a1c4e8f"
   },
   "ShopPlan": {
+    "category": "Monthly",
     "currency": "IRT",
     "description": "",
     "durationDays": 30,
@@ -1914,6 +2238,34 @@ export const EXAMPLES: Record<string, unknown> = {
     "name": "Monthly 50 GB",
     "price": 250000,
     "totalGB": 53687091200
+  },
+  "ShopService": {
+    "down": 2097152,
+    "email": "alice",
+    "enable": true,
+    "expiryTime": 1735689600000,
+    "id": 12,
+    "subscriptionUrl": "",
+    "total": 53687091200,
+    "up": 1048576
+  },
+  "ShopSession": {
+    "lang": "fa",
+    "name": "Ali",
+    "services": [
+      {
+        "down": 2097152,
+        "email": "alice",
+        "enable": true,
+        "expiryTime": 1735689600000,
+        "id": 12,
+        "subscriptionUrl": "",
+        "total": 53687091200,
+        "up": 1048576
+      }
+    ],
+    "tgId": 123456789,
+    "token": ""
   },
   "ShopWallet": {
     "balances": [
@@ -1939,6 +2291,11 @@ export const EXAMPLES: Record<string, unknown> = {
   "SignedSubLink": {
     "expiresAt": 1792411200000,
     "url": "https://sub.example.com:2096/sub/Ab3dE5gH9k?exp=1792411200\u0026sig=Zk3Wq1"
+  },
+  "SpeedResult": {
+    "downMBps": 31.5,
+    "error": "",
+    "upMBps": 28.2
   },
   "Sponsor": {
     "enable": true,
@@ -2077,6 +2434,202 @@ export const EXAMPLES: Record<string, unknown> = {
     "sni": "",
     "udp_relay_mode": "",
     "zero_rtt_handshake": false
+  },
+  "TunnelAccess": {
+    "command": "curl -fsSL https://panel.example/install-tunnel.sh | bash -s -- --token wat1:...",
+    "token": "wat1:..."
+  },
+  "TunnelCapabilities": {
+    "binaryAvailable": true,
+    "canSeeToken": true,
+    "carriers": [
+      ""
+    ],
+    "platform": "linux",
+    "publicIPv4": "203.0.113.7"
+  },
+  "TunnelCreateRequest": {
+    "carrier": "auto",
+    "icmpType": "echo",
+    "iran": {
+      "address": "203.0.113.7",
+      "kind": "node",
+      "nodeId": 2
+    },
+    "kharej": {
+      "address": "203.0.113.7",
+      "kind": "node",
+      "nodeId": 2
+    },
+    "listenPort": 0,
+    "name": "de-ir",
+    "options": {
+      "bind": "0.0.0.0",
+      "conns": 0,
+      "ech": "auto",
+      "fakeMode": "rst",
+      "fakeSni": "www.cloudflare.com",
+      "fakeTtl": 0,
+      "fec": "off",
+      "fp": "chrome",
+      "governor": false,
+      "maxMBps": 0,
+      "poolRotate": "30m",
+      "poolRotateBytes": "4GB",
+      "sessions": 1,
+      "tlsSmallCh": false
+    },
+    "path": "/wat",
+    "ports": [
+      {
+        "listen": 443,
+        "quotaGB": 0,
+        "rateMBps": 0,
+        "target": 443,
+        "udp": false
+      }
+    ],
+    "reverse": false,
+    "sni": "",
+    "token": ""
+  },
+  "TunnelEnd": {
+    "address": "203.0.113.7",
+    "autoPlan": "d=udp:4443,tcp:4443;r=",
+    "carrier": "tcp",
+    "createdAt": 1760000000000,
+    "enable": true,
+    "icmpType": "echo",
+    "id": 1,
+    "lastError": "",
+    "listenPorts": {
+      "tcp": 4443
+    },
+    "name": "de-ir",
+    "nodeId": 2,
+    "options": {
+      "bind": "0.0.0.0",
+      "conns": 0,
+      "ech": "auto",
+      "fakeMode": "rst",
+      "fakeSni": "www.cloudflare.com",
+      "fakeTtl": 0,
+      "fec": "off",
+      "fp": "chrome",
+      "governor": false,
+      "maxMBps": 0,
+      "poolRotate": "30m",
+      "poolRotateBytes": "4GB",
+      "sessions": 1,
+      "tlsSmallCh": false
+    },
+    "pairUuid": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+    "path": "/wat",
+    "peer": "203.0.113.7:4443",
+    "peerExternal": false,
+    "ports": [
+      {
+        "listen": 443,
+        "quotaGB": 0,
+        "rateMBps": 0,
+        "target": 443,
+        "udp": false
+      }
+    ],
+    "probe": [
+      {
+        "carrier": "tcp",
+        "downMBps": 31.5,
+        "ok": true,
+        "peer": "203.0.113.7:4443",
+        "rttMs": 42,
+        "upMBps": 28.2,
+        "why": ""
+      }
+    ],
+    "reverse": false,
+    "role": "kharej",
+    "rttMs": 42,
+    "sni": "",
+    "state": "up",
+    "stateChangedAt": 1760000000000,
+    "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11"
+  },
+  "TunnelEndView": {
+    "address": "203.0.113.7",
+    "carrier": "tcp",
+    "enable": true,
+    "host": "local",
+    "lastError": "",
+    "listenPorts": {},
+    "live": null,
+    "nodeId": 2,
+    "nodeName": "de-fra-1",
+    "peer": "203.0.113.7:4443",
+    "role": "kharej",
+    "rttMs": 42,
+    "state": "up",
+    "stateChangedAt": 1760000000000,
+    "uuid": "7d2c1f0e-5b1a-4e0e-9a43-0f0f3a9f8c11"
+  },
+  "TunnelEndpoint": {
+    "address": "203.0.113.7",
+    "kind": "node",
+    "nodeId": 2
+  },
+  "TunnelUpdateRequest": {
+    "enable": true,
+    "name": "de-ir",
+    "options": null,
+    "ports": null
+  },
+  "TunnelView": {
+    "auto": true,
+    "carrier": "tcp",
+    "createdAt": 1760000000000,
+    "external": "iran",
+    "iran": null,
+    "kharej": null,
+    "name": "de-ir",
+    "options": {
+      "bind": "0.0.0.0",
+      "conns": 0,
+      "ech": "auto",
+      "fakeMode": "rst",
+      "fakeSni": "www.cloudflare.com",
+      "fakeTtl": 0,
+      "fec": "off",
+      "fp": "chrome",
+      "governor": false,
+      "maxMBps": 0,
+      "poolRotate": "30m",
+      "poolRotateBytes": "4GB",
+      "sessions": 1,
+      "tlsSmallCh": false
+    },
+    "pairUuid": "0a1b2c3d-5b1a-4e0e-9a43-0f0f3a9f8c11",
+    "ports": [
+      {
+        "listen": 443,
+        "quotaGB": 0,
+        "rateMBps": 0,
+        "target": 443,
+        "udp": false
+      }
+    ],
+    "probe": [
+      {
+        "carrier": "tcp",
+        "downMBps": 31.5,
+        "ok": true,
+        "peer": "203.0.113.7:4443",
+        "rttMs": 42,
+        "upMBps": 28.2,
+        "why": ""
+      }
+    ],
+    "reverse": false,
+    "state": "up"
   },
   "User": {
     "createdAt": 0,

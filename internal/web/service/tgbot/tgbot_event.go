@@ -32,6 +32,9 @@ var tgEventLimiter = eventbus.NewRateLimiter(1 * time.Minute)
 // HandleEvent is the eventbus subscriber callback. It formats incoming events
 // as Telegram messages and sends them to all admin chats.
 func (t *Tgbot) HandleEvent(e eventbus.Event) {
+	if t.handleShopEvent(e) {
+		return
+	}
 	if !t.isEventEnabled(e.Type) {
 		return
 	}
@@ -168,6 +171,17 @@ func (t *Tgbot) formatEventMessage(e eventbus.Event) string {
 		}
 		msg := header + icon + t.I18nBot(key, "Name=="+e.Source, "Port=="+strconv.Itoa(data.Port))
 		if data.Error != "" {
+			msg += "\n" + t.I18nBot("tgbot.messages.eventErrorDetail", "Error=="+data.Error)
+		}
+		return msg
+
+	case eventbus.EventTunnelDown, eventbus.EventTunnelUp:
+		key, icon := "tgbot.messages.eventTunnelUp", "🟢 "
+		if e.Type == eventbus.EventTunnelDown {
+			key, icon = "tgbot.messages.eventTunnelDown", "🔴 "
+		}
+		msg := header + icon + t.I18nBot(key, "Name=="+e.Source)
+		if data, ok := e.Data.(*eventbus.TunnelEventData); ok && data.Error != "" {
 			msg += "\n" + t.I18nBot("tgbot.messages.eventErrorDetail", "Error=="+data.Error)
 		}
 		return msg

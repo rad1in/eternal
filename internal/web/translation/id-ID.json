@@ -1858,6 +1858,8 @@
       "eventNodeCapReached": "Batas trafik bulanan tercapai",
       "eventPortBlocked": "Port berhenti merespons",
       "eventPortRestored": "Port merespons lagi",
+      "eventTunnelDown": "Tunnel kehilangan koneksi",
+      "eventTunnelUp": "Tunnel terhubung kembali",
       "eventCPUHigh": "CPU tinggi (%)",
       "requestFailed": "Permintaan gagal",
       "smtpEncryption": "Enkripsi",
@@ -2138,6 +2140,7 @@
       "backupNowDesc": "Simpan dulu: memakai folder dan bucket yang tersimpan.",
       "eventGroupClients": "Klien",
       "eventGroupPort": "Port",
+      "eventGroupTunnel": "Tunnel",
       "portProbe": "Pemeriksaan port",
       "portProbeDesc": "Memeriksa dari luar setiap menit semua port TCP publik inbound dan memberi peringatan saat salah satunya berhenti merespons.",
       "portProbeHost": "Alamat server",
@@ -3060,7 +3063,8 @@
         "referrer": "Direferensikan oleh",
         "kinds": {
           "new": "Baru",
-          "renew": "Perpanjangan"
+          "renew": "Perpanjangan",
+          "addon": "Tambahan"
         },
         "statuses": {
           "pending": "Menunggu pembayaran",
@@ -3273,6 +3277,241 @@
       "errPath": "Gunakan hanya huruf, angka, dan . _ ~ -"
     }
   },
+  "shopbot": {
+    "disabled": "Toko sedang tidak tersedia.",
+    "banned": "Akun Anda tidak dapat menggunakan toko. Jika ini keliru, hubungi operator.",
+    "slowDown": "Terlalu banyak ketukan. Tunggu sebentar.",
+    "expired": "Pilihan Anda sudah kedaluwarsa. Buka menu untuk memulai lagi.",
+    "unlimited": "Tanpa batas",
+    "noExpiry": "Tanpa masa berlaku",
+    "menu": {
+      "welcome": "👋 Halo {{ .Name }}!\nApa yang ingin Anda lakukan?"
+    },
+    "join": {
+      "required": "Untuk memakai toko, gabung dulu ke kanal kami, lalu ketuk “Saya sudah gabung”.",
+      "open": "Gabung {{ .Channel }}",
+      "channel": "kanal",
+      "done": "✅ Saya sudah gabung"
+    },
+    "btn": {
+      "buy": "🛒 Beli",
+      "services": "📦 Layanan saya",
+      "wallet": "👛 Dompet",
+      "invite": "🎁 Undang teman",
+      "trial": "🧪 Coba gratis",
+      "support": "🆘 Bantuan",
+      "orders": "🧾 Pesanan saya",
+      "language": "🌐 Bahasa",
+      "miniapp": "🚀 Buka aplikasi toko",
+      "admin": "🛠 Admin",
+      "menu": "🏠 Menu",
+      "back": "⬅️ Kembali",
+      "cancel": "✖️ Batal",
+      "skip": "Lewati",
+      "refresh": "🔄 Segarkan",
+      "custom": "✨ Buat paket sendiri",
+      "newAccount": "🆕 Akun baru",
+      "renew": "🔄 Perpanjang {{ .Email }}",
+      "code": "🏷 Kode diskon",
+      "receipt": "📤 Kirim bukti bayar",
+      "pay": "💳 Bayar sekarang",
+      "link": "🔗 Tautan",
+      "qr": "📷 Kode QR",
+      "renewThis": "🔄 Perpanjang",
+      "addon": "➕ Tambah data / waktu",
+      "newTicket": "✍️ Tiket baru",
+      "reply": "↩️ Balas",
+      "openTicket": "💬 Buka tiket",
+      "openOrder": "🧾 Buka pesanan",
+      "approve": "✅ Setujui",
+      "reject": "❌ Tolak",
+      "today": "📊 Hari ini",
+      "waiting": "🧾 Bukti bayar menunggu",
+      "ban": "🚫 Blokir pengguna",
+      "unban": "✅ Buka blokir pengguna"
+    },
+    "plans": {
+      "title": "🛒 Pilih paket:",
+      "none": "Belum ada paket yang dijual.",
+      "misc": "Lainnya",
+      "detail": "<b>{{ .Name }}</b>\n{{ .Description }}📊 Data: {{ .Quota }}\n⏳ Durasi: {{ .Duration }}\n📱 Perangkat: {{ .Devices }}\n💰 Harga: {{ .Price }}\n\nUntuk akun yang mana?"
+    },
+    "kind": {
+      "new": "Akun baru",
+      "renew": "Perpanjangan",
+      "addon": "Tambahan"
+    },
+    "confirm": "🧾 <b>{{ .Item }}</b>\n{{ .Kind }} · <code>{{ .Email }}</code>\n💰 <b>{{ .Amount }}</b>{{ .Discount }}\n\nPilih cara membayar:",
+    "discountLine": "\n🏷 Harga normal {{ .List }} · kode {{ .Code }}",
+    "gw": {
+      "card": "💳 Transfer ke kartu",
+      "wallet": "👛 Dompet",
+      "zarinpal": "Zarinpal",
+      "idpay": "IDPay",
+      "crypto": "🪙 Kripto",
+      "stripe": "Stripe",
+      "paypal": "PayPal"
+    },
+    "askCode": "Kirim kode diskon Anda sebagai pesan.",
+    "custom": {
+      "item": "Paket kustom: {{ .Parts }}",
+      "addonItem": "Tambahan: {{ .Parts }}",
+      "askGB": "Berapa banyak data yang Anda butuhkan? Pilih ukuran atau kirim jumlah GB ({{ .Min }}-{{ .Max }}).\nHarga: {{ .Price }} per GB.",
+      "askDays": "Untuk berapa hari? Pilih durasi atau kirim jumlah hari ({{ .Min }}-{{ .Max }}).\nHarga: {{ .Price }} per hari.",
+      "badGB": "Kirim jumlah GB antara {{ .Min }} dan {{ .Max }}.",
+      "badDays": "Kirim jumlah hari antara {{ .Min }} dan {{ .Max }}.",
+      "notNumber": "Kirim bilangan bulat."
+    },
+    "addon": {
+      "off": "Menambah data atau waktu sedang tidak tersedia."
+    },
+    "order": {
+      "head": "🧾 Pesanan #{{ .Id }} - {{ .Item }}\n{{ .Kind }} · {{ .Amount }}\nStatus: {{ .Status }}",
+      "card": "\n\n💳 Transfer tepat {{ .Amount }} ke kartu ini:\n<code>{{ .Card }}</code>\n{{ .Holder }} {{ .Bank }}\n{{ .Instructions }}\n\nLalu ketuk “Kirim bukti bayar” dan kirim foto bukti atau nomor referensi transfer.",
+      "reason": "\n❗ {{ .Reason }}"
+    },
+    "orders": {
+      "title": "🧾 Pesanan terbaru Anda:",
+      "none": "Anda belum punya pesanan."
+    },
+    "askReceipt": "Kirim foto bukti pembayaran, atau nomor referensi transfer.",
+    "receiptSent": "✅ Bukti bayar terkirim. Kami akan segera memeriksanya.",
+    "delivered": {
+      "new": "✅ Lunas dan diaktifkan. Layanan Anda siap:",
+      "renew": "✅ Lunas dan diperpanjang. Layanan Anda:",
+      "addon": "✅ Lunas. Data dan waktu sudah ditambahkan:"
+    },
+    "svc": {
+      "none": "Anda belum punya layanan.",
+      "list": "📦 Layanan Anda:",
+      "card": "📦 <b>{{ .Email }}</b>\n{{ .State }}\n📊 {{ .Usage }}\n⏳ {{ .Expiry }}",
+      "state": {
+        "active": "🟢 Aktif",
+        "disabled": "⛔ Dinonaktifkan",
+        "depleted": "📉 Data habis",
+        "expired": "⌛ Kedaluwarsa"
+      },
+      "daysLeft": "sisa {{ .Days }} hari",
+      "startsOnUse": "{{ .Days }} hari sejak koneksi pertama",
+      "link": "🔗 Tautan langganan:\n<code>{{ .URL }}</code>",
+      "jsonLink": "\n\nTautan JSON:\n<code>{{ .URL }}</code>",
+      "noLink": "Tautan langganan tidak tersedia. Hubungi bantuan.",
+      "qrCaption": "📷 Kode QR untuk {{ .Email }}"
+    },
+    "wallet": {
+      "title": "👛 Saldo dompet per layanan:",
+      "empty": "tidak ada saldo",
+      "hint": "\n\nSaldo dapat dipakai untuk membayar perpanjangan dan tambahan.",
+      "none": "Dompet tersedia setelah Anda punya layanan."
+    },
+    "ref": {
+      "off": "Program referral sedang nonaktif.",
+      "needService": "Beli layanan dulu, lalu Anda mendapat tautan undangan sendiri.",
+      "info": "🎁 <b>Undang teman</b>\nSaat teman membeli layanan pertamanya lewat tautan Anda, {{ .Percent }}% dari harga masuk ke dompet Anda.\n\nKode Anda: <code>{{ .Code }}</code>\nTautan Anda:\n{{ .Link }}"
+    },
+    "support": {
+      "noService": "Tiket untuk pelanggan yang punya layanan. Hubungi kami lewat tautan di menu.",
+      "pick": "Tentang layanan yang mana?",
+      "title": "🆘 Bantuan untuk <code>{{ .Email }}</code>",
+      "ticket": "💬 <b>Tiket #{{ .Id }}</b> - {{ .Subject }}\nStatus: {{ .Status }}",
+      "you": "Anda",
+      "staff": "Bantuan",
+      "askNew": "Jelaskan masalah Anda dalam satu pesan. Baris pertama menjadi subjek.",
+      "askReply": "Kirim balasan Anda sebagai pesan.",
+      "sent": "✅ Tiket #{{ .Id }} dibuat. Kami akan menjawab di sini.",
+      "replied": "✅ Balasan terkirim."
+    },
+    "lang": {
+      "choose": "🌐 Pilih bahasa Anda:"
+    },
+    "notify": {
+      "fulfilled": "✅ Pembayaran pesanan #{{ .Id }} ({{ .Item }}) dikonfirmasi.",
+      "rejected": "❌ Pesanan #{{ .Id }} tidak diterima.",
+      "expired": "⌛ Pesanan #{{ .Id }} kedaluwarsa karena pembayaran tidak masuk.",
+      "reminder": "⏰ Pesanan #{{ .Id }} ({{ .Item }}, {{ .Amount }}) masih menunggu pembayaran.",
+      "ticket": "💬 Bantuan menjawab tiket #{{ .Id }} ({{ .Subject }}):\n\n{{ .Excerpt }}"
+    },
+    "reject": {
+      "none": "Tolak tanpa alasan",
+      "notFound": "Pembayaran tidak ditemukan",
+      "amount": "Jumlahnya tidak sesuai",
+      "duplicate": "Bukti ini sudah pernah dipakai"
+    },
+    "admin": {
+      "title": "🛠 Admin toko",
+      "web": "toko web",
+      "receipt": "🧾 <b>Bukti bayar pesanan #{{ .Id }}</b>\nPembeli: {{ .Buyer }}\nAkun: <code>{{ .Account }}</code>\n{{ .Item }} · {{ .Kind }}\nJumlah: <b>{{ .Amount }}</b>\nReferensi: {{ .Ref }}\nCatatan: {{ .Note }}",
+      "approvedBy": "✅ Disetujui oleh {{ .Name }}",
+      "rejectedBy": "❌ Ditolak oleh {{ .Name }}",
+      "alreadyHandled": "Pesanan #{{ .Id }} sudah diproses.",
+      "failed": "Pesanan #{{ .Id }} tidak dapat diproses. Lihat log panel.",
+      "stats": "📊 <b>Hari ini</b>\n{{ .Paid }}\n\nPesanan belum dibayar: {{ .Pending }}\nBukti bayar menunggu: {{ .Review }}",
+      "salesLine": "{{ .Orders }} pesanan lunas: {{ .Amount }}",
+      "noSales": "Belum ada pesanan lunas hari ini.",
+      "noneWaiting": "Tidak ada bukti bayar yang menunggu.",
+      "waitingTitle": "🧾 Bukti bayar menunggu persetujuan:",
+      "askBan": "Kirim id Telegram (angka) yang akan diblokir.",
+      "askUnban": "Kirim id Telegram (angka) yang akan dibuka blokirnya.",
+      "badID": "Itu bukan id Telegram.",
+      "cannotBanAdmin": "Admin tidak dapat diblokir.",
+      "banned": "🚫 {{ .ID }} diblokir dari toko.",
+      "unbanned": "✅ {{ .ID }} dapat memakai toko lagi."
+    },
+    "currency": {
+      "IRT": "Toman",
+      "IRR": "Rial"
+    },
+    "commandDesc": "Buka toko",
+    "app": {
+      "signedIn": "Masuk dengan Telegram sebagai {name}",
+      "services": "Layanan Anda",
+      "noServices": "Anda belum punya layanan.",
+      "disabled": "Dinonaktifkan",
+      "usage": "{used} GB dari {total} GB terpakai",
+      "expiresOn": "Berakhir {date}",
+      "renew": "Perpanjang",
+      "addon": "Tambah data / waktu",
+      "copyLink": "Salin tautan langganan",
+      "renewing": "Memperpanjang {email}: pilih paket di bawah.",
+      "adding": "Menambah ke {email}: pilih data dan hari yang ditambahkan.",
+      "addonAccount": "Tambah ke akun saya",
+      "pickService": "Pilih layanan",
+      "categoryOther": "Lainnya",
+      "custom": "Buat paket sendiri",
+      "customGb": "Data (GB)",
+      "customDays": "hari",
+      "customBounds": "Data {minGb}-{maxGb} GB, waktu {minDays}-{maxDays} hari.",
+      "customTotal": "Total",
+      "continue": "Lanjutkan",
+      "sessionExpired": "Sesi Telegram ini telah berakhir. Tutup toko lalu buka lagi dari bot."
+    },
+    "cfg": {
+      "botTitle": "Bot toko Telegram",
+      "miniApp": "Tombol Mini App",
+      "miniAppHint": "Menambahkan tombol “Buka aplikasi toko” ke menu bot. Pembeli membuka toko web di dalam Telegram dan masuk otomatis. Perlu toko publik aktif dan URL dasar https.",
+      "receiptChat": "Id grup atau kanal bukti bayar",
+      "receiptChatHint": "Opsional, misalnya -1001234567890. Bukti bayar kartu juga dikirim ke sana dengan tombol Setujui dan Tolak; hanya admin yang tercantum di pengaturan bot yang bisa memutuskan. Tambahkan bot ke chat itu terlebih dahulu. Isi 0 agar bukti hanya dikirim ke chat pribadi admin.",
+      "forceJoin": "Kanal wajib",
+      "forceJoinHint": "Pembeli harus menjadi anggota sebelum memakai toko. Satu per baris: @kanal atau id chat angka, bisa diikuti | tautan gabung (perlu untuk kanal privat). Jadikan bot admin di setiap kanal agar dapat memeriksa keanggotaan.",
+      "links": "Tautan menu",
+      "linksHint": "Tombol tambahan di menu bot, satu per baris: label | https://… (maksimal 6).",
+      "customTitle": "Paket buatan sendiri (kalkulator)",
+      "customEnabled": "Jual data dan hari kustom",
+      "customHint": "Pembeli memilih kuota dan durasi; harga = kuota × harga per GB + hari × harga per hari. Juga menjual tambahan yang menambah akun yang ada tanpa mengatur ulang pemakaiannya.",
+      "customTemplate": "Templat klien",
+      "customCurrency": "Mata uang",
+      "pricePerGb": "Harga per GB",
+      "pricePerDay": "Harga per hari",
+      "minGb": "GB minimum",
+      "maxGb": "GB maksimum",
+      "minDays": "Hari minimum",
+      "maxDays": "Hari maksimum"
+    },
+    "plan": {
+      "category": "Kategori",
+      "categoryHint": "Paket dengan kategori yang sama dikelompokkan di bot dan toko. Kosongkan jika tidak ingin dikelompokkan."
+    }
+  },
   "shop": {
     "title": "Toko",
     "noPlans": "Belum ada paket yang dijual",
@@ -3354,7 +3593,10 @@
       "ticket_limit": "Tiket terbuka Anda terlalu banyak. Tunggu balasan atau tutup salah satu.",
       "ticket_closed": "Tiket ini sudah ditutup.",
       "rate_limited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
-      "network": "Terjadi kesalahan. Silakan coba lagi."
+      "network": "Terjadi kesalahan. Silakan coba lagi.",
+      "custom_invalid": "Jumlah data atau waktu itu di luar rentang yang diizinkan.",
+      "addon_unsupported": "Akun ini tidak dapat menerima tambahan tersebut: kuota atau durasi tanpa batas tidak bisa diperpanjang.",
+      "banned": "Akun Anda tidak dapat menggunakan toko."
     }
   },
   "setup": {
@@ -3453,6 +3695,130 @@
       "internal_error": "Terjadi kesalahan di server. Coba lagi.",
       "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi."
     }
+  },
+  "tunnel": {
+    "title": "Tunnel",
+    "add": "Tambah tunnel",
+    "empty": "Belum ada tunnel",
+    "emptyHint": "Tunnel meneruskan port antara server di luar filter (Kharej) dan server di dalamnya (Iran), terenkripsi dan dengan satu klik.",
+    "name": "Nama",
+    "route": "Rute",
+    "carrier": "Carrier",
+    "carrierAuto": "Otomatis (uji semua carrier, pertahankan yang terbaik)",
+    "carrierHint": "Otomatis mencoba setiap jenis koneksi dari sisi Iran dan mempertahankan yang tercepat yang berfungsi.",
+    "auto": "Otomatis",
+    "reverse": "Terbalik",
+    "reverseHint": "Sisi Kharej yang menyambung ke Iran, bukan sebaliknya. Gunakan saat Iran tidak bisa menjangkau Kharej.",
+    "speed": "Kecepatan (unduh / unggah)",
+    "speedTest": "Uji kecepatan",
+    "speedResult": "Kecepatan",
+    "latency": "Latensi",
+    "rate": "Laju",
+    "connections": "Koneksi",
+    "uptime": "Waktu aktif",
+    "portsTitle": "Port",
+    "details": "Detail",
+    "restart": "Mulai ulang",
+    "restarted": "Tunnel dimulai ulang",
+    "saved": "Tersimpan",
+    "deleted": "Tunnel dihapus",
+    "deleteConfirm": "Hapus tunnel \"{name}\"? Kedua sisi dihentikan dan dihapus.",
+    "reprobe": "Uji carrier lagi",
+    "reprobed": "Carrier diuji ulang",
+    "probeResults": "Uji carrier",
+    "advanced": "Lanjutan",
+    "path": "Path URL",
+    "listenPort": "Port carrier",
+    "listenPortHint": "0 memilih port bebas secara otomatis.",
+    "maxSpeed": "Batas kecepatan (MB/dtk, 0 = bawaan)",
+    "next": "Berikutnya",
+    "back": "Kembali",
+    "addressPlaceholder": "Terdeteksi otomatis",
+    "addressHint": "Alamat publik yang dipakai sisi lain untuk menjangkau server ini. Ubah hanya jika deteksi salah atau Anda ingin memakai domain.",
+    "pickNode": "Pilih node",
+    "noNodes": "Belum ada node. Tambahkan di halaman Node.",
+    "noBinary": "Program wattun belum terpasang di panel ini. Perbarui panel ke rilis terbaru.",
+    "role": {
+      "kharej": "Sisi Kharej",
+      "kharejHint": "Server di luar filter, tempat layanan Anda berjalan.",
+      "iran": "Sisi Iran",
+      "iranHint": "Server di dalam, tempat pengguna Anda terhubung."
+    },
+    "host": {
+      "local": "Panel ini",
+      "node": "Sebuah node",
+      "external": "Server tanpa panel",
+      "externalHint": "Anda mendapat satu baris perintah untuk dijalankan di server itu."
+    },
+    "state": {
+      "title": "Status",
+      "up": "Terhubung",
+      "down": "Terputus",
+      "starting": "Memulai",
+      "error": "Galat",
+      "stopped": "Berhenti",
+      "unknown": "Tidak diketahui"
+    },
+    "step": {
+      "ends": "Server",
+      "ports": "Port",
+      "connection": "Koneksi",
+      "review": "Tinjau"
+    },
+    "ports": {
+      "intro": "Pengguna terhubung ke port dengar di sisi Iran dan sampai ke port tujuan di server Kharej.",
+      "listen": "Port dengar",
+      "target": "Port tujuan",
+      "rate": "Batas (MB/dtk)",
+      "rateHint": "Batas kecepatan untuk port ini, 0 = tanpa batas",
+      "quota": "Kuota (GB)",
+      "quotaHint": "Lalu lintas yang diizinkan sebelum port ini diputus, 0 = tanpa batas",
+      "add": "Tambah port",
+      "edit": "Ubah port",
+      "hotReload": "Perubahan port diterapkan tanpa memutus tunnel."
+    },
+    "kit": {
+      "title": "Perangkat anti-sensor",
+      "hint": "Opsional. Pengaturan ini membuat koneksi tampak seperti lalu lintas yang diizinkan. Berlaku di sisi yang memulai koneksi dan memerlukan server Linux dengan root.",
+      "fakeSni": "SNI palsu (nama situs yang diizinkan)",
+      "fakeMode": "Mode pemalsuan",
+      "poolRotate": "Daur ulang koneksi setiap",
+      "fingerprint": "Sidik jari TLS",
+      "smallHello": "TLS hello kecil"
+    },
+    "externalKharej": {
+      "steps": "Jalankan perintah ini di server Kharej, lalu tempel token yang dicetaknya di bawah.",
+      "token": "Token dari server Kharej"
+    },
+    "created": {
+      "title": "Tunnel \"{name}\" dibuat",
+      "externalIran": "Jalankan perintah ini di server Iran untuk menyelesaikan. Perintah ini berisi kunci tunnel, bagikan secara pribadi."
+    },
+    "connect": {
+      "warning": "Perintah ini berisi kunci tunnel. Siapa pun yang memilikinya dapat memakai tunnel.",
+      "command": "Perintah untuk server lain",
+      "show": "Tampilkan token",
+      "hide": "Sembunyikan token",
+      "copyToken": "Salin token",
+      "none": "Tunnel ini tidak punya token untuk ditampilkan."
+    },
+    "tab": {
+      "overview": "Ringkasan",
+      "logs": "Log",
+      "connect": "Hubungkan server"
+    },
+    "errName": "Gunakan 1-63 huruf, angka, spasi, titik, tanda hubung, atau garis bawah.",
+    "errNode": "Pilih node.",
+    "errSameHost": "Kedua sisi harus berada di server berbeda.",
+    "errBothExternal": "Setidaknya satu sisi harus berjalan di panel ini atau di sebuah node.",
+    "errToken": "Tempel token yang diawali wat1:",
+    "errPorts": "Tambahkan setidaknya satu port.",
+    "errPortRange": "Port berkisar 1-65535.",
+    "errDupPort": "Port dengar ini dipakai dua kali.",
+    "errReverseAuto": "Mode terbalik memerlukan carrier tertentu, bukan Otomatis.",
+    "errReversePort": "Masukkan port carrier yang akan didengarkan server Iran.",
+    "errHost": "Masukkan nama host seperti www.example.com.",
+    "errRotate": "Gunakan durasi seperti 30m atau 4h."
   },
   "tgbot": {
     "keyboardClosed": "❌ Keyboard ditutup!",
@@ -3588,6 +3954,8 @@
       "eventNodeCapStopped": "Inbound-nya dinonaktifkan.",
       "eventPortBlocked": "Port {{ .Port }} milik {{ .Name }} berhenti merespons",
       "eventPortRestored": "Port {{ .Port }} milik {{ .Name }} merespons lagi",
+      "eventTunnelDown": "Tunnel {{ .Name }} kehilangan koneksi",
+      "eventTunnelUp": "Tunnel {{ .Name }} terhubung kembali",
       "eventLoginFallback": "Gagal masuk dari {{ .Source }}",
       "memoryThreshold": "Penggunaan memori {{ .Percent }}% melebihi ambang batas {{ .Threshold }}%",
       "usagePercent": "{{ .Percent }}% ({{ .Used }} / {{ .Total }})",
@@ -3670,40 +4038,6 @@
       "chooseClient": "Pilih Klien untuk Inbound {{ .Inbound }}",
       "chooseInbound": "Pilih Inbound",
       "qrCodeForClient": "Kode QR untuk klien {{ .Email }}:"
-    },
-    "shop": {
-      "disabled": "Toko sedang tidak tersedia.",
-      "menu": "🛒 Toko\r\nApa yang ingin Anda lakukan?",
-      "plansTitle": "🛒 Pilih paket:",
-      "noPlans": "Belum ada paket yang dijual.",
-      "planDetail": "<b>{{ .Name }}</b>\r\n{{ .Description }}\r\nData: {{ .Quota }}\r\nDurasi: {{ .Duration }}\r\nPerangkat: {{ .Devices }}\r\nHarga: {{ .Price }}\r\n\r\nUntuk siapa?",
-      "noExpiry": "Tanpa kedaluwarsa",
-      "confirm": "<b>{{ .Plan }}</b> untuk <code>{{ .Email }}</code>\r\nTotal: {{ .Amount }}\r\nPilih cara pembayaran:",
-      "discountLine": "\r\nHarga normal {{ .List }}, kode {{ .Code }}",
-      "askCode": "Kirim kode diskon Anda dalam satu pesan.",
-      "askReceipt": "Kirim nomor pelacakan transfer Anda dalam satu pesan.",
-      "receiptSent": "✅ Bukti terkirim. Akan segera ditinjau.",
-      "expired": "Pilihan Anda kedaluwarsa. Kirim /shop untuk memulai lagi.",
-      "ordersTitle": "📦 Pesanan terbaru Anda:",
-      "noOrders": "Anda belum punya pesanan.",
-      "order": "📦 Pesanan #{{ .Id }} - {{ .Plan }}\r\nJumlah: {{ .Amount }}\r\nStatus: {{ .Status }}",
-      "cardInfo": "\r\n\r\nTransfer tepat {{ .Amount }} ke kartu ini:\r\n<code>{{ .Card }}</code>\r\n{{ .Holder }} {{ .Bank }}\r\n{{ .Instructions }}",
-      "payLink": "\r\n\r\nSelesaikan pembayaran: {{ .URL }}",
-      "delivered": "✅ Dibayar dan diaktifkan. Langganan Anda:",
-      "buttons": {
-        "plans": "🛒 Paket",
-        "orders": "📦 Pesanan saya",
-        "newAccount": "🆕 Akun baru",
-        "renew": "🔄 Perpanjang {{ .Email }}",
-        "code": "🏷 Kode diskon",
-        "card": "💳 Kartu ke kartu",
-        "wallet": "👛 Dompet",
-        "zarinpal": "Zarinpal",
-        "idpay": "IDPay",
-        "crypto": "Kripto",
-        "receipt": "🧾 Kirim bukti",
-        "refresh": "🔄 Segarkan"
-      }
     }
   },
   "discord": {
@@ -3748,6 +4082,8 @@
       "nodeCapReached": "Node Mencapai Batas Trafik",
       "portBlocked": "Port Diblokir",
       "portRestored": "Port Pulih",
+      "tunnelDown": "Tunnel Terputus",
+      "tunnelUp": "Tunnel Terhubung",
       "xrayCrash": "Inti Xray Mengalami Crash",
       "cpuHigh": "Ambang Batas CPU Terlampaui",
       "memoryHigh": "Ambang Batas Memori Terlampaui",

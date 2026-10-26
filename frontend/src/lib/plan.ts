@@ -16,6 +16,7 @@ export function blankPlan(templateId: number): PlanFormValues {
     templateId,
     enabled: true,
     sortOrder: 0,
+    category: '',
   };
 }
 
@@ -32,6 +33,7 @@ export function planToForm(plan: Plan): PlanFormValues {
     templateId: plan.templateId,
     enabled: plan.enabled,
     sortOrder: plan.sortOrder,
+    category: plan.category,
   };
 }
 
@@ -48,5 +50,6 @@ export function formToPlan(values: PlanFormValues): Partial<Plan> {
     templateId: values.templateId,
     enabled: values.enabled,
     sortOrder: values.sortOrder,
+    category: values.category,
   };
 }

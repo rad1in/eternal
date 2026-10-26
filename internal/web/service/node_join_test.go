@@ -149,15 +149,25 @@ func TestIssueStoresOnlyAHashAndPrunesExpiredTokens(t *testing.T) {
 	}
 }
 
-func TestJoinCommandCarriesTheMasterAndTheToken(t *testing.T) {
-	cmd := JoinCommand("https://panel.example.com:2053/abc/", "tok123", "de-fra-1")
-	for _, want := range []string{"XUI_JOIN_URL='https://panel.example.com:2053/abc/join/node'", "XUI_JOIN_TOKEN='tok123'", "XUI_NODE_NAME='de-fra-1'", "XUI_NONINTERACTIVE=1", "bash"} {
-		if !strings.Contains(cmd, want) {
-			t.Errorf("command lacks %q:\n%s", want, cmd)
-		}
+func TestJoinCommandRunsTheScriptTheMasterServes(t *testing.T) {
+	cmd := JoinCommand("https://panel.example.com:2053/abc/", "tok123", "de-fra-1", "")
+	want := "curl -fsSL https://panel.example.com:2053/abc/install-node.sh | bash -s -- --panel https://panel.example.com:2053/abc --token tok123 --name 'de-fra-1'"
+	if cmd != want {
+		t.Fatalf("command =\n%s\nwant\n%s", cmd, want)
 	}
-	quoted := JoinCommand("https://m.example/x/", "t", "it's")
-	if strings.Contains(quoted, "'it's'") || !strings.Contains(quoted, `'it'\''s'`) {
+}
+
+func TestJoinCommandPinsAMasterWithASelfSignedCertificate(t *testing.T) {
+	cmd := JoinCommand("https://203.0.113.5:2053/abc", "tok", "", "sha256//KEY=")
+	want := "curl -fsSLk --pinnedpubkey 'sha256//KEY=' https://203.0.113.5:2053/abc/install-node.sh | bash -s -- --panel https://203.0.113.5:2053/abc --token tok --pin 'sha256//KEY='"
+	if cmd != want {
+		t.Fatalf("command =\n%s\nwant\n%s", cmd, want)
+	}
+}
+
+func TestJoinCommandQuotesANameWithAQuote(t *testing.T) {
+	quoted := JoinCommand("https://m.example/x/", "t", "it's", "")
+	if !strings.Contains(quoted, `--name 'it'\''s'`) {
 		t.Errorf("name not shell-quoted:\n%s", quoted)
 	}
 }
